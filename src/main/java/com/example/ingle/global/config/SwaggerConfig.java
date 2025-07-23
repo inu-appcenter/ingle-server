@@ -1,5 +1,6 @@
 package com.example.ingle.global.config;
 
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -20,6 +21,10 @@ public class SwaggerConfig {
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT"));
+
+        // 서버 URL 추가
+        Server server = new Server();
+        server.setUrl("https://ingle-server.inuappcenter.kr");
 
         return new OpenAPI()
                 .components(new Components())
