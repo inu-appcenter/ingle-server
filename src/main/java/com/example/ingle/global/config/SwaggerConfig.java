@@ -9,6 +9,8 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
 
@@ -27,10 +29,10 @@ public class SwaggerConfig {
         server.setUrl("https://ingle-server.inuappcenter.kr");
 
         return new OpenAPI()
-                .components(new Components())
+                .servers(List.of(server))
+                .components(components)
                 .info(apiInfo())
-                .addSecurityItem(securityRequirement)
-                .components(components);
+                .addSecurityItem(securityRequirement);
     }
 
     private Info apiInfo() {
