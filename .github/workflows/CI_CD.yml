@@ -66,8 +66,8 @@ jobs:
               docker rm ${{secrets.DOCKER_REPO}}
             fi
              # 새 컨테이너 실행
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker run -d \
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            docker run -d \
             --name ${{ secrets.DOCKER_REPO }} \
-            -p 8089:8080 \
+            -p 8089:8089 \
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
