@@ -10,6 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Set Java JDK 17
         uses: actions/setup-java@v4
         with:
@@ -67,6 +69,6 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker run -d \
               --name ${{ secrets.DOCKER_REPO }} \
-              --env-file .env \ 
+              --env-file .env \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
