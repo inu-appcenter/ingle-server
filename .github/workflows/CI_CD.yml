@@ -55,7 +55,7 @@ jobs:
           password: ${{secrets.APPCENTER_SERVER_PASSWORD}}
           port: ${{secrets.APPCENTER_SERVER_PORT}}
           script: |
-            cd /home/ubuntu
+            cd /home/serverking/ingle
             
             # 환경 변수 파일 생성
             echo "${{ secrets.ENV_FILE }}" > .env
@@ -69,6 +69,6 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker run -d \
               --name ${{ secrets.DOCKER_REPO }} \
-              --env-file .env \
+              --env-file /home/serverking/ingle/.env \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
