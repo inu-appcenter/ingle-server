@@ -10,13 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Make Properties
-        run: |
-          mkdir ./src/main/resources
-          touch ./src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
-
       - name: Set Java JDK 17
         uses: actions/setup-java@v4
         with:
@@ -60,6 +53,11 @@ jobs:
           password: ${{secrets.APPCENTER_SERVER_PASSWORD}}
           port: ${{secrets.APPCENTER_SERVER_PORT}}
           script: |
+            cd /home/ubuntu
+            
+            # 환경 변수 파일 생성
+            echo "${{ secrets.ENV_FILE }}" > .env
+            
             # 기존 컨테이너 중지 및 삭제
             if [ "$(docker ps -aq -f name=${{secrets.DOCKER_REPO}})" ]; then
               docker stop ${{secrets.DOCKER_REPO}}
@@ -68,6 +66,7 @@ jobs:
              # 새 컨테이너 실행
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker run -d \
-            --name ${{ secrets.DOCKER_REPO }} \
-            -p 8089:8089 \
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+              --name ${{ secrets.DOCKER_REPO }} \
+              --env-file .env \ 
+              -p 8089:8089 \
+                ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
