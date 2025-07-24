@@ -69,6 +69,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker run -d \
               --name ${{ secrets.DOCKER_REPO }} \
+              --env SPRING_PROFILES_ACTIVE=prod \
               --env-file /home/serverking/ingle/.env \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
