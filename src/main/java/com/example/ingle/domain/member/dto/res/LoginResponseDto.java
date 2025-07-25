@@ -26,29 +26,33 @@ public class LoginResponseDto {
     @Schema(description = "닉네임", example = "IngleFan")
     private final String nickname;
 
+    @Schema(description = "이용 약관 동의 여부", example = "true")
+    private final boolean termsAgreed;
+
     @Schema(description = "JWT Access Token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
     private final String accessToken;
 
     @Schema(description = "JWT Refresh Token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
     private final String refreshToken;
 
-    @Schema(description = "Access Token 만료 시간 (Epoch milliseconds)", example = "7195000")
-    private final Long accessTokenExpires;
-
     @Schema(description = "Access Token 만료 일시 (Date)", example = "2025-05-14T15:30:00.000+09:00")
     private final Date accessTokenExpiresDate;
 
+    @Schema(description = "Refresh Token 만료 일시 (Date)", example = "2025-05-14T15:30:00.000+09:00")
+    private final Date refreshTokenExpiresDate;
+
     @Builder
     private LoginResponseDto(Member member, String accessToken, String refreshToken,
-                             Long accessTokenExpires, Date accessTokenExpiresDate) {
+                             Date accessTokenExpiresDate, Date refreshTokenExpiresDate) {
         this.memberId = member.getId();
         this.studentId = member.getStudentId();
         this.department = member.getDepartment().name();
         this.program = member.getProgram().name();
         this.nickname = member.getNickname();
+        this.termsAgreed = member.isTermsAgreed();
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.accessTokenExpires = accessTokenExpires;
         this.accessTokenExpiresDate = accessTokenExpiresDate;
+        this.refreshTokenExpiresDate = refreshTokenExpiresDate;
     }
 }

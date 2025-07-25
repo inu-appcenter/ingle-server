@@ -1,9 +1,13 @@
 spring:
+  profiles:
+    active: prod
+
   datasource:
     url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   # 파일 업로드 설정
   servlet:
     multipart:
@@ -27,6 +31,7 @@ oracle:
     username: ${ORACLE_USERNAME}
     password: ${ORACLE_PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
+  enabled: true
 
 swagger:
   server-url: ${SERVER_URL}

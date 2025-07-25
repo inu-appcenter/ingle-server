@@ -2,14 +2,15 @@ package com.example.ingle.domain.member.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Slf4j
 @Repository
+@ConditionalOnProperty(name = "oracle.enabled", havingValue = "true")
 public class INUMemberRepository {
 
-    @Qualifier("oracleJdbc")
     private final JdbcTemplate jdbcTemplate;
 
     public INUMemberRepository(@Qualifier("oracleJdbc") JdbcTemplate jdbcTemplate) {

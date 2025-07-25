@@ -5,7 +5,6 @@ import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
 import com.example.ingle.domain.member.dto.res.LoginResponseDto;
 import com.example.ingle.domain.member.dto.res.SignupRequiredResponseDto;
-import com.example.ingle.domain.member.dto.res.SignupResponseDto;
 import com.example.ingle.global.jwt.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,24 +22,26 @@ public interface AuthApiSpecification {
 
     @Operation(
             summary = "회원가입",
-            description = "회원가입을 진행합니다.",
+            description = "회원가입을 진행합니다." +
+                    "<br><br>요청 값에 로그인 시 입력했던 학번을 같이 담아서 보내주세요.",
             responses = {
                     @ApiResponse(responseCode = "201",
                             description = "회원가입 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = SignupResponseDto.class)
+                                    schema = @Schema(implementation = LoginResponseDto.class)
                             )
                     )
             }
     )
-    ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto);
+    ResponseEntity<LoginResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto);
 
     @Operation(
             summary = "INU 포털 로그인",
             description = "포털 아이디와 비밀번호로 로그인합니다." +
-                    "<br>회원가입이 필요한 경우 Status Code로 202를 응답합니다. 회원가입 시에는 회원가입 API 호출이 필요합니다." +
-                    "<br> accessToken : 2시간 / refreshToken : 3일",
+                    "<br><br>회원가입이 필요한 경우 Status Code로 202를 응답합니다.  " +
+                    "<br>회원가입 시에는 회원가입 API 호출이 필요합니다." +
+                    "<br><br> accessToken : 2시간 / refreshToken : 3일",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -79,7 +80,8 @@ public interface AuthApiSpecification {
 
     @Operation(
             summary = "닉네임 중복 확인",
-            description = "닉네임이 사용 가능한 지 확인합니다. 사용 가능하면 true, 중복되면 400을 반환합니다.",
+            description = "닉네임이 사용 가능한 지 확인합니다." +
+                    "<br><br>사용 가능하면 true, 중복되면 400을 반환합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "사용 가능 여부 반환",
                             content = @Content(

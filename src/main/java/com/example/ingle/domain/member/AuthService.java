@@ -5,7 +5,6 @@ import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
 import com.example.ingle.domain.member.dto.res.LoginResponseDto;
 import com.example.ingle.domain.member.dto.res.SignupRequiredResponseDto;
-import com.example.ingle.domain.member.dto.res.SignupResponseDto;
 import com.example.ingle.domain.member.repository.INUMemberRepository;
 import com.example.ingle.domain.member.repository.MemberRepository;
 import com.example.ingle.global.exception.CustomException;
@@ -23,29 +22,46 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final INUMemberRepository INUMemberRepository;
+    private final Optional<INUMemberRepository> inuMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public SignupResponseDto signup(SignupRequestDto signupRequestDto) {
+    public LoginResponseDto signup(SignupRequestDto signupRequestDto) {
 
         log.info("[회원가입 요청] studentId={}", signupRequestDto.getStudentId());
 
-        Member member = new Member(signupRequestDto);
+        if (memberRepository.existsByStudentId(signupRequestDto.getStudentId())) {
+            throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
+        }
 
+        Member member = new Member(signupRequestDto);
         memberRepository.save(member);
 
-        log.info("[회원가입 완료] memberId: {}, studentId: {}, nickname: {}", member.getId(),member.getStudentId(), member.getNickname());
+        log.info("[회원가입 완료] memberId: {}, studentId: {}, nickname: {}",
+                member.getId(),member.getStudentId(), member.getNickname());
 
-        return SignupResponseDto.builder().member(member).build();
+        // Spring Security 인증 없이 직접 JWT 발급
+        LoginResponseDto token = jwtTokenProvider.generateTokenFromMember(member);
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .member(member)
+                .refreshToken(token.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(refreshToken);
+
+        log.info("[JWT 발급 완료] studentId = {}", member.getStudentId());
+
+        return token;
     }
 
     @Transactional
@@ -53,8 +69,10 @@ public class AuthService {
 
         log.info("[로그인 요청] studentId={}", loginRequestDto.getStudentId());
 
-        if (!INUMemberRepository.verifySchoolLogin(loginRequestDto.getStudentId(), loginRequestDto.getPassword())) {
-            throw new CustomException(ErrorCode.LOGIN_FAILED);
+        if (inuMemberRepository.isPresent()) {
+            if (!inuMemberRepository.get().verifySchoolLogin(loginRequestDto.getStudentId(), loginRequestDto.getPassword())) {
+                throw new CustomException(ErrorCode.LOGIN_FAILED);
+            }
         }
 
         if (!memberRepository.existsByStudentId(loginRequestDto.getStudentId())) {
@@ -67,31 +85,11 @@ public class AuthService {
                     return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
                 });
 
-        // 인증 토큰 생성
-        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthenticationToken();
-        log.debug("Spring Security 인증 시작");
-
-        // Spring Security 인증 수행
-        // 내부적으로 UserDetailsService 호출
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 인증 상태 확인
-        if (!authentication.isAuthenticated()) {
-            log.error("[로그인 실패] 인증 실패: studentId = {}", loginRequestDto.getStudentId());
-            throw new CustomException(ErrorCode.LOGIN_FAILED);
-        }
-
-        // 리프레시 토큰 존재 시 삭제
-        if (refreshTokenRepository.findByStudentId(member.getStudentId()).isPresent()) {
-            refreshTokenRepository.deleteByStudentId(member.getStudentId());
-        }
-
-        // JWT 토큰 생성
-        LoginResponseDto loginResponseDto = jwtTokenProvider.generateToken(authentication);
-        log.info("[JWT 발급 완료] studentId = {}", member.getStudentId());
-
-        RefreshToken refreshToken = RefreshToken.builder().member(member).refreshToken(loginResponseDto.getRefreshToken()).build();
-        refreshTokenRepository.save(refreshToken);
+        LoginResponseDto loginResponseDto = authenticateAndGenerateToken(
+                loginRequestDto.getStudentId(),
+                loginRequestDto.getPassword(),
+                member
+        );
 
         return ResponseEntity.status(HttpStatus.OK).body(loginResponseDto);
     }
@@ -161,5 +159,34 @@ public class AuthService {
         memberRepository.delete(memberToDelete);
 
         log.info("[회원 탈퇴 완료] studentId: {}", memberToDelete.getStudentId());
+    }
+
+    private LoginResponseDto authenticateAndGenerateToken(String studentId, String password, Member member) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(studentId, password);
+
+        log.debug("Spring Security 인증 시작");
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        if (!authentication.isAuthenticated()) {
+            log.error("[인증 실패] studentId = {}", studentId);
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
+        }
+
+        // 리프레시 토큰 존재 시 삭제
+        if (refreshTokenRepository.findByStudentId(member.getStudentId()).isPresent()) {
+            refreshTokenRepository.deleteByStudentId(member.getStudentId());
+        }
+
+        // JWT 토큰 생성 및 저장
+        LoginResponseDto token = jwtTokenProvider.generateToken(authentication);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .member(member)
+                .refreshToken(token.getRefreshToken())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+        log.info("[JWT 발급 완료] studentId = {}", studentId);
+
+        return token;
     }
 }

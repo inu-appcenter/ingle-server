@@ -5,7 +5,6 @@ import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
 import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
 import com.example.ingle.domain.member.dto.res.LoginResponseDto;
-import com.example.ingle.domain.member.dto.res.SignupResponseDto;
 import com.example.ingle.global.jwt.MemberDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class AuthController implements AuthApiSpecification{
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<LoginResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.signup(signupRequestDto));
     }
 

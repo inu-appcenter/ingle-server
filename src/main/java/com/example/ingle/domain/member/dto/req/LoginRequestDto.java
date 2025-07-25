@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
 @NoArgsConstructor
@@ -18,8 +17,4 @@ public class LoginRequestDto {
     @NotBlank(message = "비밀번호가 비어있습니다.")
     @Schema(description = "사용자의 비밀번호", example = "password123")
     private String password;
-
-    public UsernamePasswordAuthenticationToken toAuthenticationToken() {
-        return new UsernamePasswordAuthenticationToken(studentId, password);
-    }
 }
