@@ -18,7 +18,7 @@ public enum ErrorCode {
     JWT_ENTRY_POINT(HttpStatus.UNAUTHORIZED, 401, "[Jwt] 인증되지 않은 사용자입니다."),
 
     // Validation
-    VALIDATION_FAILED(HttpStatus.BAD_GATEWAY, 400, "요청한 값이 올바르지 않습니다."),
+    VALIDATION_FAILED(HttpStatus.BAD_REQUEST, 400, "요청한 값이 올바르지 않습니다."),
     ;
 
     private final HttpStatus httpStatus;
