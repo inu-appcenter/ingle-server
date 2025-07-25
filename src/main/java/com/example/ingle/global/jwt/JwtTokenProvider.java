@@ -1,24 +1,32 @@
 package com.example.ingle.global.jwt;
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.example.ingle.domain.member.Member;
+import com.example.ingle.domain.member.dto.res.LoginResponseDto;
+import com.example.ingle.global.exception.CustomException;
+import com.example.ingle.global.exception.ErrorCode;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
 
+    // JWT 클레임에서 권한 정보를 저장할 키
+    private static final String AUTHORITIES_KEY = "auth";
+
     public static final long ACCESS_TOKEN_EXPIRED_TIME = 2 * 60 * 60 * 1000L;   // 2시간
-    public static final long REFRESH_TOKEN_EXPIRED_TIME = 14 * 24 * 60 * 60 * 1000L; // 14일
+    public static final long REFRESH_TOKEN_EXPIRED_TIME = 3 * 24 * 60 * 60 * 1000L; // 14일
 
     private final Key key;
     private final MemberDetailService memberDetailService;
@@ -32,50 +40,95 @@ public class JwtTokenProvider {
         this.memberDetailService = memberDetailService;
     }
 
-    // Access Token 생성
-    public String generateAccessToken(String username) {
-        Date now = new Date();
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRED_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
+    // 인증 성공 시 토큰 생성
+    public LoginResponseDto generateToken(Authentication authentication) {
+
+        // 권한 정보를 문자열로 변환 ( ROLE_USER, ROLE_ADMIN,... )
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        // 토큰 만료 시간 계산
+        long now = new Date().getTime();
+        Date accessTime = new Date(now + ACCESS_TOKEN_EXPIRED_TIME);
+        Date refreshTime = new Date(now + REFRESH_TOKEN_EXPIRED_TIME);
+
+        // 멤버 객체 꺼내기
+        MemberDetail userDetails = memberDetailService.loadUserByUsername(authentication.getName());
+        Member member = userDetails.getMember();
+
+        // JWT 토큰 빌더
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(accessTime)
                 .compact();
+
+        String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(refreshTime)
+                .compact();
+
+        return LoginResponseDto.builder()
+                .member(member)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpires(ACCESS_TOKEN_EXPIRED_TIME - 5000)
+                .accessTokenExpiresDate(accessTime)
+                .build();
     }
 
-    // Refresh Token 생성
-    public String generateRefreshToken(String username) {
-        Date now = new Date();
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRED_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    // Token 검증
-    public boolean validateToken(String token) {
-        if(token == null) {
-            throw new JwtException("Jwt AccessToken not found");
-        }
+    // 토큰 유효성 검증
+    public boolean validateToken(String token, String tokenType) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtException("Invalid Jwt token");
+        } catch (SignatureException e) {
+            // 서명 불일치
+            throw new CustomException(ErrorCode.JWT_SIGNATURE);
+        } catch (MalformedJwtException e) {
+            // 구조 문제
+            throw new CustomException(ErrorCode.JWT_MALFORMED);
+        } catch (ExpiredJwtException e) {
+            // 만료된 토큰
+            if ("access".equals(tokenType)) {
+                throw new CustomException(ErrorCode.JWT_ACCESS_TOKEN_EXPIRED);
+            } else if ("refresh".equals(tokenType)) {
+                throw new CustomException(ErrorCode.JWT_REFRESH_TOKEN_EXPIRED);
+            } else {
+                throw new CustomException(ErrorCode.JWT_NOT_VALID);
+            }
+        } catch (UnsupportedJwtException e) {
+            // 지원하지 않는 형식
+            throw new CustomException(ErrorCode.JWT_UNSUPPORTED);
+        } catch (IllegalArgumentException e) {
+            // 잘못된 인자
+            throw new CustomException(ErrorCode.JWT_NOT_VALID);
         }
     }
 
-    // JWT에서 인증 정보 조회
+    // 토큰으로부터 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        String username = parseUsername(token);
-        UserDetails userDetails = memberDetailService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities()
-        );
+
+        // 토큰 복호화 및 클레임 추출
+        Claims claims = Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        // 사용자 정보 조회
+        MemberDetail userDetails = memberDetailService.loadUserByUsername(claims.getSubject());
+
+        // 권한 정보 추출
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        // 인증 객체 생성
+        return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 
     // JWT에서 username 추출
