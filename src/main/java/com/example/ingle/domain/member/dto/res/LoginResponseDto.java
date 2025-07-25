@@ -11,8 +11,11 @@ import java.util.Date;
 @Schema(description = "로그인 응답 DTO")
 public class LoginResponseDto {
 
-    @Schema(description = "사용자 Id", example = "1")
+    @Schema(description = "회원 Id", example = "1")
     private final Long memberId;
+
+    @Schema(description = "학번", example = "202301452")
+    private final String studentId;
 
     @Schema(description = "학과", example = "COMPUTER_ENG")
     private final String department;
@@ -36,8 +39,10 @@ public class LoginResponseDto {
     private final Date accessTokenExpiresDate;
 
     @Builder
-    private LoginResponseDto(Member member, String accessToken, String refreshToken, Long accessTokenExpires, Date accessTokenExpiresDate) {
+    private LoginResponseDto(Member member, String accessToken, String refreshToken,
+                             Long accessTokenExpires, Date accessTokenExpiresDate) {
         this.memberId = member.getId();
+        this.studentId = member.getStudentId();
         this.department = member.getDepartment().name();
         this.program = member.getProgram().name();
         this.nickname = member.getNickname();
@@ -46,6 +51,4 @@ public class LoginResponseDto {
         this.accessTokenExpires = accessTokenExpires;
         this.accessTokenExpiresDate = accessTokenExpiresDate;
     }
-
-
 }

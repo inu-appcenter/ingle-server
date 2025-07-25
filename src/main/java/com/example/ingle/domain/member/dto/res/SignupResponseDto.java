@@ -9,6 +9,12 @@ import lombok.Getter;
 @Schema(description = "회원가입 응답 DTO")
 public class SignupResponseDto {
 
+    @Schema(description = "회원 Id", example = "1")
+    private final Long memberId;
+
+    @Schema(description = "학번", example = "202301452")
+    private final String studentId;
+
     @Schema(description = "학과", example = "COMPUTER_ENG")
     private final String department;
 
@@ -23,8 +29,10 @@ public class SignupResponseDto {
 
     @Builder
     private SignupResponseDto(Member member) {
-        this.department = member.getDepartment().name();
-        this.program = member.getProgram().name();
+        this.memberId = member.getId();
+        this.studentId = member.getStudentId();
+        this.department = member.getDepartment().getFullName();
+        this.program = member.getProgram().getDescription();
         this.nickname = member.getNickname();
         this.termsAgreed = member.isTermsAgreed();
     }

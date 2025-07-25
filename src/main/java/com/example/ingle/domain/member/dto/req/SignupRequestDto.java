@@ -19,7 +19,7 @@ public class SignupRequestDto {
     private String studentId;
 
     @NotNull(message = "학과가 비어있습니다.")
-    @Schema(description = "사용자의 학과", example = "COMPUTER_ENG")
+    @Schema(description = "사용자의 학과", example = "COMPUTER_ENGINEERING")
     private Department department;
 
     @NotNull(message = "파견 유형이 비어있습니다.")

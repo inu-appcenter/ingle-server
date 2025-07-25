@@ -79,7 +79,7 @@ public interface AuthApiSpecification {
 
     @Operation(
             summary = "닉네임 중복 확인",
-            description = "닉네임이 이미 존재하는지 확인합니다.",
+            description = "닉네임이 사용 가능한 지 확인합니다. 사용 가능하면 true, 중복되면 400을 반환합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "사용 가능 여부 반환",
                             content = @Content(
@@ -97,8 +97,7 @@ public interface AuthApiSpecification {
             description = "회원 탈퇴를 진행합니다.",
             responses = {
                     @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공"),
-                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다."),
-                    @ApiResponse(responseCode = "400", description = "비밀번호가 일치하지 않습니다.")
+                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.")
             }
     )
     ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails);
