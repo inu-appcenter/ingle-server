@@ -110,7 +110,7 @@ public class AuthService {
 
         RefreshToken refreshToken = refreshTokenRepository.findByStudentId(authentication.getName())
                 .orElseThrow(() -> {
-                    log.warn("[RefreshToken 조회 실패] 저장된 토큰 없음 studentId: {})", studentId);
+                    log.warn("[RefreshToken 조회 실패] 저장된 토큰 없음 studentId: {}", studentId);
                     return new CustomException(ErrorCode.JWT_NOT_FOUND);
                 });
 

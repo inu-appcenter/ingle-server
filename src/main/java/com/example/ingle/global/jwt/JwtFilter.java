@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -47,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // SecurityContext에 인증 정보 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                System.out.println("Security Context : " + authentication.getName() + "\nURI : " + requestURI);
+                log.info("[Security Context] studentId: {}, URI: {}", authentication.getName(), requestURI);
             }
 
             // 다음 필터로 요청 / 응답 객체 전달
@@ -75,7 +77,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
-        response.setStatus(errorCode.getCode());
+        response.setStatus(errorCode.getHttpStatus().value());
         response.setContentType("application/json;charset=UTF-8");
 
         ErrorResponseEntity errorResponse = ErrorResponseEntity.toResponseEntity(errorCode).getBody();

@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
 
     public static final long ACCESS_TOKEN_EXPIRED_TIME = 2 * 60 * 60 * 1000L;   // 2시간
-    public static final long REFRESH_TOKEN_EXPIRED_TIME = 3 * 24 * 60 * 60 * 1000L; // 14일
+    public static final long REFRESH_TOKEN_EXPIRED_TIME = 3 * 24 * 60 * 60 * 1000L; // 3일
 
     private final Key key;
     private final MemberDetailService memberDetailService;
