@@ -15,7 +15,7 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ErrorResponseEntity> handleCustomException(CustomException ex) {
+    public ResponseEntity<ErrorResponseEntity> handleCustomException(CustomException ex) {
         return ErrorResponseEntity.toResponseEntity(ex.getErrorCode());
     }
 
