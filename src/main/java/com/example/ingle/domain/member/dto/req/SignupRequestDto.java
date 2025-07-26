@@ -26,7 +26,7 @@ public class SignupRequestDto {
     @Schema(description = "사용자의 파견 유형", example = "EXCHANGE")
     private Program program;
 
-    @Size(min = 2, max = 20)
+    @Size(min = 3, max = 20, message = "닉네임은 3~20자여야 합니다.")
     @NotBlank(message = "닉네임이 비어있습니다.")
     @Schema(description = "사용자의 닉네임", example = "IngleFan")
     private String nickname;
