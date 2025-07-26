@@ -14,7 +14,6 @@ public class Map extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "map_id")
     private Long id;
 
     @Column(nullable = false)
