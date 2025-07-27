@@ -2,8 +2,10 @@ package com.example.ingle.global.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableTransactionManagement // 트랜잭션 처리를 위해 @Transactional 어노테이션이 작동하도록 설정
 @EnableJpaRepositories( // JpaRepository를 사용하는 클래스들의 위치 지정
         basePackages = "com.example.ingle",
@@ -27,6 +30,8 @@ import javax.sql.DataSource;
 )
 @EntityScan(basePackages = "com.example.ingle")
 public class MysqlConfig {
+
+    private final JpaProperties jpaProperties;  // JpaProperties는 spring.jpa로 시작하는 모든 설정을 자동으로 매핑해주는 클래스
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
@@ -59,6 +64,7 @@ public class MysqlConfig {
                 .dataSource(dataSource)
                 .packages("com.example.ingle")
                 .persistenceUnit("mysql")
+                .properties(jpaProperties.getProperties())
                 .build();
     }
 
