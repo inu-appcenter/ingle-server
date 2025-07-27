@@ -11,7 +11,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
@@ -32,7 +32,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                         .code(ErrorCode.JWT_ACCESS_DENIED.getCode())
                         .name(ErrorCode.JWT_ACCESS_DENIED.name())
                         .message(ErrorCode.JWT_ACCESS_DENIED.getMessage())
-                        .errors(Collections.emptyList())
+                        .errors(List.of())
                         .build()
         );
         // JSON을 HTTP 응답 본문에 작성

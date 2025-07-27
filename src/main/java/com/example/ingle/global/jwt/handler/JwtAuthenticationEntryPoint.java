@@ -19,7 +19,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        // 403
+        // 401
         response.setStatus(ErrorCode.JWT_ENTRY_POINT.getHttpStatus().value());
         // 응답의 콘텐츠 타입을 JSON 형식으로 지정
         response.setContentType("application/json;charset=UTF-8");

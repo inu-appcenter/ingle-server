@@ -52,7 +52,7 @@ public class AuthController implements AuthApiSpecification{
     }
 
     // 포털 로그인 테스트
-    @GetMapping("/login/test")
+    @PostMapping("/login/test")
     public ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(authService.loginTest(loginRequestDto));
     }
