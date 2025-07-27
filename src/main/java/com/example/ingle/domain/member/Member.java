@@ -19,7 +19,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "student_id", nullable = false)
     private String studentId;
 
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(name = "terms_agreed", nullable = false)
     private boolean termsAgreed;
 
     @Enumerated(EnumType.STRING)
