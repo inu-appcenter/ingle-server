@@ -48,19 +48,4 @@ public class Member extends BaseEntity {
         this.termsAgreed = signupRequestDto.isTermsAgreed();
         this.role = Role.USER;
     }
-
-    // 학과 업데이트
-    public void updateDepartment(Department department) {
-        this.department = department;
-    }
-
-    // 파견 유형 업데이트
-    public void updateStudentId(Program program) {
-        this.program = program;
-    }
-
-    // 닉네임 업데이트
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
-    }
 }
