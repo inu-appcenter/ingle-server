@@ -28,8 +28,12 @@ public class SwaggerConfig {
         Server server = new Server();
         server.setUrl("https://ingle-server.inuappcenter.kr");
 
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("로컬 개발 서버");
+
         return new OpenAPI()
-                .servers(List.of(server))
+                .servers(List.of(server, localServer))
                 .components(components)
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement);
