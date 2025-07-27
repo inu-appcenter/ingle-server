@@ -12,6 +12,7 @@ import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.JwtTokenProvider;
 import com.example.ingle.global.jwt.RefreshToken;
 import com.example.ingle.global.jwt.RefreshTokenRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class AuthService {
                 .build();
         refreshTokenRepository.save(refreshToken);
 
-        log.info("[JWT 발급 완료] studentId = {}", member.getStudentId());
+        log.info("[회원가입 성공] studentId = {}", member.getStudentId());
 
         return token;
     }
@@ -90,6 +91,8 @@ public class AuthService {
                 loginRequestDto.getPassword(),
                 member
         );
+
+        log.info("[로그인 성공] studentId: {}", member.getStudentId());
 
         return ResponseEntity.status(HttpStatus.OK).body(loginResponseDto);
     }
@@ -159,5 +162,19 @@ public class AuthService {
         memberRepository.delete(memberToDelete);
 
         log.info("[회원 탈퇴 완료] studentId: {}", memberToDelete.getStudentId());
+    }
+
+    @Transactional(readOnly = true)
+    public String loginTest(@Valid LoginRequestDto loginRequestDto) {
+
+        log.info("[로그인 테스트 요청] studentId={}", loginRequestDto.getStudentId());
+
+        if (inuMemberRepository.isPresent()) {
+            if (!inuMemberRepository.get().verifySchoolLogin(loginRequestDto.getStudentId(), loginRequestDto.getPassword())) {
+                return "INU 포털 로그인 실패";
+            }
+        }
+
+        return "INU 포털 로그인 성공: " + loginRequestDto.getStudentId();
     }
 }
