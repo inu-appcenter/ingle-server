@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnProperty(name = "oracle.enabled", havingValue = "true")
-public class OracleDataSourceConfig {
+public class OracleConfig {
 
     // Oracle DataSource 등록
     // HikariDataSource를 구성
