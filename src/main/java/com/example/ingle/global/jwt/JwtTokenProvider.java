@@ -11,6 +11,7 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -32,14 +33,16 @@ public class JwtTokenProvider {
 
     private final Key key;
     private final MemberDetailService memberDetailService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
-            MemberDetailService memberDetailService
+            MemberDetailService memberDetailService, RefreshTokenRepository refreshTokenRepository
     ) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.memberDetailService = memberDetailService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     // 인증 성공 시 토큰 생성
@@ -86,6 +89,37 @@ public class JwtTokenProvider {
         log.info("[간단 JWT 발급] studentId: {}, accessToken: {}, refreshToken: {}", studentId, accessToken, refreshToken);
 
         return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
+    }
+
+    // 인증 및 토큰 생성
+    public LoginResponseDto authenticateAndGenerateToken(AuthenticationManagerBuilder authenticationManagerBuilder,
+                                                         String studentId, String password, Member member) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(studentId, password);
+
+        log.debug("Spring Security 인증 시작");
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        if (!authentication.isAuthenticated()) {
+            log.error("[인증 실패] studentId = {}", studentId);
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
+        }
+
+        // 리프레시 토큰 존재 시 삭제
+        if (refreshTokenRepository.findByStudentId(member.getStudentId()).isPresent()) {
+            refreshTokenRepository.deleteByStudentId(member.getStudentId());
+        }
+
+        // JWT 토큰 생성 및 저장
+        LoginResponseDto token = generateToken(authentication);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .member(member)
+                .refreshToken(token.getRefreshToken())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+        log.info("[JWT 발급 완료] studentId = {}", studentId);
+
+        return token;
     }
 
     // 토큰 유효성 검증

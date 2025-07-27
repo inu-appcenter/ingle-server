@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -32,8 +31,8 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final Optional<INUMemberRepository> inuMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Transactional
     public LoginResponseDto signup(SignupRequestDto signupRequestDto) {
@@ -85,7 +84,8 @@ public class AuthService {
                     return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
                 });
 
-        LoginResponseDto loginResponseDto = authenticateAndGenerateToken(
+        LoginResponseDto loginResponseDto = jwtTokenProvider.authenticateAndGenerateToken(
+                authenticationManagerBuilder,
                 loginRequestDto.getStudentId(),
                 loginRequestDto.getPassword(),
                 member
@@ -159,34 +159,5 @@ public class AuthService {
         memberRepository.delete(memberToDelete);
 
         log.info("[회원 탈퇴 완료] studentId: {}", memberToDelete.getStudentId());
-    }
-
-    private LoginResponseDto authenticateAndGenerateToken(String studentId, String password, Member member) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(studentId, password);
-
-        log.debug("Spring Security 인증 시작");
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        if (!authentication.isAuthenticated()) {
-            log.error("[인증 실패] studentId = {}", studentId);
-            throw new CustomException(ErrorCode.LOGIN_FAILED);
-        }
-
-        // 리프레시 토큰 존재 시 삭제
-        if (refreshTokenRepository.findByStudentId(member.getStudentId()).isPresent()) {
-            refreshTokenRepository.deleteByStudentId(member.getStudentId());
-        }
-
-        // JWT 토큰 생성 및 저장
-        LoginResponseDto token = jwtTokenProvider.generateToken(authentication);
-        RefreshToken refreshToken = RefreshToken.builder()
-                .member(member)
-                .refreshToken(token.getRefreshToken())
-                .build();
-
-        refreshTokenRepository.save(refreshToken);
-        log.info("[JWT 발급 완료] studentId = {}", studentId);
-
-        return token;
     }
 }
