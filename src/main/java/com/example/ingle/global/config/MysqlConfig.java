@@ -1,5 +1,6 @@
 package com.example.ingle.global.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -27,12 +28,22 @@ import javax.sql.DataSource;
 @EntityScan(basePackages = "com.example.ingle")
 public class MysqlConfig {
 
-    // MySQL용 DataSource 생성
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public MysqlDataSourceProperties mysqlDataSourceProperties() {
+        return new MysqlDataSourceProperties();
+    }
+
     @Bean(name = "mysqlDataSource")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource mysqlDataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource mysqlDataSource(MysqlDataSourceProperties props) {
+        return DataSourceBuilder.create()
+                .url(props.getUrl())
+                .username(props.getUsername())
+                .password(props.getPassword())
+                .driverClassName(props.getDriverClassName())
+                .type(HikariDataSource.class)
+                .build();
     }
 
     // JPA가 엔티티를 관리하기 위한 팩토리
