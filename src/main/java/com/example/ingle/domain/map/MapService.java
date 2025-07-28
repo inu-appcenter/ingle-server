@@ -61,7 +61,7 @@ public class MapService {
         List<MapResponseDto> mapResponseDtos = maps.stream()
                 .map(map -> MapResponseDto.builder().map(map).build()).toList();
 
-        log.info("[지도 검색 성공");
+        log.info("[지도 검색 성공]");
 
         return mapResponseDtos;
     }

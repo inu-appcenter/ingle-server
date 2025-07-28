@@ -1,5 +1,6 @@
-package com.example.ingle.domain.member;
+package com.example.ingle.domain.member.service;
 
+import com.example.ingle.domain.member.Member;
 import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
 import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
