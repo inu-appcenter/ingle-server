@@ -1,11 +1,3 @@
----
-name: "☃️ PR 템플릿"
-about: "❄️ 작업 완료 후 PR 생성 시 사용"
-title: "✨ feat : "
-labels: enhancement
-assignees: ''
----
-
 ## 📎 관련 이슈
 
 - closed #이슈번호

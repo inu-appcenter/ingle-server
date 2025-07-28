@@ -29,7 +29,7 @@ public class AuthController implements AuthApiSpecification{
     // 포털 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.login(loginRequestDto));
+        return authService.login(loginRequestDto);
     }
 
     // 토큰 재발급
