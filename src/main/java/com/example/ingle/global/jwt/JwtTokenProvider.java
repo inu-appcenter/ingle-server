@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     // JWT 클레임에서 권한 정보를 저장할 키
     private static final String AUTHORITIES_KEY = "auth";
 
-    public static final long ACCESS_TOKEN_EXPIRED_TIME = 2 * 60 * 60 * 1000L;   // 2시간
+    public static final long ACCESS_TOKEN_EXPIRED_TIME = 1 * 60 * 60 * 1000L;   // 1시간
     public static final long REFRESH_TOKEN_EXPIRED_TIME = 3 * 24 * 60 * 60 * 1000L; // 3일
 
     private final Key key;
