@@ -19,7 +19,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "student_id", nullable = false)
     private String studentId;
 
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(name = "terms_agreed", nullable = false)
     private boolean termsAgreed;
 
     @Enumerated(EnumType.STRING)
@@ -47,20 +47,5 @@ public class Member extends BaseEntity {
         this.program = signupRequestDto.getProgram();
         this.termsAgreed = signupRequestDto.isTermsAgreed();
         this.role = Role.USER;
-    }
-
-    // 학과 업데이트
-    public void updateDepartment(Department department) {
-        this.department = department;
-    }
-
-    // 파견 유형 업데이트
-    public void updateStudentId(Program program) {
-        this.program = program;
-    }
-
-    // 닉네임 업데이트
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
     }
 }
