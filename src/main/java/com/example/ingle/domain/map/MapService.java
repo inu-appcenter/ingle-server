@@ -46,7 +46,7 @@ public class MapService {
 
         MapDetailResponseDto mapDetailResponseDto = MapDetailResponseDto.builder().map(map).build();
 
-        log.info("[건물 상세 조회 성공");
+        log.info("[건물 상세 조회 성공]");
 
         return mapDetailResponseDto;
     }
