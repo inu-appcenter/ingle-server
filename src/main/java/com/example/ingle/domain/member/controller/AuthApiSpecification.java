@@ -200,7 +200,7 @@ public interface AuthApiSpecification {
 
     @Operation(
             summary = "(TEST) INU 포털 로그인 테스트",
-            description = "포털 아이디와 비밀번호로 로그인을 테스트합니다.",
+            description = "INU 포털 로그인 기능을 테스트합니다.",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
