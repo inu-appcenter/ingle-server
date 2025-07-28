@@ -5,9 +5,11 @@ import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
 import com.example.ingle.domain.member.dto.res.LoginResponseDto;
 import com.example.ingle.domain.member.dto.res.SignupRequiredResponseDto;
+import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.global.jwt.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,8 +56,34 @@ public interface AuthApiSpecification {
                             description = "회원가입 필요",
                             content = @Content(schema = @Schema(implementation = SignupRequiredResponseDto.class))
                     ),
-                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다."),
-                    @ApiResponse(responseCode = "401", description = "로그인 실패 - 잘못된 자격 증명")
+                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "MEMBER_NOT_FOUND", summary = "회원을 찾을 수 없습니다.",
+                                            value = """
+                                                {
+                                                   "code": 404,
+                                                   "name": "MEMBER_NOT_FOUND",
+                                                   "message": "회원을 찾을 수 없습니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    ),
+                    @ApiResponse(responseCode = "401", description = "포털 로그인 실패",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "LOGIN_FAILED", summary = "로그인이 실패하였습니다.",
+                                            value = """
+                                                {
+                                                   "code": 401,
+                                                   "name": "LOGIN_FAILED",
+                                                   "message": "로그인이 실패하였습니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    )
             }
     )
     ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto);
@@ -72,9 +100,48 @@ public interface AuthApiSpecification {
                                     schema = @Schema(implementation = LoginResponseDto.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "420", description = "만료된 리프레시 토큰입니다."),
-                    @ApiResponse(responseCode = "404", description = "리프레시 토큰 조회 실패"),
-                    @ApiResponse(responseCode = "400", description = "리프레시 토큰 불일치")
+                    @ApiResponse(responseCode = "420", description = "만료된 리프레시 토큰입니다.",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "JWT_REFRESH_TOKEN_EXPIRED", summary = "[Jwt] 만료된 리프레시 토큰입니다.",
+                                            value = """
+                                                {
+                                                   "code": 420,
+                                                   "name": "JWT_REFRESH_TOKEN_EXPIRED",
+                                                   "message": "[Jwt] 만료된 리프레시 토큰입니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "리프레시 토큰 조회 실패",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "JWT_NOT_FOUND", summary = "[Jwt] 리프레시 토큰 조회 실패",
+                                            value = """
+                                                {
+                                                   "code": 404,
+                                                   "name": "JWT_NOT_FOUND",
+                                                   "message": "[Jwt] 리프레시 토큰 조회 실패",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400", description = "리프레시 토큰 불일치",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "JWT_NOT_MATCH", summary = "[Jwt] 리프레시 토큰 불일치",
+                                            value = """
+                                                {
+                                                   "code": 400,
+                                                   "name": "JWT_NOT_MATCH",
+                                                   "message": "[Jwt] 리프레시 토큰 불일치",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    )
             }
     )
     ResponseEntity<LoginResponseDto> refresh(@Valid @RequestBody JwtTokenRequestDto jwtTokenRequestDto);
@@ -90,7 +157,20 @@ public interface AuthApiSpecification {
                                     schema = @Schema(implementation = Boolean.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "400", description = "닉네임이 중복되었습니다.")
+                    @ApiResponse(responseCode = "400", description = "닉네임이 중복되었습니다.",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "NICKNAME_DUPLICATED", summary = "닉네임이 중복되었습니다.",
+                                            value = """
+                                                {
+                                                   "code": 400,
+                                                   "name": "NICKNAME_DUPLICATED",
+                                                   "message": "닉네임이 중복되었습니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    )
             }
     )
     ResponseEntity<Boolean> checkNicknameDuplicated(@PathVariable String nickname);
@@ -100,7 +180,20 @@ public interface AuthApiSpecification {
             description = "회원 탈퇴를 진행합니다.",
             responses = {
                     @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공"),
-                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.")
+                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(name = "MEMBER_NOT_FOUND", summary = "회원을 찾을 수 없습니다.",
+                                            value = """
+                                                {
+                                                   "code": 404,
+                                                   "name": "MEMBER_NOT_FOUND",
+                                                   "message": "회원을 찾을 수 없습니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    ),
             }
     )
     ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails);
