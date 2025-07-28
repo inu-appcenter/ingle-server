@@ -58,7 +58,7 @@ public interface AuthApiSpecification {
                     ),
                     @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "MEMBER_NOT_FOUND", summary = "회원을 찾을 수 없습니다.",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 404,
@@ -72,7 +72,7 @@ public interface AuthApiSpecification {
                     ),
                     @ApiResponse(responseCode = "401", description = "포털 로그인 실패",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "LOGIN_FAILED", summary = "로그인이 실패하였습니다.",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 401,
@@ -102,7 +102,7 @@ public interface AuthApiSpecification {
                     ),
                     @ApiResponse(responseCode = "420", description = "만료된 리프레시 토큰입니다.",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "JWT_REFRESH_TOKEN_EXPIRED", summary = "[Jwt] 만료된 리프레시 토큰입니다.",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 420,
@@ -116,7 +116,7 @@ public interface AuthApiSpecification {
                     ),
                     @ApiResponse(responseCode = "404", description = "리프레시 토큰 조회 실패",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "JWT_NOT_FOUND", summary = "[Jwt] 리프레시 토큰 조회 실패",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 404,
@@ -130,7 +130,7 @@ public interface AuthApiSpecification {
                     ),
                     @ApiResponse(responseCode = "400", description = "리프레시 토큰 불일치",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "JWT_NOT_MATCH", summary = "[Jwt] 리프레시 토큰 불일치",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 400,
@@ -159,7 +159,7 @@ public interface AuthApiSpecification {
                     ),
                     @ApiResponse(responseCode = "400", description = "닉네임이 중복되었습니다.",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "NICKNAME_DUPLICATED", summary = "닉네임이 중복되었습니다.",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 400,
@@ -182,7 +182,7 @@ public interface AuthApiSpecification {
                     @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공"),
                     @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(name = "MEMBER_NOT_FOUND", summary = "회원을 찾을 수 없습니다.",
+                                    examples = @ExampleObject(
                                             value = """
                                                 {
                                                    "code": 404,
