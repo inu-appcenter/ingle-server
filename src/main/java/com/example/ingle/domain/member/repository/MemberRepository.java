@@ -1,12 +1,13 @@
-package com.example.ingle.domain.member;
+package com.example.ingle.domain.member.repository;
 
+import com.example.ingle.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByNickname(String nickname);
+
+    Optional<Member> findByStudentId(String studentId);
     boolean existsByNickname(String nickname);
+    boolean existsByStudentId(String studentId);
 }
