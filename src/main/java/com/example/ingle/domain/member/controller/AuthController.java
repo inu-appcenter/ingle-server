@@ -44,6 +44,13 @@ public class AuthController implements AuthApiSpecification{
         return ResponseEntity.status(HttpStatus.OK).body(authService.checkNicknameDuplicated(nickname));
     }
 
+    // 로그아웃
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal MemberDetail userDetails) {
+        authService.logout(userDetails.getMember());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     // 회원탈퇴
     @DeleteMapping
     public ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails) {

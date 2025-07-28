@@ -147,6 +147,22 @@ public class AuthService {
     }
 
     @Transactional
+    public void logout(Member member) {
+
+        log.info("[로그아웃 요청] studentId: {}", member.getStudentId());
+
+        RefreshToken refreshToken = refreshTokenRepository.findByStudentId(member.getStudentId())
+                .orElseThrow(() -> {
+                    log.warn("[로그아웃 실패] 저장된 RefreshToken 없음: studentId={}", member.getStudentId());
+                    return new CustomException(ErrorCode.JWT_NOT_FOUND);
+                });
+
+        refreshTokenRepository.delete(refreshToken);
+
+        log.info("[로그아웃 성공] studentId: {}", member.getStudentId());
+    }
+
+    @Transactional
     public void deleteMember(Member member) {
 
         log.info("[회원 탈퇴 요청 시작] studentId: {}", member.getStudentId());
