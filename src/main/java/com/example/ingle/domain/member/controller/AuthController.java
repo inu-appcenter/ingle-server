@@ -1,6 +1,6 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.member.AuthService;
+import com.example.ingle.domain.member.service.AuthService;
 import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
 import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
