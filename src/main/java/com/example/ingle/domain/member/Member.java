@@ -1,65 +1,60 @@
 package com.example.ingle.domain.member;
 
+import com.example.ingle.domain.member.dto.req.SignupRequestDto;
+import com.example.ingle.domain.member.dto.req.UpdateMemberRequestDto;
+import com.example.ingle.domain.member.enums.Department;
+import com.example.ingle.domain.member.enums.Program;
+import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
+import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member")
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String department;
-
-    @Column(nullable = false, length = 20)
+    @Column(name = "student_id", nullable = false)
     private String studentId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Department department;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Program program;
 
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
-    @Column(length = 100)
-    private String profileImage;
-
-    @Column(nullable = false)
-    private boolean terms;
+    @Column(name = "terms_agreed", nullable = false)
+    private boolean termsAgreed;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    @Builder
-    private Member(String department, String studentId, String nickname, String profileImage, boolean terms, Role role) {
-        this.department = department;
-        this.studentId = studentId;
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-        this.terms = terms;
-        this.role = role;
+    public Member(SignupRequestDto signupRequestDto) {
+        this.studentId = signupRequestDto.getStudentId();
+        this.nickname = signupRequestDto.getNickname();
+        this.department = signupRequestDto.getDepartment();
+        this.program = signupRequestDto.getProgram();
+        this.termsAgreed = signupRequestDto.isTermsAgreed();
+        this.role = Role.USER;
     }
 
-    // 학과 업데이트
-    public void updateDepartment(String department) {
-        this.department = department;
-    }
-
-    // 학번 업데이트
-    public void updateStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    // 닉네임 업데이트
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    // 프로필 사진 업데이트
-    public void updateProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void updateMember(@Valid UpdateMemberRequestDto updateMemberRequestDto) {
+        this.studentId = updateMemberRequestDto.getStudentId() != null ? updateMemberRequestDto.getStudentId() : this.studentId;
+        this.department = updateMemberRequestDto.getDepartment() != null ? updateMemberRequestDto.getDepartment() : this.department;
+        this.nickname = updateMemberRequestDto.getNickname() != null ? updateMemberRequestDto.getNickname() : this.nickname;
+        this.program = updateMemberRequestDto.getProgram() != null ? updateMemberRequestDto.getProgram() : this.program;
     }
 }
