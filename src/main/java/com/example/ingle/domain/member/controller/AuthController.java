@@ -39,8 +39,8 @@ public class AuthController implements AuthApiSpecification{
     }
 
     // 닉네임 중복 확인
-    @GetMapping("/nickname/{nickname}")
-    public ResponseEntity<Boolean> checkNicknameDuplicated(@PathVariable String nickname) {
+    @GetMapping("/nickname")
+    public ResponseEntity<Boolean> checkNicknameDuplicated(@RequestParam String nickname) {
         return ResponseEntity.status(HttpStatus.OK).body(authService.checkNicknameDuplicated(nickname));
     }
 

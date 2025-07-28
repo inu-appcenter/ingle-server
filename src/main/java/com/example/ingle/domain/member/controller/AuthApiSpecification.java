@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Auth", description = "회원 인증 및 권한 관련 API")
 public interface AuthApiSpecification {
@@ -173,7 +173,7 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<Boolean> checkNicknameDuplicated(@PathVariable String nickname);
+    ResponseEntity<Boolean> checkNicknameDuplicated(@RequestParam String nickname);
 
     @Operation(
             summary = "회원 탈퇴",
