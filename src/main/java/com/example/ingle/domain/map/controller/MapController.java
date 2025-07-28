@@ -33,10 +33,9 @@ public class MapController implements MapApiSpecification {
         return ResponseEntity.status(HttpStatus.OK).body(mapService.findById(mapId));
     }
 
-    // 건물 검색
+    // 지도 검색
     @GetMapping("/search")
-    public ResponseEntity<List<MapResponseDto>> searchMaps(
-            @RequestParam String keyword) {
+    public ResponseEntity<List<MapResponseDto>> searchMaps(@RequestParam String keyword) {
         return ResponseEntity.status(HttpStatus.OK).body(mapService.searchMaps(keyword));
     }
 }

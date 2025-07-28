@@ -21,5 +21,5 @@ public interface MapRepository extends JpaRepository<Map,Long> {
             @Param("maxLng") double maxLng,
             @Param("category") MapCategory category);
 
-    List<Map> findTop10ByNameContainingOrderByCreatedAtDesc(String name);
+    List<Map> findByNameContainingOrderByCreatedAtDesc(String name);
 }

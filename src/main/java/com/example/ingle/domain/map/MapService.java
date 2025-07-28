@@ -56,7 +56,7 @@ public class MapService {
 
         log.info("[지도 검색]");
 
-        List<Map> maps = mapRepository.findTop10ByNameContainingOrderByCreatedAtDesc(keyword);
+        List<Map> maps = mapRepository.findByNameContainingOrderByCreatedAtDesc(keyword);
 
         List<MapResponseDto> mapResponseDtos = maps.stream()
                 .map(map -> MapResponseDto.builder().map(map).build()).toList();

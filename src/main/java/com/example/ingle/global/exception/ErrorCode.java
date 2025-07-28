@@ -33,7 +33,7 @@ public enum ErrorCode {
     MEMBER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, 400, "이미 존재하는 회원입니다."),
 
     // Map
-    MAP_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "지도를 찾을 수 없습니다."),
+    MAP_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "건물을 찾을 수 없습니다."),
 
     // Validation
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST, 400, "요청한 값이 올바르지 않습니다."),
