@@ -1,4 +1,4 @@
-package com.example.ingle.domain.map;
+package com.example.ingle.domain.map.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 

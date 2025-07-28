@@ -29,27 +29,24 @@ public class Map extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MapCategory category;
 
-    @Column(name = "building_name", nullable = false)
-    private String buildingName;
+    @Column(name = "building_name", nullable = true)
+    private Integer buildingName;
 
-    @Column(name = "building_code", nullable = false)
+    @Column(name = "building_code", nullable = true)
     private String buildingCode;
 
-    @Column(nullable = false)
-    private Integer floor;
-
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
+    @Column(nullable = true)
+    private String location;
 
     @Column(nullable = true)
-    private String image;
+    private Integer floor;
 
-    @Column(name = "open_time", nullable = false)
+    @Column(name = "open_time", nullable = true)
     private String openTime;
 
-    @Column(name = "close_time", nullable = false)
+    @Column(name = "close_time", nullable = true)
     private String closeTime;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
 }
