@@ -29,8 +29,8 @@ public class Map extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MapCategory category;
 
-    @Column(name = "building_name", nullable = true)
-    private Integer buildingName;
+    @Column(name = "building_number", nullable = true)
+    private Integer buildingNumber;
 
     @Column(name = "building_code", nullable = true)
     private String buildingCode;
