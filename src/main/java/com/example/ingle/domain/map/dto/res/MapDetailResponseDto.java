@@ -26,7 +26,7 @@ public class MapDetailResponseDto {
     private final MapCategory category;
 
     @Schema(description = "호관", example = "1")
-    private final Integer buildingName;
+    private final Integer buildingNumber;
 
     @Schema(description = "건물 코드", example = "SH")
     private final String buildingCode;
@@ -53,7 +53,7 @@ public class MapDetailResponseDto {
         this.latitude = map.getLatitude();
         this.longitude = map.getLongitude();
         this.category = map.getCategory();
-        this.buildingName = map.getBuildingName();
+        this.buildingNumber = map.getBuildingNumber();
         this.buildingCode = map.getBuildingCode();
         this.location = map.getLocation();
         this.floor = map.getFloor();
