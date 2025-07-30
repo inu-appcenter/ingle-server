@@ -32,8 +32,4 @@ public class SignupRequestDto {
     @NotBlank(message = "닉네임이 비어있습니다.")
     @Schema(description = "사용자의 닉네임", example = "IngleFan")
     private String nickname;
-
-    @NotNull(message = "이용 약관 동의 여부가 비어있습니다.")
-    @Schema(description = "이용 약관 동의 여부", example = "true")
-    private boolean termsAgreed;
 }

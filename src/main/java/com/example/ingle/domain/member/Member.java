@@ -35,9 +35,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
-    @Column(name = "terms_agreed", nullable = false)
-    private boolean termsAgreed;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -47,7 +44,6 @@ public class Member extends BaseEntity {
         this.nickname = signupRequestDto.getNickname();
         this.department = signupRequestDto.getDepartment();
         this.program = signupRequestDto.getProgram();
-        this.termsAgreed = signupRequestDto.isTermsAgreed();
         this.role = Role.USER;
     }
 
