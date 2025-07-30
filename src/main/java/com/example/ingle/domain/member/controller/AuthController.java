@@ -1,6 +1,6 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.member.AuthService;
+import com.example.ingle.domain.member.service.AuthService;
 import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
 import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
@@ -39,9 +39,16 @@ public class AuthController implements AuthApiSpecification{
     }
 
     // 닉네임 중복 확인
-    @GetMapping("/nickname/{nickname}")
-    public ResponseEntity<Boolean> checkNicknameDuplicated(@PathVariable String nickname) {
+    @GetMapping("/nickname")
+    public ResponseEntity<Boolean> checkNicknameDuplicated(@RequestParam String nickname) {
         return ResponseEntity.status(HttpStatus.OK).body(authService.checkNicknameDuplicated(nickname));
+    }
+
+    // 로그아웃
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal MemberDetail userDetails) {
+        authService.logout(userDetails.getMember());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // 회원탈퇴

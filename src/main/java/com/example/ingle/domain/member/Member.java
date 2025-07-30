@@ -1,11 +1,13 @@
 package com.example.ingle.domain.member;
 
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
+import com.example.ingle.domain.member.dto.req.UpdateMemberRequestDto;
 import com.example.ingle.domain.member.enums.Department;
 import com.example.ingle.domain.member.enums.Program;
 import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,5 +49,12 @@ public class Member extends BaseEntity {
         this.program = signupRequestDto.getProgram();
         this.termsAgreed = signupRequestDto.isTermsAgreed();
         this.role = Role.USER;
+    }
+
+    public void updateMember(@Valid UpdateMemberRequestDto updateMemberRequestDto) {
+        this.studentId = updateMemberRequestDto.getStudentId() != null ? updateMemberRequestDto.getStudentId() : this.studentId;
+        this.department = updateMemberRequestDto.getDepartment() != null ? updateMemberRequestDto.getDepartment() : this.department;
+        this.nickname = updateMemberRequestDto.getNickname() != null ? updateMemberRequestDto.getNickname() : this.nickname;
+        this.program = updateMemberRequestDto.getProgram() != null ? updateMemberRequestDto.getProgram() : this.program;
     }
 }

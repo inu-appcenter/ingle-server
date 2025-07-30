@@ -1,5 +1,6 @@
-package com.example.ingle.domain.member;
+package com.example.ingle.domain.member.service;
 
+import com.example.ingle.domain.member.Member;
 import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
 import com.example.ingle.domain.member.dto.req.LoginRequestDto;
 import com.example.ingle.domain.member.dto.req.SignupRequestDto;
@@ -144,6 +145,22 @@ public class AuthService {
             throw new CustomException(ErrorCode.NICKNAME_DUPLICATED);
         }
         return true;
+    }
+
+    @Transactional
+    public void logout(Member member) {
+
+        log.info("[로그아웃 요청] studentId: {}", member.getStudentId());
+
+        RefreshToken refreshToken = refreshTokenRepository.findByStudentId(member.getStudentId())
+                .orElseThrow(() -> {
+                    log.warn("[로그아웃 실패] 저장된 RefreshToken 없음: studentId={}", member.getStudentId());
+                    return new CustomException(ErrorCode.JWT_NOT_FOUND);
+                });
+
+        refreshTokenRepository.delete(refreshToken);
+
+        log.info("[로그아웃 성공] studentId: {}", member.getStudentId());
     }
 
     @Transactional

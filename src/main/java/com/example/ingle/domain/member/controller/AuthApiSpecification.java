@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Auth", description = "회원 인증 및 권한 관련 API")
 public interface AuthApiSpecification {
@@ -173,7 +173,32 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<Boolean> checkNicknameDuplicated(@PathVariable String nickname);
+    ResponseEntity<Boolean> checkNicknameDuplicated(@RequestParam String nickname);
+
+    @Operation(
+            summary = "로그아웃",
+            description = "로그인된 사용자의 로그아웃을 수행합니다." +
+                    "<br><br>서버에서는 리프레시 토큰을 삭제하여 로그아웃 처리합니다." +
+                    "<br><br>프론트엔드에서는 액세스 토큰을 삭제해야 합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "로그아웃 성공"),
+                    @ApiResponse(responseCode = "404", description = "[Jwt] 리프레시 토큰 조회 실패",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(
+                                            value = """
+                                                {
+                                                   "code": 404,
+                                                   "name": "JWT_NOT_FOUND",
+                                                   "message": "[Jwt] 리프레시 토큰 조회 실패",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    ),
+            }
+    )
+    ResponseEntity<Void> logout(@AuthenticationPrincipal MemberDetail userDetails);
 
     @Operation(
             summary = "회원 탈퇴",
