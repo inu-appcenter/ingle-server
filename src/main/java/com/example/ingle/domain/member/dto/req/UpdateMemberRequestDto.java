@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Schema(description = "회원가입 요청 DTO")
-public class SignupRequestDto {
+@Schema(description = "회원 정보 수정 요청 DTO")
+public class UpdateMemberRequestDto {
 
     @Pattern(regexp = "\\d{9}", message = "학번은 9자리 숫자여야 합니다.")
     @NotBlank(message = "학번이 비어있습니다.")
@@ -24,12 +24,12 @@ public class SignupRequestDto {
     @Schema(description = "사용자의 학과", example = "COMPUTER_ENGINEERING")
     private Department department;
 
-    @NotNull(message = "파견 유형이 비어있습니다.")
+    @NotNull(message = "파견 유형 비어있습니다.")
     @Schema(description = "사용자의 파견 유형", example = "EXCHANGE")
     private Program program;
 
     @Size(min = 3, max = 20, message = "닉네임은 3~20자여야 합니다.")
     @NotBlank(message = "닉네임이 비어있습니다.")
-    @Schema(description = "사용자의 닉네임", example = "IngleFan")
+    @Schema(description = "사용자의 닉네임", example = "EXCHANGE")
     private String nickname;
 }

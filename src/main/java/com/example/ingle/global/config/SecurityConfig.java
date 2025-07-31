@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(AUTH_URIS).permitAll()
+                        .requestMatchers(SWAGGER_URIS).permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -82,5 +83,11 @@ public class SecurityConfig {
             "/api/v1/auth/login/test",
             "/api/v1/auth/refresh",
             "/api/v1/auth/nickname/**",
+    };
+
+    private static final String[] SWAGGER_URIS = {
+            "/favicon.ico",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 }

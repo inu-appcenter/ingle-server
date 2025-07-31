@@ -7,6 +7,7 @@ import lombok.Getter;
 @Schema(description = "회원가입 필요 응답 DTO")
 public class SignupRequiredResponseDto {
 
+    @Schema(description = "학번", example = "202301452")
     private final String studentId;
 
     private final boolean loginRequired = true;

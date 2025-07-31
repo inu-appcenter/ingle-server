@@ -17,17 +17,14 @@ public class LoginResponseDto {
     @Schema(description = "학번", example = "202301452")
     private final String studentId;
 
-    @Schema(description = "학과", example = "COMPUTER_ENG")
+    @Schema(description = "학과", example = "Dept. of Computer Science & Engineering")
     private final String department;
 
-    @Schema(description = "파견 유형", example = "EXCHANGE")
+    @Schema(description = "파견 유형", example = "Exchange Student")
     private final String program;
 
     @Schema(description = "닉네임", example = "IngleFan")
     private final String nickname;
-
-    @Schema(description = "이용 약관 동의 여부", example = "true")
-    private final boolean termsAgreed;
 
     @Schema(description = "JWT Access Token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
     private final String accessToken;
@@ -49,7 +46,6 @@ public class LoginResponseDto {
         this.department = member.getDepartment().name();
         this.program = member.getProgram().name();
         this.nickname = member.getNickname();
-        this.termsAgreed = member.isTermsAgreed();
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.accessTokenExpiresDate = accessTokenExpiresDate;
