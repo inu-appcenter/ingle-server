@@ -11,9 +11,9 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -91,18 +91,16 @@ public class JwtTokenProvider {
         return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
     }
 
-    // 인증 및 토큰 생성
-    public LoginResponseDto authenticateAndGenerateToken(AuthenticationManagerBuilder authenticationManagerBuilder,
-                                                         String studentId, String password, Member member) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(studentId, password);
+    // 포털 로그인 토큰 생성
+    public LoginResponseDto authenticateAndGenerateToken(String studentId, Member member) {
+        log.info("INU 포털 로그인 이미 성공 → Spring Security 인증 절차 스킵");
 
-        log.debug("Spring Security 인증 시작");
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        MemberDetail memberDetail = new MemberDetail(member);
 
-        if (!authentication.isAuthenticated()) {
-            log.error("[인증 실패] studentId = {}", studentId);
-            throw new CustomException(ErrorCode.LOGIN_FAILED);
-        }
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                memberDetail, null, memberDetail.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 리프레시 토큰 존재 시 삭제
         if (refreshTokenRepository.findByStudentId(member.getStudentId()).isPresent()) {

@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +33,6 @@ public class AuthService {
     private final Optional<INUMemberRepository> inuMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Transactional
     public LoginResponseDto signup(SignupRequestDto signupRequestDto) {
@@ -87,11 +85,7 @@ public class AuthService {
                 });
 
         LoginResponseDto loginResponseDto = jwtTokenProvider.authenticateAndGenerateToken(
-                authenticationManagerBuilder,
-                loginRequestDto.getStudentId(),
-                loginRequestDto.getPassword(),
-                member
-        );
+                loginRequestDto.getStudentId(), member);
 
         log.info("[로그인 성공] studentId: {}", member.getStudentId());
 
