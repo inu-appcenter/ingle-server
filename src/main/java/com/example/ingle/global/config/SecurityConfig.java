@@ -79,6 +79,7 @@ public class SecurityConfig {
     private static final String[] AUTH_URIS = {
             "/api/v1/auth/signup",
             "/api/v1/auth/login",
+            "/api/v1/auth/login/test",
             "/api/v1/auth/refresh",
             "/api/v1/auth/nickname/**",
     };
