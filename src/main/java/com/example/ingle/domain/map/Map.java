@@ -1,10 +1,15 @@
 package com.example.ingle.domain.map;
 
+import com.example.ingle.domain.map.enums.ClosedDay;
+import com.example.ingle.domain.map.enums.MapCategory;
 import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,7 +27,7 @@ public class Map extends BaseEntity {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String name;
 
     @Column(nullable = false)
@@ -47,8 +52,11 @@ public class Map extends BaseEntity {
     @Column(name = "close_time", nullable = true)
     private String closeTime;
 
-    @Column(name = "closed_days", nullable = true)
-    private String closedDays;
+    @ElementCollection(targetClass = ClosedDay.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "map_closed_days", joinColumns = @JoinColumn(name = "map_id"))
+    @Column(name = "closed_day")
+    private Set<ClosedDay> closedDays = new HashSet<>();
 
     @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
