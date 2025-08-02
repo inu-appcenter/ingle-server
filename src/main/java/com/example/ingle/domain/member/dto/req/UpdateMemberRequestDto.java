@@ -4,6 +4,7 @@ import com.example.ingle.domain.member.enums.Department;
 import com.example.ingle.domain.member.enums.Program;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -19,11 +20,11 @@ public class UpdateMemberRequestDto {
     @Schema(description = "사용자의 학번", example = "202301452")
     private String studentId;
 
-    @NotBlank(message = "학과가 비어있습니다.")
+    @NotNull(message = "학과가 비어있습니다.")
     @Schema(description = "사용자의 학과", example = "COMPUTER_ENGINEERING")
     private Department department;
 
-    @NotBlank(message = "파견 유형 비어있습니다.")
+    @NotNull(message = "파견 유형 비어있습니다.")
     @Schema(description = "사용자의 파견 유형", example = "EXCHANGE")
     private Program program;
 
