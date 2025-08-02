@@ -25,7 +25,6 @@ public interface AuthApiSpecification {
     @Operation(
             summary = "회원가입",
             description = "회원가입을 진행합니다." +
-                    "<br><br>요청 값에 로그인 시 입력했던 학번을 같이 담아서 보내주세요." +
                     "<br><br>닉네임은 3~20자 사이의 문자열만 허용합니다.",
             responses = {
                     @ApiResponse(responseCode = "201",

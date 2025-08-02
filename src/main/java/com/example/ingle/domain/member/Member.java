@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +36,9 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
+    @Column(name = "image_url", nullable = true)
+    private String imageUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -45,6 +49,7 @@ public class Member extends BaseEntity {
         this.department = signupRequestDto.getDepartment();
         this.program = signupRequestDto.getProgram();
         this.role = Role.USER;
+        this.imageUrl = "https://example.com/default-profile.jpg";
     }
 
     public void updateMember(@Valid UpdateMemberRequestDto updateMemberRequestDto) {
@@ -52,5 +57,9 @@ public class Member extends BaseEntity {
         this.department = updateMemberRequestDto.getDepartment() != null ? updateMemberRequestDto.getDepartment() : this.department;
         this.nickname = updateMemberRequestDto.getNickname() != null ? updateMemberRequestDto.getNickname() : this.nickname;
         this.program = updateMemberRequestDto.getProgram() != null ? updateMemberRequestDto.getProgram() : this.program;
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
