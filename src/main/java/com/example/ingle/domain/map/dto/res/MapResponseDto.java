@@ -1,7 +1,7 @@
 package com.example.ingle.domain.map.dto.res;
 
 import com.example.ingle.domain.map.Map;
-import com.example.ingle.domain.map.MapCategory;
+import com.example.ingle.domain.map.enums.MapCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

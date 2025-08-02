@@ -1,6 +1,6 @@
 package com.example.ingle.domain.map.controller;
 
-import com.example.ingle.domain.map.MapCategory;
+import com.example.ingle.domain.map.enums.MapCategory;
 import com.example.ingle.domain.map.MapService;
 import com.example.ingle.domain.map.dto.res.MapDetailResponseDto;
 import com.example.ingle.domain.map.dto.res.MapResponseDto;

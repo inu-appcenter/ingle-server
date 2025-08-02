@@ -1,10 +1,13 @@
 package com.example.ingle.domain.map.dto.res;
 
 import com.example.ingle.domain.map.Map;
-import com.example.ingle.domain.map.MapCategory;
+import com.example.ingle.domain.map.enums.ClosedDay;
+import com.example.ingle.domain.map.enums.MapCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.Set;
 
 @Getter
 @Schema(description = "지도 상세 정보 응답 DTO")
@@ -43,6 +46,9 @@ public class MapDetailResponseDto {
     @Schema(description = "클로즈 시간", example = "24:00")
     private final String closeTime;
 
+    @Schema(description = "휴무일 목록", example = "[\"MONDAY\", \"SUNDAY\"]")
+    private final Set<ClosedDay> closedDays;
+
     @Schema(description = "전화번호", example = "032-1234-5678")
     private final String phoneNumber;
 
@@ -59,6 +65,7 @@ public class MapDetailResponseDto {
         this.floor = map.getFloor();
         this.openTime = map.getOpenTime();
         this.closeTime = map.getCloseTime();
+        this.closedDays = map.getClosedDays();
         this.phoneNumber = map.getPhoneNumber();
     }
 }

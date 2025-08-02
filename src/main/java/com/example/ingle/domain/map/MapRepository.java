@@ -1,5 +1,6 @@
 package com.example.ingle.domain.map;
 
+import com.example.ingle.domain.map.enums.MapCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
