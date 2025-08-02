@@ -47,6 +47,9 @@ public class Map extends BaseEntity {
     @Column(name = "close_time", nullable = true)
     private String closeTime;
 
+    @Column(name = "closed_days", nullable = true)
+    private String closedDays;
+
     @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
 }
