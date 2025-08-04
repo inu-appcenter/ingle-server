@@ -17,21 +17,17 @@ public class Tutorial {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(length = 100)
-    private String image;
+    @Column(nullable = false)
+    private Integer rewardPosition; // 리워드 칸 위치 Reward.position
 
-    public Tutorial(String title, String content, Category category, String image) {
+    public Tutorial(String title, Category category, Integer rewardPosition) {
         this.title = title;
-        this.content = content;
         this.category = category;
-        this.image = image;
+        this.rewardPosition = rewardPosition;
     }
 
     // 제목 업데이트
@@ -39,18 +35,13 @@ public class Tutorial {
         this.title = title;
     }
 
-    // 내용 업데이트
-    public void updateContent(String content) {
-        this.content = content;
-    }
-
     // 카테고리 업데이트
     public void updateCategory(Category category) {
         this.category = category;
     }
 
-    // 이미지 업데이트
-    public void updateImage(String image) {
-        this.image = image;
+    // 리워드 위치 업데이트
+    public void updateRewardPosition(Integer rewardPosition) {
+        this.rewardPosition = rewardPosition;
     }
 }
