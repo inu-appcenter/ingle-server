@@ -50,6 +50,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 log.info("[Security Context] studentId: {}, URI: {}", authentication.getName(), requestURI);
+            } else {
+                log.warn("[JWT 검증 실패] 유효하지 않은 토큰: {}, URI: {}", jwt, requestURI);
+                throw new CustomException(ErrorCode.JWT_NOT_VALID);
             }
 
             // 다음 필터로 요청 / 응답 객체 전달

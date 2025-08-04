@@ -1,11 +1,11 @@
-package com.example.ingle.domain.map;
+package com.example.ingle.domain.building.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum MapCategory {
+public enum BuildingCategory {
 
     SCHOOL_BUILDING("School Building"),             // 학교 건물
     RESTAURANT("Restaurant"),                       // 식당

@@ -1,7 +1,7 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.member.dto.req.UpdateMemberRequestDto;
-import com.example.ingle.domain.member.dto.res.MyPageResponseDto;
+import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.global.jwt.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +25,7 @@ public interface MemberApiSpecification {
                     @ApiResponse(
                             responseCode = "200",
                             description = "마이페이지 조회 성공",
-                            content = @Content(schema = @Schema(implementation = MyPageResponseDto.class))
+                            content = @Content(schema = @Schema(implementation = MyPageResponse.class))
                     ),
                     @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
@@ -43,7 +43,7 @@ public interface MemberApiSpecification {
                     )
             }
     )
-    ResponseEntity<MyPageResponseDto> getMyPage(@AuthenticationPrincipal MemberDetail memberDetail);
+    ResponseEntity<MyPageResponse> getMyPage(@AuthenticationPrincipal MemberDetail memberDetail);
 
     @Operation(
             summary = "마이페이지 수정",
@@ -53,7 +53,7 @@ public interface MemberApiSpecification {
                     @ApiResponse(
                             responseCode = "200",
                             description = "마이페이지 수정 성공",
-                            content = @Content(schema = @Schema(implementation = MyPageResponseDto.class))
+                            content = @Content(schema = @Schema(implementation = MyPageResponse.class))
                     ),
                     @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
@@ -71,7 +71,7 @@ public interface MemberApiSpecification {
                     )
             }
     )
-    ResponseEntity<MyPageResponseDto> updateMyPage(
+    ResponseEntity<MyPageResponse> updateMyPage(
             @AuthenticationPrincipal MemberDetail memberDetail,
-            @Valid @RequestBody UpdateMemberRequestDto updateMemberRequestDto);
+            @Valid @RequestBody MemberInfoRequest memberInfoRequest);
 }

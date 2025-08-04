@@ -1,10 +1,11 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
-import com.example.ingle.domain.member.dto.req.LoginRequestDto;
-import com.example.ingle.domain.member.dto.req.SignupRequestDto;
-import com.example.ingle.domain.member.dto.res.LoginResponseDto;
-import com.example.ingle.domain.member.dto.res.SignupRequiredResponseDto;
+import com.example.ingle.domain.member.dto.req.JwtTokenRequest;
+import com.example.ingle.domain.member.dto.req.LoginRequest;
+import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.res.LoginResponse;
+import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
+import com.example.ingle.domain.member.dto.res.SignupRequiredResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.global.jwt.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,12 +32,12 @@ public interface AuthApiSpecification {
                             description = "회원가입 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = LoginResponseDto.class)
+                                    schema = @Schema(implementation = LoginSuccessResponse.class)
                             )
                     )
             }
     )
-    ResponseEntity<LoginResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto);
+    ResponseEntity<LoginSuccessResponse> signup(@Valid @RequestBody MemberInfoRequest memberInfoRequest);
 
     @Operation(
             summary = "INU 포털 로그인",
@@ -48,26 +49,12 @@ public interface AuthApiSpecification {
                     @ApiResponse(
                             responseCode = "200",
                             description = "로그인 성공",
-                            content = @Content(schema = @Schema(implementation = LoginResponseDto.class))
+                            content = @Content(schema = @Schema(implementation = LoginSuccessResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "202",
                             description = "회원가입 필요",
-                            content = @Content(schema = @Schema(implementation = SignupRequiredResponseDto.class))
-                    ),
-                    @ApiResponse(responseCode = "404", description = "멤버를 찾을 수 없습니다.",
-                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(
-                                            value = """
-                                                {
-                                                   "code": 404,
-                                                   "name": "MEMBER_NOT_FOUND",
-                                                   "message": "회원을 찾을 수 없습니다.",
-                                                   "errors": null
-                                                }
-                                                """
-                                    )
-                            )
+                            content = @Content(schema = @Schema(implementation = SignupRequiredResponse.class))
                     ),
                     @ApiResponse(responseCode = "401", description = "포털 로그인 실패",
                             content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
@@ -85,7 +72,7 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto);
+    ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest);
 
     @Operation(
             summary = "토큰 재발급",
@@ -96,7 +83,7 @@ public interface AuthApiSpecification {
                             description = "새로운 리프레시 토큰 반환",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = LoginResponseDto.class)
+                                    schema = @Schema(implementation = LoginSuccessResponse.class)
                             )
                     ),
                     @ApiResponse(responseCode = "420", description = "만료된 리프레시 토큰입니다.",
@@ -143,31 +130,17 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<LoginResponseDto> refresh(@Valid @RequestBody JwtTokenRequestDto jwtTokenRequestDto);
+    ResponseEntity<LoginSuccessResponse> refresh(@Valid @RequestBody JwtTokenRequest jwtTokenRequest);
 
     @Operation(
             summary = "닉네임 중복 확인",
-            description = "닉네임이 사용 가능한 지 확인합니다." +
-                    "<br><br>사용 가능하면 true, 중복되면 400을 반환합니다.",
+            description = "닉네임의 중복 여부를 확인합니다." +
+                    "<br><br>true -> 중복, false -> 사용 가능",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "사용 가능 여부 반환",
+                    @ApiResponse(responseCode = "200", description = "닉네임 중복 확인",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = Boolean.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "400", description = "닉네임이 중복되었습니다.",
-                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
-                                    examples = @ExampleObject(
-                                            value = """
-                                                {
-                                                   "code": 400,
-                                                   "name": "NICKNAME_DUPLICATED",
-                                                   "message": "닉네임이 중복되었습니다.",
-                                                   "errors": null
-                                                }
-                                                """
-                                    )
                             )
                     )
             }
@@ -229,9 +202,9 @@ public interface AuthApiSpecification {
                     @ApiResponse(
                             responseCode = "200",
                             description = "테스트 성공",
-                            content = @Content(schema = @Schema(implementation = LoginResponseDto.class))
+                            content = @Content(schema = @Schema(implementation = LoginSuccessResponse.class))
                     )
             }
     )
-    ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto);
+    ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequest loginRequest);
 }

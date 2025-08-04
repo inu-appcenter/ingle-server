@@ -1,6 +1,6 @@
 package com.example.ingle.global.jwt;
 
-import com.example.ingle.domain.member.Member;
+import com.example.ingle.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

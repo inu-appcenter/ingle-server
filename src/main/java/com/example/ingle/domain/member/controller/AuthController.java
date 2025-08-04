@@ -1,10 +1,11 @@
 package com.example.ingle.domain.member.controller;
 
+import com.example.ingle.domain.member.dto.req.JwtTokenRequest;
+import com.example.ingle.domain.member.dto.req.LoginRequest;
+import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.res.LoginResponse;
+import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.domain.member.service.AuthService;
-import com.example.ingle.domain.member.dto.req.JwtTokenRequestDto;
-import com.example.ingle.domain.member.dto.req.LoginRequestDto;
-import com.example.ingle.domain.member.dto.req.SignupRequestDto;
-import com.example.ingle.domain.member.dto.res.LoginResponseDto;
 import com.example.ingle.global.jwt.MemberDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +23,24 @@ public class AuthController implements AuthApiSpecification{
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<LoginResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.signup(signupRequestDto));
+    public ResponseEntity<LoginSuccessResponse> signup(@Valid @RequestBody MemberInfoRequest memberInfoRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.signup(memberInfoRequest));
     }
 
     // 포털 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        return authService.login(loginRequestDto);
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        LoginResponse loginResponse = authService.login(loginRequest);
+        if (loginResponse instanceof LoginSuccessResponse)
+            return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+        else
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(loginResponse);
     }
 
     // 토큰 재발급
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponseDto> refresh(@Valid @RequestBody JwtTokenRequestDto jwtTokenRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.refresh(jwtTokenRequestDto));
+    public ResponseEntity<LoginSuccessResponse> refresh(@Valid @RequestBody JwtTokenRequest jwtTokenRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(authService.refresh(jwtTokenRequest));
     }
 
     // 닉네임 중복 확인
@@ -60,7 +65,7 @@ public class AuthController implements AuthApiSpecification{
 
     // 포털 로그인 테스트
     @PostMapping("/login/test")
-    public ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.loginTest(loginRequestDto));
+    public ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(authService.loginTest(loginRequest));
     }
 }

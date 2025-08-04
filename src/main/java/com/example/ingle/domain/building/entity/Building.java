@@ -1,5 +1,6 @@
-package com.example.ingle.domain.map;
+package com.example.ingle.domain.building.entity;
 
+import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "maps")
-public class Map extends BaseEntity {
+@Table(name = "building")
+public class Building extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +23,12 @@ public class Map extends BaseEntity {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "building_name", nullable = false)
+    private String buildingName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MapCategory category;
+    private BuildingCategory category;
 
     @Column(name = "building_number", nullable = true)
     private Integer buildingNumber;
