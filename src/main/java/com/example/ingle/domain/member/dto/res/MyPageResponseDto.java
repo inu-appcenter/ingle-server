@@ -24,6 +24,9 @@ public class MyPageResponseDto {
     @Schema(description = "닉네임", example = "IngleFan")
     private final String nickname;
 
+    @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg")
+    private final String imageUrl;
+
     @Builder
     private MyPageResponseDto(Member member) {
         this.memberId = member.getId();
@@ -31,5 +34,6 @@ public class MyPageResponseDto {
         this.department = member.getDepartment().name();
         this.program = member.getProgram().name();
         this.nickname = member.getNickname();
+        this.imageUrl = member.getImageUrl();
     }
 }
