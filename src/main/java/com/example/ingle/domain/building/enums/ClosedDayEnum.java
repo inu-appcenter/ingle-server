@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ClosedDay {
+public enum ClosedDayEnum {
 
     NONE("No Closed Days"),
     MONDAY("Monday"),
