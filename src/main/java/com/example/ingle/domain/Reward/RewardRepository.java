@@ -1,4 +1,4 @@
-package com.example.ingle.domain.Reward;
+package com.example.ingle.domain.reward;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

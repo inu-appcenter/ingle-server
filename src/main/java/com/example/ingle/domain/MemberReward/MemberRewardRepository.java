@@ -1,18 +1,19 @@
-package com.example.ingle.domain.MemberReward;
+package com.example.ingle.domain.memberreward;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRewardRepository extends JpaRepository<MemberReward, Long> {
 
-    // 특정 회원의 특정 튜토리얼 완료 여부 확인 (중복 방지)
-    boolean existsByMemberIdAndTutorialId(Long memberId, Long tutorialId);
 
-    // 삭제 + 리스트 반환
-    void deleteByTutorialId(Long tutorialId);
+    Optional<MemberReward> findByMemberIdAndRewardPosition(Long memberId, Integer rewardPosition);
+
+    // 특정 튜토리얼 완료 여부만 확인
+    boolean existsByMemberIdAndTutorialId(Long memberId, Long tutorialId);
 
     // 특정 멤버의 (완료된)튜토리얼 ID 목록 조회 (획득 여부 표시용)
     @Query("SELECT ur.tutorialId FROM MemberReward ur WHERE ur.memberId = :memberId")
