@@ -17,6 +17,7 @@ public class ClosedDay {
     private Long id;
 
     @Column(name = "closed_day", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
     private ClosedDayEnum closedDay;
 
     @Column(name = "building_id", nullable = false)
