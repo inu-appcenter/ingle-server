@@ -1,8 +1,8 @@
-package com.example.ingle.domain.map.controller;
+package com.example.ingle.domain.building.controller;
 
-import com.example.ingle.domain.map.enums.MapCategory;
-import com.example.ingle.domain.map.dto.res.MapDetailResponseDto;
-import com.example.ingle.domain.map.dto.res.MapResponseDto;
+import com.example.ingle.domain.building.enums.BuildingCategory;
+import com.example.ingle.domain.building.dto.res.BuildingDetailResponse;
+import com.example.ingle.domain.building.dto.res.BuildingResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -17,26 +17,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Tag(name = "Map", description = "지도 관련 API")
-public interface MapApiSpecification {
+@Tag(name = "Building", description = "건물 관련 API")
+public interface BuildingApiSpecification {
 
     @Operation(
-            summary = "지도 범위 조회",
-            description = "화면 범위 내의 존재하는 지도 값들을 반환합니다." +
-                    "<br><br>카테고리를 선택하지 않으면 모든 카테고리의 지도를 반환합니다.",
+            summary = "지도 범위 내의 건물 조회",
+            description = "화면 범위 내의 존재하는 건물 값들을 반환합니다." +
+                    "<br><br>카테고리를 선택하지 않으면 모든 카테고리의 건물을 반환합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "지도 범위 조회 성공",
+                    @ApiResponse(responseCode = "200", description = "지도 범위 내의 건물 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = MapResponseDto.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = BuildingResponse.class))
                             )
                     ),
             }
     )
-    ResponseEntity<List<MapResponseDto>> getMapsInBounds(
+    ResponseEntity<List<BuildingResponse>> findMapsInBounds(
             @RequestParam double minLat, @RequestParam double minLng,
             @RequestParam double maxLat, @RequestParam double maxLng,
-            @RequestParam(required = false) MapCategory category);
+            @RequestParam(required = false) BuildingCategory category);
 
     @Operation(
             summary = "건물 상세 조회",
@@ -45,7 +45,7 @@ public interface MapApiSpecification {
                     @ApiResponse(responseCode = "200", description = "건물 상세 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MapDetailResponseDto.class)
+                                    schema = @Schema(implementation = BuildingDetailResponse.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404", description = "건물을 찾을 수 없습니다.",
@@ -64,20 +64,20 @@ public interface MapApiSpecification {
                     )
             }
     )
-    ResponseEntity<MapDetailResponseDto> getMapDetail(@PathVariable Long mapId);
+    ResponseEntity<BuildingDetailResponse> getMapDetail(@PathVariable Long mapId);
 
     @Operation(
-            summary = "지도 검색",
+            summary = "건물 검색",
             description = "지도에서 키워드를 기반으로 건물을 검색합니다." +
                     "<br><br>해당 키워드가 포함된 건물들을 모두 반환합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "지도 검색 성공",
+                    @ApiResponse(responseCode = "200", description = "건물 검색 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = MapResponseDto.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = BuildingResponse.class))
                             )
                     )
             }
     )
-    ResponseEntity<List<MapResponseDto>> searchMaps(@RequestParam String keyword);
+    ResponseEntity<List<BuildingResponse>> searchMaps(@RequestParam String keyword);
 }

@@ -1,6 +1,6 @@
 package com.example.ingle.global.jwt;
 
-import com.example.ingle.domain.member.Member;
+import com.example.ingle.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,10 +22,10 @@ public class RefreshToken {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String studentId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 512)
     private String refreshToken;
 
     @Column(name = "created_at", updatable = false)

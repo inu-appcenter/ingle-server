@@ -1,4 +1,4 @@
-package com.example.ingle.domain.map.enums;
+package com.example.ingle.domain.building.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

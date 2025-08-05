@@ -1,7 +1,7 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.member.dto.req.UpdateMemberRequestDto;
-import com.example.ingle.domain.member.dto.res.MyPageResponseDto;
+import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.domain.member.service.MemberService;
 import com.example.ingle.global.jwt.MemberDetail;
 import jakarta.validation.Valid;
@@ -20,15 +20,15 @@ public class MemberController implements MemberApiSpecification{
 
     // 마이페이지 조회
     @GetMapping
-    public ResponseEntity<MyPageResponseDto> getMyPage(@AuthenticationPrincipal MemberDetail memberDetail) {
+    public ResponseEntity<MyPageResponse> getMyPage(@AuthenticationPrincipal MemberDetail memberDetail) {
         return ResponseEntity.status(HttpStatus.OK).body(memberService.getMyPage(memberDetail));
     }
 
     // 마이페이지 수정
     @PutMapping
-    public ResponseEntity<MyPageResponseDto> updateMyPage(
+    public ResponseEntity<MyPageResponse> updateMyPage(
             @AuthenticationPrincipal MemberDetail memberDetail,
-            @Valid @RequestBody UpdateMemberRequestDto updateMemberRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.updateMyPage(memberDetail, updateMemberRequestDto));
+            @Valid @RequestBody MemberInfoRequest memberInfoRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.updateMyPage(memberDetail, memberInfoRequest));
     }
 }
