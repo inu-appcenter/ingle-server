@@ -1,22 +1,10 @@
-package com.example.ingle.domain.Reward;
+package com.example.ingle.domain.reward;
 
-
-import com.example.ingle.domain.Reward.dto.req.CreateRewardRequestDto;
-import com.example.ingle.domain.Reward.dto.req.UpdateRewardRequestDto;
-import com.example.ingle.domain.member.dto.req.SignupRequestDto;
-import com.example.ingle.domain.member.dto.req.UpdateMemberRequestDto;
-import com.example.ingle.domain.member.enums.Role;
-import com.example.ingle.domain.tutorial.Category;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,31 +22,15 @@ public class Reward {
     //[4][5][6]
     //[7][8][9]
 
-    @Column(nullable = false)
-    private String title;
+    @Column(nullable = false, length = 20)
+    private String name; // 리워드 이름
 
-    @Column(nullable = false)
-    private String description;
+    @Column(nullable = false, length = 20)
+    private String title; // 리워드 카드 제목
+
+    @Column(nullable = false, length = 100)
+    private String keword; // 리워드 카드 내 키워드
 
     @Column(name = "reward_image_url", nullable = false)
     private String rewardImageUrl;
-
-    @Column(name = "reward_detail_image_url", nullable = false)
-    private String rewardDetailImageUrl;
-
-    public Reward(CreateRewardRequestDto createRewardRequestDto) {
-        this.position = createRewardRequestDto.getPosition();
-        this.title = createRewardRequestDto.getTitle();
-        this.description = createRewardRequestDto.getDescription();
-        this.rewardImageUrl = createRewardRequestDto.getRewardImageUrl();
-        this.rewardDetailImageUrl = createRewardRequestDto.getRewardDetailImageUrl();
-    }
-
-    public void updateReward(@Valid UpdateRewardRequestDto updateRewardRequestDto) {
-        this.position = updateRewardRequestDto.getPosition() != null? updateRewardRequestDto.getPosition(): this.position;
-        this.title = updateRewardRequestDto.getTitle() != null? updateRewardRequestDto.getTitle(): this.title;
-        this.description = updateRewardRequestDto.getDescription() != null? updateRewardRequestDto.getDescription(): this.description;
-        this.rewardImageUrl = updateRewardRequestDto.getRewardImageUrl() != null? updateRewardRequestDto.getRewardImageUrl(): this.rewardImageUrl;
-        this.rewardDetailImageUrl = updateRewardRequestDto.getRewardDetailImageUrl() != null? updateRewardRequestDto.getRewardDetailImageUrl(): this.rewardDetailImageUrl;
-    }
 }
