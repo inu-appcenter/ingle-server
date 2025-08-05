@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "closed_day")
 public class ClosedDay {
 
     @Id
