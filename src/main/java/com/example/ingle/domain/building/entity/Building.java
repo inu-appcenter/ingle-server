@@ -35,7 +35,7 @@ public class Building extends BaseEntity {
     @Column(name = "building_code", length = 10)
     private String buildingCode;
 
-    @Column(length = 50)
+    @Column(length = 100)
     private String location;
 
     private Integer floor;
