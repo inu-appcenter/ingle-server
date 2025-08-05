@@ -16,7 +16,7 @@ public class ClosedDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "closed_day", nullable = false, length = 20)
     private ClosedDayEnum closedDay;
 
     @Column(name = "building_id", nullable = false)
