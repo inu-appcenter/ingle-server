@@ -195,14 +195,4 @@ public class JwtProvider {
         log.info("[Refresh Token 생성]");
         return LoginSuccessResponse.from(member, accessToken, refreshToken, accessTime, refreshTime);
     }
-
-    // JWT에서 username 추출
-    public String parseUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
 }

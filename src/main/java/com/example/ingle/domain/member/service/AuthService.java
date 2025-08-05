@@ -28,7 +28,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final Optional<INUMemberRepository> inuMemberRepository;
+    private final INUMemberRepository inuMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
 
@@ -66,10 +66,8 @@ public class AuthService {
 
         log.info("[로그인 요청] studentId={}", loginRequest.getStudentId());
 
-        if (inuMemberRepository.isPresent()) {
-            if (!inuMemberRepository.get().verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
-                throw new CustomException(ErrorCode.LOGIN_FAILED);
-            }
+        if (!inuMemberRepository.verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
         Optional<Member> optionalMember = memberRepository.findByStudentId(loginRequest.getStudentId());
@@ -175,10 +173,8 @@ public class AuthService {
 
         log.info("[로그인 테스트 요청] studentId={}", loginRequest.getStudentId());
 
-        if (inuMemberRepository.isPresent()) {
-            if (!inuMemberRepository.get().verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
-                return "INU 포털 로그인 실패";
-            }
+        if (!inuMemberRepository.verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
+            return "INU 포털 로그인 실패";
         }
 
         return "INU 포털 로그인 성공: " + loginRequest.getStudentId();

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@Schema(description = "리프레쉬 요청 DTO")
 public class JwtTokenRequest {
 
     @NotBlank(message = "Refresh Token이 비어있습니다.")
