@@ -1,10 +1,12 @@
 package com.example.ingle.domain.building.service;
 
-import com.example.ingle.domain.building.entity.Building;
-import com.example.ingle.domain.building.enums.BuildingCategory;
-import com.example.ingle.domain.building.repository.BuildingRepository;
 import com.example.ingle.domain.building.dto.res.BuildingDetailResponse;
 import com.example.ingle.domain.building.dto.res.BuildingResponse;
+import com.example.ingle.domain.building.entity.Building;
+import com.example.ingle.domain.building.entity.ClosedDay;
+import com.example.ingle.domain.building.enums.BuildingCategory;
+import com.example.ingle.domain.building.repository.BuildingRepository;
+import com.example.ingle.domain.building.repository.ClosedDayRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class BuildingService {
 
     private final BuildingRepository buildingRepository;
+    private final ClosedDayRepository closedDayRepository;
 
     @Transactional(readOnly = true)
     public List<BuildingResponse> findMapsInBounds(double minLat, double maxLat, double minLng, double maxLng, BuildingCategory buildingCategory) {
@@ -42,7 +45,9 @@ public class BuildingService {
                     return new CustomException(ErrorCode.BUILDING_NOT_FOUND);
                 });
 
-        return BuildingDetailResponse.from(building);
+        List<ClosedDay> closedDay = closedDayRepository.findByBuildingId(buildingId);
+
+        return BuildingDetailResponse.from(building, closedDay);
     }
 
     @Transactional(readOnly = true)

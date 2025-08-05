@@ -1,15 +1,11 @@
 package com.example.ingle.domain.building.entity;
 
 import com.example.ingle.domain.building.enums.BuildingCategory;
-import com.example.ingle.domain.building.enums.ClosedDay;
 import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -50,12 +46,6 @@ public class Building extends BaseEntity {
     @Column(name = "close_time", length = 10)
     private String closeTime;
 
-    @Column(name = "closed_day")
-    @ElementCollection(targetClass = ClosedDay.class)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "map_closed_days", joinColumns = @JoinColumn(name = "map_id"))
-    private Set<ClosedDay> closedDays = new HashSet<>();
-
-    @Column(name = "phone_number", nullable = true)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 }
