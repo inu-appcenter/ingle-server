@@ -44,9 +44,6 @@ public class AuthService {
         Member member = Member.fromSignupRequest(memberInfoRequest);
         memberRepository.save(member);
 
-        log.info("[회원가입 완료] memberId: {}, studentId: {}, nickname: {}",
-                member.getId(),member.getStudentId(), member.getNickname());
-
         // Spring Security 인증 없이 직접 JWT 발급
         LoginSuccessResponse token = jwtProvider.generateTokenFromMember(member);
 
@@ -110,22 +107,17 @@ public class AuthService {
             throw new CustomException(ErrorCode.JWT_NOT_MATCH);
         }
 
-        log.info("[RefreshToken 일치 확인 완료] 새 AccessToken 및 RefreshToken 생성 시작");
-
         LoginSuccessResponse loginSuccessResponse = jwtProvider.generateToken(authentication);
         log.info("[AccessToken/RefreshToken 재발급 완료] studentId: {}", studentId);
 
         RefreshToken newRefreshToken = refreshToken.updateValue(loginSuccessResponse.refreshToken());
         refreshTokenRepository.save(newRefreshToken);
-        log.info("[새 RefreshToken 저장 완료] studentId: {}", studentId);
 
         return loginSuccessResponse;
     }
 
     @Transactional(readOnly = true)
     public Boolean checkNicknameDuplicated(String nickname) {
-
-        log.info("[닉네임 중복 확인] nickname={}", nickname);
 
         boolean exists = memberRepository.existsByNickname(nickname);
 
@@ -146,8 +138,6 @@ public class AuthService {
                 });
 
         refreshTokenRepository.delete(refreshToken);
-
-        log.info("[로그아웃 성공] studentId: {}", member.getStudentId());
     }
 
     @Transactional
@@ -162,21 +152,15 @@ public class AuthService {
                 });
 
         refreshTokenRepository.deleteByStudentId(member.getStudentId());
-
         memberRepository.delete(memberToDelete);
-
-        log.info("[회원 탈퇴 완료] studentId: {}", memberToDelete.getStudentId());
     }
 
     @Transactional(readOnly = true)
     public String loginTest(LoginRequest loginRequest) {
 
-        log.info("[로그인 테스트 요청] studentId={}", loginRequest.getStudentId());
-
         if (!inuMemberRepository.verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
             return "INU 포털 로그인 실패";
         }
-
         return "INU 포털 로그인 성공: " + loginRequest.getStudentId();
     }
 }
