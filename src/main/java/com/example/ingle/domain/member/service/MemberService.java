@@ -24,15 +24,13 @@ public class MemberService {
 
         Member loginMember = memberDetail.getMember();
 
-        log.info("[마이페이지 조회 요청] 회원 ID: {}", loginMember.getId());
+        log.info("[마이페이지 조회] 회원 ID: {}", loginMember.getId());
 
         Member member = memberRepository.findById(loginMember.getId())
                 .orElseThrow(() -> {
                     log.warn("[마이페이지 조회 실패] 회원 ID: {}", loginMember.getId());
                     return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
                 });
-
-        log.info("[마이페이지 조회 성공] 회원 ID: {}", member.getId());
 
         return MyPageResponse.from(member);
     }
@@ -42,7 +40,7 @@ public class MemberService {
 
         Member loginMember = memberDetail.getMember();
 
-        log.info("[마이페이지 수정 요청] 회원 ID: {}", loginMember.getId());
+        log.info("[마이페이지 수정] 회원 ID: {}", loginMember.getId());
 
         Member member = memberRepository.findById(loginMember.getId())
                 .orElseThrow(() -> {
@@ -51,8 +49,6 @@ public class MemberService {
                 });
 
         member.updateMember(memberInfoRequest);
-
-        log.info("[마이페이지 수정 성공] 회원 ID: {}", member.getId());
 
         return MyPageResponse.from(member);
     }

@@ -11,7 +11,7 @@ import com.example.ingle.domain.member.repository.INUMemberRepository;
 import com.example.ingle.domain.member.repository.MemberRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
-import com.example.ingle.global.jwt.JwtTokenProvider;
+import com.example.ingle.global.jwt.JwtProvider;
 import com.example.ingle.global.jwt.RefreshToken;
 import com.example.ingle.global.jwt.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final Optional<INUMemberRepository> inuMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public LoginSuccessResponse signup(MemberInfoRequest memberInfoRequest) {
@@ -48,7 +48,7 @@ public class AuthService {
                 member.getId(),member.getStudentId(), member.getNickname());
 
         // Spring Security 인증 없이 직접 JWT 발급
-        LoginSuccessResponse token = jwtTokenProvider.generateTokenFromMember(member);
+        LoginSuccessResponse token = jwtProvider.generateTokenFromMember(member);
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .member(member)
@@ -79,7 +79,7 @@ public class AuthService {
         }
 
         Member member = optionalMember.get();
-        LoginSuccessResponse loginSuccessResponse = jwtTokenProvider.authenticateAndGenerateToken(
+        LoginSuccessResponse loginSuccessResponse = jwtProvider.authenticateAndGenerateToken(
                 loginRequest.getStudentId(), member);
 
         log.info("[로그인 성공] studentId: {}", member.getStudentId());
@@ -92,12 +92,12 @@ public class AuthService {
 
         log.info("[JWT 토큰 재발급 요청]");
 
-        if (!jwtTokenProvider.validateToken(jwtTokenRequest.getRefreshToken(), "refresh")) {
+        if (!jwtProvider.validateToken(jwtTokenRequest.getRefreshToken(), "refresh")) {
             log.warn("[JWT 토큰 유효성 검증 실패] 만료된 Refresh Token");
             throw new CustomException(ErrorCode.JWT_REFRESH_TOKEN_EXPIRED);
         }
 
-        Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenRequest.getRefreshToken());
+        Authentication authentication = jwtProvider.getAuthentication(jwtTokenRequest.getRefreshToken());
         String studentId = authentication.getName();
         log.info("[인증 정보 추출 완료] studentId={}", studentId);
 
@@ -114,7 +114,7 @@ public class AuthService {
 
         log.info("[RefreshToken 일치 확인 완료] 새 AccessToken 및 RefreshToken 생성 시작");
 
-        LoginSuccessResponse loginSuccessResponse = jwtTokenProvider.generateToken(authentication);
+        LoginSuccessResponse loginSuccessResponse = jwtProvider.generateToken(authentication);
         log.info("[AccessToken/RefreshToken 재발급 완료] studentId: {}", studentId);
 
         RefreshToken newRefreshToken = refreshToken.updateValue(loginSuccessResponse.refreshToken());

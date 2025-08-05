@@ -14,32 +14,31 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "member")
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "student_id", nullable = false)
+    @Column(name = "student_id", nullable = false, length = 20)
     private String studentId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 70)
     @Enumerated(EnumType.STRING)
     private Department department;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     private StudentType studentType;
 
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
-    @Column(name = "image_url", nullable = true)
+    @Column(name = "image_url", length = 2000)
     private String imageUrl;
 
+    @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role role;
 
     public Member(String studentId, Department department, StudentType studentType, String nickname, Role role, String imageUrl) {

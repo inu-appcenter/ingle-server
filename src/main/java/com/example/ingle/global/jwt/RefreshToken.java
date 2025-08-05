@@ -22,10 +22,10 @@ public class RefreshToken {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String studentId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 512)
     private String refreshToken;
 
     @Column(name = "created_at", updatable = false)

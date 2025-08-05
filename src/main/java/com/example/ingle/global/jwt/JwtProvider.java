@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtTokenProvider {
+public class JwtProvider {
 
     // JWT 클레임에서 권한 정보를 저장할 키
     private static final String AUTHORITIES_KEY = "auth";
@@ -35,7 +35,7 @@ public class JwtTokenProvider {
     private final MemberDetailService memberDetailService;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtTokenProvider(
+    public JwtProvider(
             @Value("${jwt.secret}") String secret,
             MemberDetailService memberDetailService, RefreshTokenRepository refreshTokenRepository
     ) {

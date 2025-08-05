@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "building")
 public class Building extends BaseEntity {
 
     @Id
@@ -23,31 +22,30 @@ public class Building extends BaseEntity {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(name = "building_name", nullable = false)
+    @Column(name = "building_name", nullable = false, length = 200)
     private String buildingName;
 
-    @Column(nullable = false)
+    @Column(name = "building_category", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
-    private BuildingCategory category;
+    private BuildingCategory buildingCategory;
 
-    @Column(name = "building_number", nullable = true)
+    @Column(name = "building_number")
     private Integer buildingNumber;
 
-    @Column(name = "building_code", nullable = true)
+    @Column(name = "building_code", length = 10)
     private String buildingCode;
 
-    @Column(nullable = true)
+    @Column(length = 30)
     private String location;
 
-    @Column(nullable = true)
     private Integer floor;
 
-    @Column(name = "open_time", nullable = true)
+    @Column(name = "open_time", length = 10)
     private String openTime;
 
-    @Column(name = "close_time", nullable = true)
+    @Column(name = "close_time", length = 10)
     private String closeTime;
 
-    @Column(name = "phone_number", nullable = true)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 }
