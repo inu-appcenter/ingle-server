@@ -48,7 +48,7 @@ public class JwtProvider {
     // 인증 성공 시 토큰 생성
     public LoginSuccessResponse generateToken(Authentication authentication) {
 
-        log.info("[JWT 발급 요청]");
+        log.info("[JWT 발급 요청] From Authentication");
 
         // 권한 정보를 문자열로 변환 ( ROLE_USER, ROLE_ADMIN,... )
         String authorities = extractAuthorities(authentication);
@@ -65,7 +65,7 @@ public class JwtProvider {
         String accessToken = createToken(authentication.getName(), authorities, ACCESS_TOKEN_EXPIRED_TIME);
         String refreshToken = createToken(authentication.getName(), authorities, REFRESH_TOKEN_EXPIRED_TIME);
 
-        log.info("[JWT 발급 완료] accessToken: {}, refreshToken: {}", accessToken, refreshToken);
+        log.info("[Authentication JWT 발급 완료] accessToken: {}, refreshToken: {}", accessToken, refreshToken);
 
         return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
     }
@@ -73,7 +73,7 @@ public class JwtProvider {
     // Member 객체만으로 JWT 발급
     public LoginSuccessResponse generateTokenFromMember(Member member) {
 
-        log.info("[JWT 발급 요청]");
+        log.info("[JWT 발급 요청] From Member");
 
         String studentId = member.getStudentId();
         String authorities = "ROLE_USER";
@@ -85,7 +85,7 @@ public class JwtProvider {
         String accessToken = createToken(studentId, authorities, ACCESS_TOKEN_EXPIRED_TIME);
         String refreshToken = createToken(studentId, authorities, REFRESH_TOKEN_EXPIRED_TIME);
 
-        log.info("[간단 JWT 발급] studentId: {}, accessToken: {}, refreshToken: {}", studentId, accessToken, refreshToken);
+        log.info("[Member JWT 발급] studentId: {}, accessToken: {}, refreshToken: {}", studentId, accessToken, refreshToken);
 
         return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
     }
