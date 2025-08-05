@@ -35,9 +35,9 @@ public class AuthService {
     @Transactional
     public LoginSuccessResponse signup(MemberInfoRequest memberInfoRequest) {
 
-        log.info("[회원가입 요청] studentId={}", memberInfoRequest.getStudentId());
+        log.info("[회원가입 요청] studentId={}", memberInfoRequest.studentId());
 
-        if (memberRepository.existsByStudentId(memberInfoRequest.getStudentId())) {
+        if (memberRepository.existsByStudentId(memberInfoRequest.studentId())) {
             throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
         }
 
@@ -61,21 +61,21 @@ public class AuthService {
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
 
-        log.info("[로그인 요청] studentId={}", loginRequest.getStudentId());
+        log.info("[로그인 요청] studentId={}", loginRequest.studentId());
 
-        if (!inuMemberRepository.verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
+        if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
-        Optional<Member> optionalMember = memberRepository.findByStudentId(loginRequest.getStudentId());
+        Optional<Member> optionalMember = memberRepository.findByStudentId(loginRequest.studentId());
         if (optionalMember.isEmpty()) {
-            log.info("[회원 가입 필요] studentId: {}", loginRequest.getStudentId());
-            return new SignupRequiredResponse(loginRequest.getStudentId(), true, "회원 가입이 필요합니다.");
+            log.info("[회원 가입 필요] studentId: {}", loginRequest.studentId());
+            return new SignupRequiredResponse(loginRequest.studentId(), true, "회원 가입이 필요합니다.");
         }
 
         Member member = optionalMember.get();
         LoginSuccessResponse loginSuccessResponse = jwtProvider.authenticateAndGenerateToken(
-                loginRequest.getStudentId(), member);
+                loginRequest.studentId(), member);
 
         log.info("[로그인 성공] studentId: {}", member.getStudentId());
 
@@ -87,12 +87,12 @@ public class AuthService {
 
         log.info("[JWT 토큰 재발급 요청]");
 
-        if (!jwtProvider.validateToken(jwtTokenRequest.getRefreshToken(), "refresh")) {
+        if (!jwtProvider.validateToken(jwtTokenRequest.refreshToken(), "refresh")) {
             log.warn("[JWT 토큰 유효성 검증 실패] 만료된 Refresh Token");
             throw new CustomException(ErrorCode.JWT_REFRESH_TOKEN_EXPIRED);
         }
 
-        Authentication authentication = jwtProvider.getAuthentication(jwtTokenRequest.getRefreshToken());
+        Authentication authentication = jwtProvider.getAuthentication(jwtTokenRequest.refreshToken());
         String studentId = authentication.getName();
         log.info("[인증 정보 추출 완료] studentId={}", studentId);
 
@@ -102,7 +102,7 @@ public class AuthService {
                     return new CustomException(ErrorCode.JWT_NOT_FOUND);
                 });
 
-        if (!refreshToken.getRefreshToken().equals(jwtTokenRequest.getRefreshToken())) {
+        if (!refreshToken.getRefreshToken().equals(jwtTokenRequest.refreshToken())) {
             log.warn("[RefreshToken 불일치] 요청 토큰과 저장 토큰이 다름 studentId: {}", studentId);
             throw new CustomException(ErrorCode.JWT_NOT_MATCH);
         }
@@ -158,9 +158,9 @@ public class AuthService {
     @Transactional(readOnly = true)
     public String loginTest(LoginRequest loginRequest) {
 
-        if (!inuMemberRepository.verifySchoolLogin(loginRequest.getStudentId(), loginRequest.getPassword())) {
+        if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
             return "INU 포털 로그인 실패";
         }
-        return "INU 포털 로그인 성공: " + loginRequest.getStudentId();
+        return "INU 포털 로그인 성공: " + loginRequest.studentId();
     }
 }

@@ -52,20 +52,20 @@ public class Member extends BaseEntity {
 
     public static Member fromSignupRequest(MemberInfoRequest memberInfoRequest) {
         return new Member(
-                memberInfoRequest.getStudentId(),
-                memberInfoRequest.getDepartment(),
-                memberInfoRequest.getStudentType(),
-                memberInfoRequest.getNickname(),
+                memberInfoRequest.studentId(),
+                memberInfoRequest.department(),
+                memberInfoRequest.studentType(),
+                memberInfoRequest.nickname(),
                 Role.USER,
                 "https://example.com/default-profile.jpg"
         );
     }
 
     public void updateMember(@Valid MemberInfoRequest memberInfoRequest) {
-        this.studentId = memberInfoRequest.getStudentId() != null ? memberInfoRequest.getStudentId() : this.studentId;
-        this.department = memberInfoRequest.getDepartment() != null ? memberInfoRequest.getDepartment() : this.department;
-        this.nickname = memberInfoRequest.getNickname() != null ? memberInfoRequest.getNickname() : this.nickname;
-        this.studentType = memberInfoRequest.getStudentType() != null ? memberInfoRequest.getStudentType() : this.studentType;
+        this.studentId = memberInfoRequest.studentId() != null ? memberInfoRequest.studentId() : this.studentId;
+        this.department = memberInfoRequest.department() != null ? memberInfoRequest.department() : this.department;
+        this.nickname = memberInfoRequest.nickname() != null ? memberInfoRequest.nickname() : this.nickname;
+        this.studentType = memberInfoRequest.studentType() != null ? memberInfoRequest.studentType() : this.studentType;
     }
 
     public void updateImageUrl(String imageUrl) {
