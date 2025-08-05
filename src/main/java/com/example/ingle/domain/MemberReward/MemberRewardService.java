@@ -50,13 +50,13 @@ public class MemberRewardService {
                 .completedAt(LocalDateTime.now())
                 .build();
 
-        MemberReward savedMemberReward = memberRewardRepository.save(memberReward);
+        memberRewardRepository.save(memberReward);
 
         log.info("[튜토리얼 완료 성공] memberRewardId: {}, rewardPosition: {}",
-                savedMemberReward.getId(), rewardPosition);
+                memberReward.getId(), rewardPosition);
 
         return CompleteTutorialResponseDto.builder()
-                .memberReward(savedMemberReward)
+                .memberReward(memberReward)
                 .build();
     }
 

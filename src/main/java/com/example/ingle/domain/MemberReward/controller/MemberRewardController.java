@@ -19,7 +19,6 @@ public class MemberRewardController implements MemberRewardApiSpecification {
 
     // 튜토리얼 완료 처리
     @PostMapping("/{tutorialId}")
-    @Override
     public ResponseEntity<CompleteTutorialResponseDto> completeTutorial(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable("tutorialId") Long tutorialId) {
