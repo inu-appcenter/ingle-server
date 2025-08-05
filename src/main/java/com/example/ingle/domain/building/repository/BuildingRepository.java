@@ -14,7 +14,7 @@ public interface BuildingRepository extends JpaRepository<Building,Long> {
         SELECT m FROM Building m
         WHERE m.latitude BETWEEN :minLat AND :maxLat
         AND m.longitude BETWEEN :minLng AND :maxLng
-        AND (:category IS NULL OR m.category = :category)
+        AND (:category IS NULL OR m.buildingCategory = :category)
     """)
     List<Building> findMapsInBounds(
             @Param("minLat") double minLat,
@@ -23,5 +23,5 @@ public interface BuildingRepository extends JpaRepository<Building,Long> {
             @Param("maxLng") double maxLng,
             @Param("category") BuildingCategory category);
 
-    List<Building> findByBuildingNameContainingOrderByCreatedAtDesc(String name);
+    List<Building> findByBuildingNameContainingOrderByCreatedAtDesc(String buildingName);
 }

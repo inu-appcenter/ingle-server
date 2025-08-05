@@ -17,7 +17,7 @@ public record BuildingResponse(@Schema(description = "건물 Id", example = "1")
                 building.getBuildingName(),
                 building.getLatitude(),
                 building.getLongitude(),
-                building.getCategory()
+                building.getBuildingCategory()
         );
     }
 }
