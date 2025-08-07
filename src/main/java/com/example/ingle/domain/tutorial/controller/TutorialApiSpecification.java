@@ -1,7 +1,7 @@
 package com.example.ingle.domain.tutorial.controller;
 
 import com.example.ingle.domain.tutorial.Category;
-import com.example.ingle.domain.tutorial.dto.res.TutorialResponseDto;
+import com.example.ingle.domain.tutorial.dto.res.TutorialResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +24,7 @@ public interface TutorialApiSpecification {
                     @ApiResponse(responseCode = "200", description = "튜토리얼 목록 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponseDto.class)),
+                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponse.class)),
                                     examples = @ExampleObject(
                                             name = "전체 튜토리얼 목록 응답 예시",
                                             value = """
@@ -54,7 +54,7 @@ public interface TutorialApiSpecification {
                     )
             }
     )
-    ResponseEntity<List<TutorialResponseDto>> getAllTutorials();
+    ResponseEntity<List<TutorialResponse>> getAllTutorials();
 
     @Operation(
             summary = "카테고리별 튜토리얼 목록 조회",
@@ -63,7 +63,7 @@ public interface TutorialApiSpecification {
                     @ApiResponse(responseCode = "200", description = "카테고리별 튜토리얼 목록 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponseDto.class)),
+                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponse.class)),
                                     examples = @ExampleObject(
                                             name = "BASIC 카테고리 튜토리얼 목록 응답 예시",
                                             value = """
@@ -93,5 +93,5 @@ public interface TutorialApiSpecification {
                     )
             }
     )
-    ResponseEntity<List<TutorialResponseDto>> getTutorialsByCategory(@RequestParam Category category);
+    ResponseEntity<List<TutorialResponse>> getTutorialsByCategory(@RequestParam Category category);
 }

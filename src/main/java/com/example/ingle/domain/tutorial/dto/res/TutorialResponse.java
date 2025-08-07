@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "튜토리얼 조회 응답 DTO")
-public class TutorialResponseDto {
+public class TutorialResponse {
 
     @Schema(description = "튜토리얼 Id", example = "1")
     private final Long tutorialId;
@@ -27,7 +27,7 @@ public class TutorialResponseDto {
     private final Integer rewardPosition;
 
     @Builder
-    public TutorialResponseDto(Tutorial tutorial) {
+    public TutorialResponse(Tutorial tutorial) {
         this.tutorialId = tutorial.getId();
         this.title = tutorial.getTitle();
         this.category = tutorial.getCategory();
