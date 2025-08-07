@@ -1,7 +1,7 @@
 package com.example.ingle.domain.reward;
 
-import com.example.ingle.domain.reward.dto.res.RewardCardResponseDto;
-import com.example.ingle.domain.reward.dto.res.RewardResponseDto;
+import com.example.ingle.domain.reward.dto.res.RewardCardResponse;
+import com.example.ingle.domain.reward.dto.res.RewardResponse;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,7 @@ public class RewardService {
 
     // 리워드 카드 조회
     @Transactional(readOnly = true)
-    public RewardCardResponseDto getRewardCard(Integer position) {
-
-        log.info("[리워드 카드 조회] position: {}", position);
+    public RewardCardResponse getRewardCard(Integer position) {
 
         Reward reward = rewardRepository.findByPosition(position)
                 .orElseThrow(() -> {
@@ -30,16 +28,12 @@ public class RewardService {
                     return new CustomException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
-        log.info("[리워드 카드 조회 성공]");
-
-        return RewardCardResponseDto.builder().reward(reward).build();
+        return RewardCardResponse.builder().reward(reward).build();
     }
 
     // 특정 위치 리워드 조회
     @Transactional(readOnly = true)
-    public RewardResponseDto getReward(Integer position) {
-
-        log.info("[리워드 조회] position: {}", position);
+    public RewardResponse getReward(Integer position) {
 
         Reward reward = rewardRepository.findByPosition(position)
                 .orElseThrow(() -> {
@@ -47,23 +41,17 @@ public class RewardService {
                     return new CustomException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
-        log.info("[리워드 조회 성공]");
-
-        return RewardResponseDto.builder().reward(reward).build();
+        return RewardResponse.builder().reward(reward).build();
     }
 
     // 리워드 목록 조회(위치순)
     @Transactional(readOnly = true)
-    public List<RewardResponseDto> getAllRewards() {
-
-        log.info("[전체 리워드 조회]");
+    public List<RewardResponse> getAllRewards() {
 
         List<Reward> rewards = rewardRepository.findAllOrderByPosition();
-        List<RewardResponseDto> rewardResponseDtos = rewards.stream()
-                .map(reward -> RewardResponseDto.builder().reward(reward).build())
+        List<RewardResponse> rewardResponseDtos = rewards.stream()
+                .map(reward -> RewardResponse.builder().reward(reward).build())
                 .toList();
-
-        log.info("[전체 리워드 조회 성공]");
 
         return rewardResponseDtos;
     }

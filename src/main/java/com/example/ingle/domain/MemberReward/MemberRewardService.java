@@ -1,8 +1,8 @@
 package com.example.ingle.domain.memberreward;
 
-import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponseDto;
-import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponseDto;
-import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponseDto;
+import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponse;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponse;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponse;
 import com.example.ingle.domain.tutorial.Tutorial;
 import com.example.ingle.domain.tutorial.TutorialRepository;
 import com.example.ingle.global.exception.CustomException;
@@ -25,9 +25,7 @@ public class MemberRewardService {
 
     // 튜토리얼 완료 처리
     @Transactional
-    public CompleteTutorialResponseDto completeTutorial(Long memberId, Long tutorialId) {
-
-        log.info("[튜토리얼 완료 처리] memberId: {}, tutorialId: {}", memberId, tutorialId);
+    public CompleteTutorialResponse completeTutorial(Long memberId, Long tutorialId) {
 
         if (memberRewardRepository.existsByMemberIdAndTutorialId(memberId, tutorialId)) {
             log.warn("[튜토리얼 완료 실패] 이미 완료된 튜토리얼: memberId: {}, tutorialId: {}",
@@ -56,16 +54,14 @@ public class MemberRewardService {
         log.info("[튜토리얼 완료 성공] memberRewardId: {}, rewardPosition: {}",
                 memberReward.getId(), rewardPosition);
 
-        return CompleteTutorialResponseDto.builder()
+        return CompleteTutorialResponse.builder()
                 .memberReward(memberReward)
                 .build();
     }
 
     // 특정 리워드 획득 여부 조회
     @Transactional(readOnly = true)
-    public MemberRewardStatusResponseDto getRewardStatusByPosition(Long memberId, Integer rewardPosition) {
-
-        log.info("[리워드 상태 조회] memberId: {}, rewardPosition: {}", memberId, rewardPosition);
+    public MemberRewardStatusResponse getRewardStatusByPosition(Long memberId, Integer rewardPosition) {
 
         Optional<MemberReward> memberRewardOpt = memberRewardRepository
                 .findByMemberIdAndRewardPosition(memberId, rewardPosition);
@@ -80,26 +76,28 @@ public class MemberRewardService {
                         return new CustomException(ErrorCode.REWARD_NOT_FOUND);
                     });
 
-            return MemberRewardStatusResponseDto.notCompleted(tutorial.getId(), rewardPosition);
+            return MemberRewardStatusResponse.notCompleted(tutorial.getId(), rewardPosition);
         }
 
         MemberReward memberReward = memberRewardOpt.get();
         log.info("[리워드 상태 조회 결과] 완료: memberId: {}, rewardPosition: {}, completedAt: {}",
                 memberId, rewardPosition, memberReward.getCompletedAt());
 
-        return MemberRewardStatusResponseDto.fromMemberReward(memberReward);
+        return MemberRewardStatusResponse.fromMemberReward(memberReward);
     }
 
     // 진행률 조회
     @Transactional(readOnly = true)
-    public MemberRewardProgressResponseDto getProgressByMemberId(Long memberId) {
+    public MemberRewardProgressResponse getProgressByMemberId(Long memberId) {
         // 완료된 튜토리얼(획득한 리워드) 수
         Long completedCount = memberRewardRepository.countCompletedTutorialsByMemberId(memberId);
 
         // 전체 튜토리얼 수
         Long totalCount = tutorialRepository.count();
 
-        return MemberRewardProgressResponseDto.builder()
+        log.debug("[진행률 조회] memberId: {}, 완료: {}/{}", memberId, completedCount, totalCount);
+
+        return MemberRewardProgressResponse.builder()
                 .completedCount(completedCount.intValue())
                 .totalCount(totalCount.intValue())
                 .build();

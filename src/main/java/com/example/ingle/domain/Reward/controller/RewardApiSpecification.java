@@ -1,7 +1,7 @@
 package com.example.ingle.domain.reward.controller;
 
-import com.example.ingle.domain.reward.dto.res.RewardCardResponseDto;
-import com.example.ingle.domain.reward.dto.res.RewardResponseDto;
+import com.example.ingle.domain.reward.dto.res.RewardCardResponse;
+import com.example.ingle.domain.reward.dto.res.RewardResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -26,7 +26,7 @@ public interface RewardApiSpecification {
                     @ApiResponse(responseCode = "200", description = "리워드 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RewardResponseDto.class)
+                                    schema = @Schema(implementation = RewardResponse.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404", description = "리워드를 찾을 수 없습니다.",
@@ -45,7 +45,7 @@ public interface RewardApiSpecification {
                     )
             }
     )
-    ResponseEntity<RewardResponseDto> getReward(@PathVariable @Min(1) Integer position);
+    ResponseEntity<RewardResponse> getReward(@PathVariable @Min(1) Integer position);
 
     @Operation(
             summary = "리워드 카드 상세 조회",
@@ -54,7 +54,7 @@ public interface RewardApiSpecification {
                     @ApiResponse(responseCode = "200", description = "리워드 카드 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RewardCardResponseDto.class)
+                                    schema = @Schema(implementation = RewardCardResponse.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404", description = "리워드를 찾을 수 없습니다.",
@@ -73,7 +73,7 @@ public interface RewardApiSpecification {
                     )
             }
     )
-    ResponseEntity<RewardCardResponseDto> getRewardCard(@PathVariable("position") @Min(1) Integer position);
+    ResponseEntity<RewardCardResponse> getRewardCard(@PathVariable("position") @Min(1) Integer position);
 
     @Operation(
             summary = "전체 리워드 목록 조회",
@@ -82,7 +82,7 @@ public interface RewardApiSpecification {
                     @ApiResponse(responseCode = "200", description = "전체 리워드 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = RewardResponseDto.class)),
+                                    array = @ArraySchema(schema = @Schema(implementation = RewardResponse.class)),
                                             examples = @ExampleObject(
                                                     name = "전체 리워드 목록 응답 예시",
                                                     value = """
@@ -112,5 +112,5 @@ public interface RewardApiSpecification {
                     )
             }
     )
-    ResponseEntity<List<RewardResponseDto>> getAllRewards();
+    ResponseEntity<List<RewardResponse>> getAllRewards();
 }

@@ -1,8 +1,8 @@
 package com.example.ingle.domain.reward.controller;
 
 import com.example.ingle.domain.reward.RewardService;
-import com.example.ingle.domain.reward.dto.res.RewardCardResponseDto;
-import com.example.ingle.domain.reward.dto.res.RewardResponseDto;
+import com.example.ingle.domain.reward.dto.res.RewardCardResponse;
+import com.example.ingle.domain.reward.dto.res.RewardResponse;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,21 +25,21 @@ public class RewardController implements RewardApiSpecification {
 
     // 리워드 조회
     @GetMapping("/{position}")
-    public ResponseEntity<RewardResponseDto> getReward(
+    public ResponseEntity<RewardResponse> getReward(
             @PathVariable @Min(1) Integer position) {
         return ResponseEntity.status(HttpStatus.OK).body(rewardService.getReward(position));
     }
 
     // 리워드 카드 조회
     @GetMapping("/{position}/card")
-    public ResponseEntity<RewardCardResponseDto> getRewardCard(
+    public ResponseEntity<RewardCardResponse> getRewardCard(
             @PathVariable("position") @Min(1) Integer position) {
         return ResponseEntity.status(HttpStatus.OK).body(rewardService.getRewardCard(position));
     }
 
     // 전체 리워드 목록 조회
     @GetMapping
-    public ResponseEntity<List<RewardResponseDto>> getAllRewards() {
+    public ResponseEntity<List<RewardResponse>> getAllRewards() {
         return ResponseEntity.status(HttpStatus.OK).body(rewardService.getAllRewards());
     }
 }
