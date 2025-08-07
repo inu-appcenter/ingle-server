@@ -82,7 +82,32 @@ public interface RewardApiSpecification {
                     @ApiResponse(responseCode = "200", description = "전체 리워드 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = RewardResponseDto.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = RewardResponseDto.class)),
+                                            examples = @ExampleObject(
+                                                    name = "전체 리워드 목록 응답 예시",
+                                                    value = """
+                                                        [
+                                                          {
+                                                            "id": 1,
+                                                            "position": 1,
+                                                            "name": "Transit",
+                                                            "rewardImageUrl": "https://ingle-server.inuappcenter.kr/images/reward_1.png"
+                                                          },
+                                                          {
+                                                            "id": 2,
+                                                            "position": 2,
+                                                            "name": "Dormitory",
+                                                            "rewardImageUrl": "https://ingle-server.inuappcenter.kr/images/reward_2.png"
+                                                          },
+                                                          {
+                                                            "id": 3,
+                                                            "position": 3,
+                                                            "name": "Library",
+                                                            "rewardImageUrl": "https://ingle-server.inuappcenter.kr/images/reward_3.png"
+                                                          }
+                                                        ]
+                                                         """
+                                            )
                             )
                     )
             }
