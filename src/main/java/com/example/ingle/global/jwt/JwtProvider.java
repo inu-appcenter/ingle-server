@@ -1,7 +1,7 @@
 package com.example.ingle.global.jwt;
 
-import com.example.ingle.domain.member.Member;
-import com.example.ingle.domain.member.dto.res.LoginResponseDto;
+import com.example.ingle.domain.member.entity.Member;
+import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtTokenProvider {
+public class JwtProvider {
 
     // JWT 클레임에서 권한 정보를 저장할 키
     private static final String AUTHORITIES_KEY = "auth";
@@ -35,7 +35,7 @@ public class JwtTokenProvider {
     private final MemberDetailService memberDetailService;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtTokenProvider(
+    public JwtProvider(
             @Value("${jwt.secret}") String secret,
             MemberDetailService memberDetailService, RefreshTokenRepository refreshTokenRepository
     ) {
@@ -46,9 +46,9 @@ public class JwtTokenProvider {
     }
 
     // 인증 성공 시 토큰 생성
-    public LoginResponseDto generateToken(Authentication authentication) {
+    public LoginSuccessResponse generateToken(Authentication authentication) {
 
-        log.info("[JWT 발급 요청]");
+        log.info("[JWT 발급 요청] From Authentication");
 
         // 권한 정보를 문자열로 변환 ( ROLE_USER, ROLE_ADMIN,... )
         String authorities = extractAuthorities(authentication);
@@ -60,21 +60,20 @@ public class JwtTokenProvider {
 
         // 멤버 객체 꺼내기
         MemberDetail userDetails = memberDetailService.loadUserByUsername(authentication.getName());
-        log.info("[JWT 발급] username: {}", userDetails.getUsername());
         Member member = userDetails.getMember();
 
         String accessToken = createToken(authentication.getName(), authorities, ACCESS_TOKEN_EXPIRED_TIME);
         String refreshToken = createToken(authentication.getName(), authorities, REFRESH_TOKEN_EXPIRED_TIME);
 
-        log.info("[JWT 발급 완료] accessToken: {}, refreshToken: {}", accessToken, refreshToken);
+        log.info("[Authentication JWT 발급 완료] accessToken: {}, refreshToken: {}", accessToken, refreshToken);
 
         return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
     }
 
     // Member 객체만으로 JWT 발급
-    public LoginResponseDto generateTokenFromMember(Member member) {
+    public LoginSuccessResponse generateTokenFromMember(Member member) {
 
-        log.info("[JWT 발급 요청]");
+        log.info("[JWT 발급 요청] From Member");
 
         String studentId = member.getStudentId();
         String authorities = "ROLE_USER";
@@ -86,13 +85,13 @@ public class JwtTokenProvider {
         String accessToken = createToken(studentId, authorities, ACCESS_TOKEN_EXPIRED_TIME);
         String refreshToken = createToken(studentId, authorities, REFRESH_TOKEN_EXPIRED_TIME);
 
-        log.info("[간단 JWT 발급] studentId: {}, accessToken: {}, refreshToken: {}", studentId, accessToken, refreshToken);
+        log.info("[Member JWT 발급] studentId: {}, accessToken: {}, refreshToken: {}", studentId, accessToken, refreshToken);
 
         return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
     }
 
     // 포털 로그인 토큰 생성
-    public LoginResponseDto authenticateAndGenerateToken(String studentId, Member member) {
+    public LoginSuccessResponse authenticateAndGenerateToken(String studentId, Member member) {
         log.info("INU 포털 로그인 이미 성공 → Spring Security 인증 절차 스킵");
 
         MemberDetail memberDetail = new MemberDetail(member);
@@ -108,10 +107,10 @@ public class JwtTokenProvider {
         }
 
         // JWT 토큰 생성 및 저장
-        LoginResponseDto token = generateToken(authentication);
+        LoginSuccessResponse token = generateToken(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .member(member)
-                .refreshToken(token.getRefreshToken())
+                .refreshToken(token.refreshToken())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
@@ -191,25 +190,9 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private LoginResponseDto buildLoginResponse(Member member, String accessToken, String refreshToken,
-                                                Date accessTime, Date refreshTime) {
+    private LoginSuccessResponse buildLoginResponse(Member member, String accessToken, String refreshToken,
+                                                    Date accessTime, Date refreshTime) {
         log.info("[Refresh Token 생성]");
-        return LoginResponseDto.builder()
-                .member(member)
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .accessTokenExpiresDate(accessTime)
-                .refreshTokenExpiresDate(refreshTime)
-                .build();
-    }
-
-    // JWT에서 username 추출
-    public String parseUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return LoginSuccessResponse.from(member, accessToken, refreshToken, accessTime, refreshTime);
     }
 }

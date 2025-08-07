@@ -1,7 +1,7 @@
 package com.example.ingle.global.config;
 
 import com.example.ingle.global.jwt.JwtFilter;
-import com.example.ingle.global.jwt.JwtTokenProvider;
+import com.example.ingle.global.jwt.JwtProvider;
 import com.example.ingle.global.jwt.handler.JwtAccessDeniedHandler;
 import com.example.ingle.global.jwt.handler.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -58,7 +58,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

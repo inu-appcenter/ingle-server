@@ -1,6 +1,6 @@
 package com.example.ingle.domain.member.repository;
 
-import com.example.ingle.domain.member.Member;
+import com.example.ingle.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

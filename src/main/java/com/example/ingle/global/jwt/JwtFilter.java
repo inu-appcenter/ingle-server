@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,8 +25,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
     // HTTP 헤더에서 JWT 토큰이 담기는 키 이름
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return Arrays.stream(excludedUris)
+                .anyMatch(pattern -> pathMatcher.match(pattern, uri));
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -33,23 +43,20 @@ public class JwtFilter extends OncePerRequestFilter {
         // 요청 URI 정보 저장
         String requestURI = request.getRequestURI();
 
-        // 리프레시 토큰 발급 API는 Access Token 검증 건너뜀
-        if ("/api/v1/auth/refresh".equals(requestURI)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         try {
             // JWT 토큰이 존재하고 유효하면 인증 객체를 SecurityContext에 저장
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt, "access")) {
+            if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt, "access")) {
 
                 // 토큰 기반 인증 정보 생성
-                Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                Authentication authentication = jwtProvider.getAuthentication(jwt);
 
                 // SecurityContext에 인증 정보 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 log.info("[Security Context] studentId: {}, URI: {}", authentication.getName(), requestURI);
+            } else {
+                log.warn("[JWT 검증 실패] 유효하지 않은 토큰: {}, URI: {}", jwt, requestURI);
+                throw new CustomException(ErrorCode.JWT_NOT_VALID);
             }
 
             // 다음 필터로 요청 / 응답 객체 전달
@@ -85,4 +92,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         response.getWriter().write(json);
     }
+
+    private final String[] excludedUris = {
+            "/api/v1/auth/signup",
+            "/api/v1/auth/login",
+            "/api/v1/auth/login/test",
+            "/api/v1/auth/refresh",
+            "/api/v1/auth/nickname/**",
+            "/favicon.ico",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
 }

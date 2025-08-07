@@ -60,8 +60,6 @@ public class MysqlConfig {
             EntityManagerFactoryBuilder builder,
             @Qualifier("mysqlDataSource") DataSource dataSource
     ) {
-
-        System.out.println("JPA Properties: " + jpaProperties.getProperties());
         return builder
                 .dataSource(dataSource)
                 .packages("com.example.ingle")
