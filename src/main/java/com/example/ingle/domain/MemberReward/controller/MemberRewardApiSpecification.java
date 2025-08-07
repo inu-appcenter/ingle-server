@@ -1,6 +1,7 @@
 package com.example.ingle.domain.memberreward.controller;
 
 import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponseDto;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponseDto;
 import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponseDto;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.global.jwt.MemberDetail;
@@ -91,4 +92,29 @@ public interface MemberRewardApiSpecification {
     ResponseEntity<MemberRewardStatusResponseDto> getRewardStatusByPosition(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable("position") Integer rewardPosition);
+
+    @Operation(
+            summary = "멤버 튜토리얼 진행률 조회",
+            description = "현재 로그인한 사용자의 튜토리얼 완료 진행률을 조회합니다." +
+                    "<br><br>완료된 튜토리얼 수와 전체 튜토리얼 수를 반환합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "진행률 조회 성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MemberRewardProgressResponseDto.class),
+                                    examples = @ExampleObject(
+                                            name = "진행률 조회 응답 예시",
+                                            value = """
+                                                {
+                                                   "completedCount": 3,
+                                                   "totalCount": 13
+                                                }
+                                                """
+                                    )
+                            )
+                    )
+            }
+    )
+    ResponseEntity<MemberRewardProgressResponseDto> getProgress(
+            @AuthenticationPrincipal MemberDetail memberDetail);
 }

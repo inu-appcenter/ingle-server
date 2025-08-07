@@ -1,6 +1,7 @@
 package com.example.ingle.domain.memberreward;
 
 import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponseDto;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponseDto;
 import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponseDto;
 import com.example.ingle.domain.tutorial.Tutorial;
 import com.example.ingle.domain.tutorial.TutorialRepository;
@@ -87,5 +88,20 @@ public class MemberRewardService {
                 memberId, rewardPosition, memberReward.getCompletedAt());
 
         return MemberRewardStatusResponseDto.fromMemberReward(memberReward);
+    }
+
+    // 진행률 조회
+    @Transactional(readOnly = true)
+    public MemberRewardProgressResponseDto getProgressByMemberId(Long memberId) {
+        // 완료된 튜토리얼(획득한 리워드) 수
+        Long completedCount = memberRewardRepository.countCompletedTutorialsByMemberId(memberId);
+
+        // 전체 튜토리얼 수
+        Long totalCount = tutorialRepository.count();
+
+        return MemberRewardProgressResponseDto.builder()
+                .completedCount(completedCount.intValue())
+                .totalCount(totalCount.intValue())
+                .build();
     }
 }
