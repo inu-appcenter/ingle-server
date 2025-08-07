@@ -5,6 +5,7 @@ import com.example.ingle.domain.tutorial.dto.res.TutorialResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,32 @@ public interface TutorialApiSpecification {
                     @ApiResponse(responseCode = "200", description = "튜토리얼 목록 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponseDto.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponseDto.class)),
+                                    examples = @ExampleObject(
+                                            name = "전체 튜토리얼 목록 응답 예시",
+                                            value = """
+                                                [
+                                                  {
+                                                    "id": 1,
+                                                    "title": "Transportation",
+                                                    "category": "CAMPUS_LIFE",
+                                                    "rewardPosition": 1
+                                                  },
+                                                  {
+                                                    "id": 2,
+                                                    "title": "Tuition Payments",
+                                                    "category": "ACADEMIC_AFFAIRS",
+                                                    "rewardPosition": 2
+                                                  },
+                                                  {
+                                                    "id": 3,
+                                                    "title": "Hospital",
+                                                    "category": "LIFE_STYLE",
+                                                    "rewardPosition": 3
+                                                  }
+                                                ]
+                                                """
+                                    )
                             )
                     )
             }
@@ -37,7 +63,32 @@ public interface TutorialApiSpecification {
                     @ApiResponse(responseCode = "200", description = "카테고리별 튜토리얼 목록 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponseDto.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = TutorialResponseDto.class)),
+                                    examples = @ExampleObject(
+                                            name = "BASIC 카테고리 튜토리얼 목록 응답 예시",
+                                            value = """
+                                                [
+                                                  {
+                                                    "id": 1,
+                                                    "title": "Transportation",
+                                                    "category": "CAMPUS_LIFE",
+                                                    "rewardPosition": 1
+                                                  },
+                                                  {
+                                                    "id": 2,
+                                                    "title": "Tuition Payments",
+                                                    "category": "ACADEMIC_AFFAIRS",
+                                                    "rewardPosition": 2
+                                                  },
+                                                  {
+                                                    "id": 4,
+                                                    "title": "Course Registration",
+                                                    "category": "ACADEMIC_AFFAIRS",
+                                                    "rewardPosition": 3
+                                                  }
+                                                ]
+                                                """
+                                    )
                             )
                     )
             }
