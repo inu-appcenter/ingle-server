@@ -1,9 +1,9 @@
 package com.example.ingle.domain.memberreward.controller;
 
 import com.example.ingle.domain.memberreward.MemberRewardService;
-import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponseDto;
-import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponseDto;
-import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponseDto;
+import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponse;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponse;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponse;
 import com.example.ingle.global.jwt.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class MemberRewardController implements MemberRewardApiSpecification {
 
     // 튜토리얼 완료 처리
     @PostMapping("/{tutorialId}")
-    public ResponseEntity<CompleteTutorialResponseDto> completeTutorial(
+    public ResponseEntity<CompleteTutorialResponse> completeTutorial(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable("tutorialId") Long tutorialId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -29,7 +29,7 @@ public class MemberRewardController implements MemberRewardApiSpecification {
 
     // 특정 리워드 상태 조회
     @GetMapping("/{position}")
-    public ResponseEntity<MemberRewardStatusResponseDto> getRewardStatusByPosition(
+    public ResponseEntity<MemberRewardStatusResponse> getRewardStatusByPosition(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable("position") Integer rewardPosition) {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -38,7 +38,7 @@ public class MemberRewardController implements MemberRewardApiSpecification {
 
     // 멤버 튜토리얼 진행률 조회
     @GetMapping("/progress")
-    public ResponseEntity<MemberRewardProgressResponseDto> getProgress(
+    public ResponseEntity<MemberRewardProgressResponse> getProgress(
             @AuthenticationPrincipal MemberDetail memberDetail) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 memberRewardService.getProgressByMemberId(memberDetail.getMember().getId()));

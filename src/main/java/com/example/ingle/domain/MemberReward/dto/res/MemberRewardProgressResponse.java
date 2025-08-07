@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "리워드 진행률 응답 DTO")
-public class MemberRewardProgressResponseDto {
+public class MemberRewardProgressResponse {
 
     @Schema(description = "완료된 튜토리얼 수", example = "3")
     private final Integer completedCount;
@@ -15,7 +15,7 @@ public class MemberRewardProgressResponseDto {
     private final Integer totalCount;
 
     @Builder
-    private MemberRewardProgressResponseDto(Integer completedCount, Integer totalCount) {
+    private MemberRewardProgressResponse(Integer completedCount, Integer totalCount) {
         this.completedCount = completedCount;
         this.totalCount = totalCount;
     }

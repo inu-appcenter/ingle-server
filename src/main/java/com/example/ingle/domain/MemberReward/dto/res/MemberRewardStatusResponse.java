@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Schema(description = "리워드 획득 여부 응답 DTO")
-public class MemberRewardStatusResponseDto {
+public class MemberRewardStatusResponse {
 
     @Schema(description = "리워드 위치", example = "1")
     private final Integer rewardPosition;
@@ -24,7 +24,7 @@ public class MemberRewardStatusResponseDto {
     private final LocalDateTime completedAt;
 
     @Builder
-    private MemberRewardStatusResponseDto(Integer rewardPosition, Long tutorialId, Boolean isCompleted, LocalDateTime completedAt) {
+    private MemberRewardStatusResponse(Integer rewardPosition, Long tutorialId, Boolean isCompleted, LocalDateTime completedAt) {
         this.rewardPosition = rewardPosition;
         this.tutorialId = tutorialId;
         this.isCompleted = isCompleted;
@@ -32,8 +32,8 @@ public class MemberRewardStatusResponseDto {
     }
 
     // 완료
-    public static MemberRewardStatusResponseDto fromMemberReward(MemberReward memberReward) {
-        return MemberRewardStatusResponseDto.builder()
+    public static MemberRewardStatusResponse fromMemberReward(MemberReward memberReward) {
+        return MemberRewardStatusResponse.builder()
                 .tutorialId(memberReward.getTutorialId())
                 .rewardPosition(memberReward.getRewardPosition())
                 .isCompleted(memberReward.getIsCompleted())
@@ -42,8 +42,8 @@ public class MemberRewardStatusResponseDto {
     }
 
     // 미완료
-    public static MemberRewardStatusResponseDto notCompleted(Long tutorialId, Integer rewardPosition) {
-        return MemberRewardStatusResponseDto.builder()
+    public static MemberRewardStatusResponse notCompleted(Long tutorialId, Integer rewardPosition) {
+        return MemberRewardStatusResponse.builder()
                 .tutorialId(tutorialId)
                 .rewardPosition(rewardPosition)
                 .isCompleted(false)

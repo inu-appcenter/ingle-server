@@ -1,8 +1,8 @@
 package com.example.ingle.domain.memberreward.controller;
 
-import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponseDto;
-import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponseDto;
-import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponseDto;
+import com.example.ingle.domain.memberreward.dto.res.CompleteTutorialResponse;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardProgressResponse;
+import com.example.ingle.domain.memberreward.dto.res.MemberRewardStatusResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.global.jwt.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ public interface MemberRewardApiSpecification {
                     @ApiResponse(responseCode = "201", description = "튜토리얼 완료 처리 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = CompleteTutorialResponseDto.class)
+                                    schema = @Schema(implementation = CompleteTutorialResponse.class)
                             )
                     ),
                     @ApiResponse(responseCode = "400", description = "이미 완료한 튜토리얼입니다.",
@@ -59,7 +59,7 @@ public interface MemberRewardApiSpecification {
                     )
             }
     )
-    ResponseEntity<CompleteTutorialResponseDto> completeTutorial(
+    ResponseEntity<CompleteTutorialResponse> completeTutorial(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable("tutorialId") Long tutorialId);
 
@@ -70,7 +70,7 @@ public interface MemberRewardApiSpecification {
                     @ApiResponse(responseCode = "200", description = "리워드 상태 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MemberRewardStatusResponseDto.class)
+                                    schema = @Schema(implementation = MemberRewardStatusResponse.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 리워드 위치입니다.",
@@ -89,7 +89,7 @@ public interface MemberRewardApiSpecification {
                     )
             }
     )
-    ResponseEntity<MemberRewardStatusResponseDto> getRewardStatusByPosition(
+    ResponseEntity<MemberRewardStatusResponse> getRewardStatusByPosition(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable("position") Integer rewardPosition);
 
@@ -101,7 +101,7 @@ public interface MemberRewardApiSpecification {
                     @ApiResponse(responseCode = "200", description = "진행률 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MemberRewardProgressResponseDto.class),
+                                    schema = @Schema(implementation = MemberRewardProgressResponse.class),
                                     examples = @ExampleObject(
                                             name = "진행률 조회 응답 예시",
                                             value = """
@@ -115,6 +115,6 @@ public interface MemberRewardApiSpecification {
                     )
             }
     )
-    ResponseEntity<MemberRewardProgressResponseDto> getProgress(
+    ResponseEntity<MemberRewardProgressResponse> getProgress(
             @AuthenticationPrincipal MemberDetail memberDetail);
 }

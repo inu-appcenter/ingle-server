@@ -1,6 +1,6 @@
 package com.example.ingle.domain.tutorial;
 
-import com.example.ingle.domain.tutorial.dto.res.TutorialResponseDto;
+import com.example.ingle.domain.tutorial.dto.res.TutorialResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,38 +15,30 @@ public class TutorialService {
     private final TutorialRepository tutorialRepository;
 
     @Transactional(readOnly = true)
-    public List<TutorialResponseDto> getTutorialsByCategory(Category category) {
-
-        log.info("[카테고리별 튜토리얼 조회] category: {}", category);
+    public List<TutorialResponse> getTutorialsByCategory(Category category) {
 
         List<Tutorial> tutorials = tutorialRepository.findByCategoryOrderByRewardPosition(category);
 
-        List<TutorialResponseDto> tutorialResponseDtos = tutorials.stream()
-                .map(tutorial -> TutorialResponseDto.builder()
+        List<TutorialResponse> tutorialResponses = tutorials.stream()
+                .map(tutorial -> TutorialResponse.builder()
                         .tutorial(tutorial)
                         .build())
                 .toList();
 
-        log.info("[카테고리별 튜토리얼 조회 성공]");
-
-        return tutorialResponseDtos;
+        return tutorialResponses;
     }
 
     @Transactional(readOnly = true)
-    public List<TutorialResponseDto> getAllTutorials() {
-
-        log.info("[전체 튜토리얼 조회]");
+    public List<TutorialResponse> getAllTutorials() {
 
         List<Tutorial> tutorials = tutorialRepository.findAllByOrderByRewardPosition();
 
-        List<TutorialResponseDto> tutorialResponseDtos = tutorials.stream()
-                .map(tutorial -> TutorialResponseDto.builder()
+        List<TutorialResponse> tutorialResponses = tutorials.stream()
+                .map(tutorial -> TutorialResponse.builder()
                         .tutorial(tutorial)
                         .build())
                 .toList();
 
-        log.info("[전체 튜토리얼 조회 성공]");
-
-        return tutorialResponseDtos;
+        return tutorialResponses;
     }
 }

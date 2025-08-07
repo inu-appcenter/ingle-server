@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Schema(description = "튜토리얼 완료 처리 응답 DTO")
-public class CompleteTutorialResponseDto {
+public class CompleteTutorialResponse {
 
     @Schema(description = "튜토리얼 ID", example = "1")
     private final Long tutorialId;
@@ -21,7 +21,7 @@ public class CompleteTutorialResponseDto {
     private final LocalDateTime completedAt;
 
     @Builder
-    private CompleteTutorialResponseDto(MemberReward memberReward) {
+    private CompleteTutorialResponse(MemberReward memberReward) {
         this.tutorialId = memberReward.getTutorialId();
         this.rewardPosition = memberReward.getRewardPosition();
         this.completedAt = memberReward.getCompletedAt();
