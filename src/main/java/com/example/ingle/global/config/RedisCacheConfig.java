@@ -24,10 +24,10 @@ public class RedisCacheConfig {
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new ParameterNamesModule()); // record 생성자 파라미터 인식
-        objectMapper.registerModule(new Jdk8Module()); // Optional 지원
-        objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 등 지원
+        ObjectMapper objectMapper = new ObjectMapper()
+                .registerModule(new ParameterNamesModule()) // record 생성자 파라미터 인식
+                .registerModule(new Jdk8Module()) // Optional 지원
+                .registerModule(new JavaTimeModule()); // LocalDateTime 등 지원
 
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
