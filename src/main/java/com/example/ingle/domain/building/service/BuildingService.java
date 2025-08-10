@@ -27,7 +27,9 @@ public class BuildingService {
 
     @Cacheable(
             value = "mapsInBounds",
-            key = "T(java.lang.Math).floor(#minLat * 100) + '_' + T(java.lang.Math).floor(#maxLat * 100) + '_' + T(java.lang.Math).floor(#minLng * 100) + '_' + T(java.lang.Math).floor(#maxLng * 100) + '_' + #buildingCategory",
+            key = "T(java.lang.Math).floor(#minLat * 100) + '_' + T(java.lang.Math).floor(#maxLat * 100) " +
+                    "+ '_' + T(java.lang.Math).floor(#minLng * 100) + '_' + T(java.lang.Math).floor(#maxLng * 100) " +
+                    "+ '_' + (#buildingCategory != null ? #buildingCategory.toString() : 'null')",
             cacheManager = "cacheManager"
     )
     @Transactional(readOnly = true)
