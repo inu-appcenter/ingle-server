@@ -24,8 +24,8 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6385
+      host: ingle-redis
+      port: 6379
 
 oracle:
   datasource:
