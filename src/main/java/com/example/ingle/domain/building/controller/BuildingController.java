@@ -21,8 +21,8 @@ public class BuildingController implements BuildingApiSpecification {
     // 지도 범위 조회 (카테고리)
     @GetMapping
     public ResponseEntity<List<BuildingResponse>> findMapsInBounds(
-            @RequestParam double minLat, @RequestParam double minLng,
-            @RequestParam double maxLat, @RequestParam double maxLng,
+            @RequestParam double minLat, @RequestParam double maxLat,
+            @RequestParam double minLng, @RequestParam double maxLng,
             @RequestParam(required = false) BuildingCategory buildingCategory) {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.findMapsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory));
     }
