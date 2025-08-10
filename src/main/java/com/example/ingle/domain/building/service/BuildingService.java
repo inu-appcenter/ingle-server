@@ -11,6 +11,7 @@ import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,11 @@ public class BuildingService {
     private final BuildingRepository buildingRepository;
     private final ClosedDayRepository closedDayRepository;
 
+    @Cacheable(
+            value = "mapsInBounds",
+            key = "T(java.lang.Math).floor(#minLat * 100) + '_' + T(java.lang.Math).floor(#maxLat * 100) + '_' + T(java.lang.Math).floor(#minLng * 100) + '_' + T(java.lang.Math).floor(#maxLng * 100) + '_' + #buildingCategory",
+            cacheManager = "cacheManager"
+    )
     @Transactional(readOnly = true)
     public List<BuildingResponse> findMapsInBounds(double minLat, double maxLat, double minLng, double maxLng, BuildingCategory buildingCategory) {
 

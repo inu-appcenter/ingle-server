@@ -63,6 +63,16 @@ jobs:
               docker stop ${{secrets.DOCKER_REPO}}
               docker rm ${{secrets.DOCKER_REPO}}
             fi
+            
+            # 기존 Redis 컨테이너 중지 및 삭제
+            if [ "$(docker ps -aq -f name=ingle-redis)" ]; then
+              docker stop ingle-redis
+              docker rm ingle-redis
+            fi
+            
+            # Redis 컨테이너 새로 실행 (포트 6385 바인딩)
+            docker run -d --name ingle-redis -p 6385:6379 redis:latest
+            
              # 새 컨테이너 실행
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker run -d \
