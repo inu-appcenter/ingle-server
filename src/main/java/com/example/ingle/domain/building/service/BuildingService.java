@@ -37,7 +37,7 @@ public class BuildingService {
 
         log.info("[지도 범위 조회]");
 
-        List<Building> buildings = buildingRepository.findMapsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory);
+        List<Building> buildings = buildingRepository.findBuildingsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory);
 
         return buildings.stream().map(BuildingResponse::from).toList();
     }
