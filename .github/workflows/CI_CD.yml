@@ -87,6 +87,5 @@ jobs:
               --env ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }} \
               --env JWT_SECRET=${{ secrets.JWT_SECRET }} \
               --env SERVER_URL=${{ secrets.SERVER_URL }} \
-              --env-file /home/serverking/ingle/.env \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
