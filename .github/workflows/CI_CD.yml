@@ -55,9 +55,6 @@ jobs:
           script: |
             cd /home/serverking/ingle
             
-            # 환경 변수 파일 생성
-            echo "${{ secrets.ENV_FILE }}" > .env
-            
             docker network create ingle-network || true
             
             # 기존 컨테이너 중지 및 삭제
@@ -82,8 +79,14 @@ jobs:
               --network ingle-network \
               --env SPRING_PROFILES_ACTIVE=prod \
               --env JAVA_TOOL_OPTIONS="-Duser.timezone=Asia/Seoul" \
+              --env MYSQL_URL=${{ secrets.DB_URL }} \
+              --env MYSQL_USERNAME=${{ secrets.DB_USERNAME }} \
+              --env MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              --env ORACLE_URL=${{ secrets.ORACLE_URL }} \
+              --env ORACLE_USERNAME=${{ secrets.ORACLE_USERNAME }} \
+              --env ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }} \
+              --env JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              --env SERVER_URL=${{ secrets.SERVER_URL }} \
               --env-file /home/serverking/ingle/.env \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            
-            rm /home/serverking/ingle/.env
