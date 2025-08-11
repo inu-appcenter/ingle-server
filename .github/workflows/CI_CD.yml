@@ -79,7 +79,7 @@ jobs:
               --network ingle-network \
               --env SPRING_PROFILES_ACTIVE=prod \
               --env JAVA_TOOL_OPTIONS="-Duser.timezone=Asia/Seoul" \
-              --env 'MYSQL_URL=${{ secrets.DB_URL }}' \
+              --env 'MYSQL_URL=${{ secrets.MYSQL_URL }}' \
               --env MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
               --env MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
               --env ORACLE_URL=${{ secrets.ORACLE_URL }} \
