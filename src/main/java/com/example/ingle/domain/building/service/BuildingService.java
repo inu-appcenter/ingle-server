@@ -25,6 +25,10 @@ public class BuildingService {
     private final BuildingRepository buildingRepository;
     private final ClosedDayRepository closedDayRepository;
 
+    /*
+    - 결과는 Redis 캐시에 저장되며, 동일한 파라미터로 호출 시 캐시된 결과를 반환합니다.
+    - 캐시 만료 시간은 3시간입니다.
+     */
     @Cacheable(
             value = "mapsInBounds",
             key = "T(java.lang.Math).floor(#minLat * 100) + '_' + T(java.lang.Math).floor(#maxLat * 100) " +
