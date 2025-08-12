@@ -18,8 +18,8 @@ public record LoginSuccessResponse(
         @Schema(description = "학과", example = "Dept. of Computer Science & Engineering")
         String department,
 
-        @Schema(description = "파견 유형", example = "Exchange Student")
-        String program,
+        @Schema(description = "학생 유형", example = "Exchange Student")
+        String studentType,
 
         @Schema(description = "닉네임", example = "IngleFan")
         String nickname,

@@ -16,7 +16,7 @@ public record MyPageResponse(
         String department,
 
         @Schema(description = "파견 유형", example = "EXCHANGE")
-        String program,
+        String studentType,
 
         @Schema(description = "닉네임", example = "IngleFan")
         String nickname,
