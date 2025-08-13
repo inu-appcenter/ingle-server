@@ -18,13 +18,25 @@ import java.util.List;
 public interface StampApiSpecification {
 
     @Operation(
-            summary = "스탬프 상세 조회",
-            description = "ID로 스탬프의 상세 정보를 조회합니다.",
+            summary = "스탬프 조회",
+            description = "ID로 스탬프의 정보를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "스탬프 상세 조회 성공",
+                    @ApiResponse(responseCode = "200", description = "스탬프 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = StampResponse.class)
+                                    schema = @Schema(implementation = StampResponse.class),
+                                    examples = @ExampleObject(
+                                            name = "전체 스탬프 목록 응답 예시",
+                                            value = """
+                                              {
+                                                "id": 1,
+                                                "name": "Transit",
+                                                "cardtitle": "Transportation",
+                                                "keyword": "Airport, Subway, Buses, Bike",
+                                                "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_1.png"
+                                              }
+                                             """
+                                    )
                             )
                     ),
                     @ApiResponse(responseCode = "404", description = "스탬프를 찾을 수 없습니다.",
