@@ -17,7 +17,7 @@ public class TutorialService {
     @Transactional(readOnly = true)
     public List<TutorialResponse> getTutorialsByCategory(Category category) {
 
-        List<Tutorial> tutorials = tutorialRepository.findByCategoryOrderByRewardPosition(category);
+        List<Tutorial> tutorials = tutorialRepository.findByCategoryOrderByStampId(category);
 
         List<TutorialResponse> tutorialResponses = tutorials.stream()
                 .map(tutorial -> TutorialResponse.builder()
@@ -31,7 +31,7 @@ public class TutorialService {
     @Transactional(readOnly = true)
     public List<TutorialResponse> getAllTutorials() {
 
-        List<Tutorial> tutorials = tutorialRepository.findAllByOrderByRewardPosition();
+        List<Tutorial> tutorials = tutorialRepository.findAllByOrderByStampId();
 
         List<TutorialResponse> tutorialResponses = tutorials.stream()
                 .map(tutorial -> TutorialResponse.builder()

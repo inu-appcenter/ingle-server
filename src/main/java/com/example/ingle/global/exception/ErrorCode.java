@@ -41,9 +41,8 @@ public enum ErrorCode {
     TUTORIAL_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "튜토리얼을 찾을 수 없습니다."),
     TUTORIAL_ALREADY_COMPLETED(HttpStatus.BAD_REQUEST, 400, "이미 완료한 튜토리얼입니다."),
 
-    // Reward
-    REWARD_POSITION_DUPLICATED(HttpStatus.BAD_REQUEST, 400, "리워드 위치가 중복되었습니다."),
-    REWARD_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "리워드를 찾을 수 없습니다."),
+    // Stamp
+    STAMP_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "스탬프를 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
