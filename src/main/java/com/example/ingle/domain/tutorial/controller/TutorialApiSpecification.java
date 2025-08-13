@@ -33,19 +33,19 @@ public interface TutorialApiSpecification {
                                                     "id": 1,
                                                     "title": "Transportation",
                                                     "category": "CAMPUS_LIFE",
-                                                    "rewardPosition": 1
+                                                    "stampId": 1
                                                   },
                                                   {
                                                     "id": 2,
                                                     "title": "Tuition Payments",
                                                     "category": "ACADEMIC_AFFAIRS",
-                                                    "rewardPosition": 2
+                                                    "stampId": 2
                                                   },
                                                   {
                                                     "id": 3,
                                                     "title": "Hospital",
                                                     "category": "LIFE_STYLE",
-                                                    "rewardPosition": 3
+                                                    "stampId": 3
                                                   }
                                                 ]
                                                 """
@@ -72,19 +72,19 @@ public interface TutorialApiSpecification {
                                                     "id": 1,
                                                     "title": "Transportation",
                                                     "category": "CAMPUS_LIFE",
-                                                    "rewardPosition": 1
+                                                    "stampId": 1
                                                   },
                                                   {
                                                     "id": 2,
                                                     "title": "Tuition Payments",
                                                     "category": "ACADEMIC_AFFAIRS",
-                                                    "rewardPosition": 2
+                                                    "stampId": 2
                                                   },
                                                   {
                                                     "id": 4,
                                                     "title": "Course Registration",
                                                     "category": "ACADEMIC_AFFAIRS",
-                                                    "rewardPosition": 3
+                                                    "stampId": 3
                                                   }
                                                 ]
                                                 """
