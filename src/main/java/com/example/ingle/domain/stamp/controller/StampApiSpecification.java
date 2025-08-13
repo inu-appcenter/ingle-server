@@ -26,14 +26,18 @@ public interface StampApiSpecification {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = StampResponse.class),
                                     examples = @ExampleObject(
-                                            name = "전체 스탬프 목록 응답 예시",
+                                            name = "스탬프 조회 응답 예시",
                                             value = """
                                               {
                                                 "id": 1,
+                                                "memberId": 123,
+                                                "tutorialId": 1,
                                                 "name": "Transit",
                                                 "cardtitle": "Transportation",
-                                                "keyword": "Airport, Subway, Buses, Bike",
-                                                "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_1.png"
+                                                "keword": "Airport, Subway, Buses, Bike",
+                                                "rewardImageUrl": null,
+                                                "isCompleted": true,
+                                                "completedAt": "2025-01-15T14:30:00"
                                               }
                                              """
                                     )
@@ -71,17 +75,25 @@ public interface StampApiSpecification {
                                                         [
                                                           {
                                                             "id": 1,
+                                                            "memberId": 123,
+                                                            "tutorialId": 1,
                                                             "name": "Transit",
                                                             "cardtitle": "Transportation",
                                                             "keyword": "Airport, Subway, Buses, Bike",
-                                                            "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_1.png"
+                                                            "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_1.png",
+                                                            "isCompleted": true,
+                                                            "completedAt": "2025-01-15T14:30:00"
                                                           },
                                                           {
                                                             "id": 2,
+                                                            "memberId": 123,
+                                                            "tutorialId": 2,
                                                             "name": "Dormitory",
                                                             "cardtitle": "Dormitory Life",
                                                             "keyword": "Room, Facilities, Rules",
-                                                            "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_2.png"
+                                                            "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_2.png",
+                                                            "isCompleted": true,
+                                                            "completedAt": "2025-01-15T14:30:00"
                                                           }
                                                         ]
                                                          """
