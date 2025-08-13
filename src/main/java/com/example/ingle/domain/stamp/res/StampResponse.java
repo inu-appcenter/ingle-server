@@ -24,13 +24,13 @@ public class StampResponse {
     private final String name;
 
     @Schema(description = "스탬프 카드 제목", example = "Transportation")
-    private final String cardtitle;
+    private final String cardTitle;
 
     @Schema(description = "스탬프 키워드", example = "Airport, Subway, Buses, Bike")
-    private final String keword;
+    private final String keyword;
 
     @Schema(description = "리워드 이미지", example = "https://ingle-server.inuappcenter.kr/images/reward_1.png")
-    private final String rewardImageUrl;
+    private final String imageUrl;
 
     @Schema(description = "완료 여부", example = "true")
     private final Boolean isCompleted;
@@ -44,9 +44,9 @@ public class StampResponse {
         this.memberId = stamp.getMemberId();
         this.tutorialId = stamp.getTutorialId();
         this.name = stamp.getName();
-        this.cardtitle = stamp.getCardtitle();
-        this.keword = stamp.getKeword();
-        this.rewardImageUrl = null;
+        this.cardTitle = stamp.getCardTitle();
+        this.keyword = stamp.getKeyword();
+        this.imageUrl = stamp.getImageUrl();
         this.isCompleted = stamp.getIsCompleted();
         this.completedAt = stamp.getCompletedAt();
     }

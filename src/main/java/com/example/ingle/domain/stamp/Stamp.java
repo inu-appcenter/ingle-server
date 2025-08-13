@@ -28,10 +28,10 @@ public class Stamp extends BaseEntity {
     private String name; // 스탬프 이름
 
     @Column(nullable = false, length = 20)
-    private String cardtitle; // 카드 제목
+    private String cardTitle; // 카드 제목
 
     @Column(nullable = false, length = 100)
-    private String keword; // 카드 내 키워드
+    private String keyword; // 카드 내 키워드
 
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
@@ -42,24 +42,24 @@ public class Stamp extends BaseEntity {
     private LocalDateTime completedAt;
 
     @Builder
-    public Stamp(Long memberId, Long tutorialId, String name, String cardtitle, String keword, String imageUrl, Boolean isCompleted, LocalDateTime completedAt) {
+    public Stamp(Long memberId, Long tutorialId, String name, String cardTitle, String keyword, String imageUrl, Boolean isCompleted, LocalDateTime completedAt) {
         this.memberId = memberId;
         this.tutorialId = tutorialId;
         this.name = name;
-        this.cardtitle = cardtitle;
-        this.keword = keword;
+        this.cardTitle = cardTitle;
+        this.keyword = keyword;
         this.imageUrl = imageUrl;
         this.isCompleted = isCompleted;
         this.completedAt = completedAt;
     }
 
-    public static Stamp complete(Long memberId, Long tutorialId, String name, String cardtitle, String keword, String imageUrl, Boolean isCompleted, LocalDateTime completedAt) {
+    public static Stamp complete(Long memberId, Long tutorialId, String name, String cardTitle, String keyword, String imageUrl, Boolean isCompleted, LocalDateTime completedAt) {
         return Stamp.builder()
                 .memberId(memberId)
                 .tutorialId(tutorialId)
                 .name(name)
-                .cardtitle(cardtitle)
-                .keword(keword)
+                .cardTitle(cardTitle)
+                .keyword(keyword)
                 .imageUrl(imageUrl)
                 .isCompleted(isCompleted)
                 .completedAt(completedAt)
