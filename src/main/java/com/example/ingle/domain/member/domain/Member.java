@@ -1,4 +1,4 @@
-package com.example.ingle.domain.member.entity;
+package com.example.ingle.domain.member.domain;
 
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.enums.Department;

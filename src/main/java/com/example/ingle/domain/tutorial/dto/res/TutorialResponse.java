@@ -19,18 +19,14 @@ public class TutorialResponse {
     @Schema(description = "튜토리얼 카테고리", example = "CAMPUS_LIFE")
     private final Category category;
 
-    @Schema(description = "리워드 칸 위치 (1~13)\n" +
-            "[1][2][3]\n" +
-            "[4][5][6]\n" +
-            "[7][8][9]\n",
-            example = "1")
-    private final Integer rewardPosition;
+    @Schema(description = "스탬프 식별자", example = "1")
+    private final Long stampId;
 
     @Builder
     public TutorialResponse(Tutorial tutorial) {
         this.tutorialId = tutorial.getId();
         this.title = tutorial.getTitle();
         this.category = tutorial.getCategory();
-        this.rewardPosition = tutorial.getRewardPosition();
+        this.stampId = tutorial.getStampId();
     }
 }

@@ -22,12 +22,12 @@ public class Tutorial {
     private Category category;
 
     @Column(nullable = false)
-    private Integer rewardPosition; // 리워드 칸 위치 Reward.position
+    private Long stampId; // 스탬프 식별자
 
-    public Tutorial(String title, Category category, Integer rewardPosition) {
+    public Tutorial(String title, Category category, Long stampId) {
         this.title = title;
         this.category = category;
-        this.rewardPosition = rewardPosition;
+        this.stampId = stampId;
     }
 
     // 제목 업데이트
@@ -42,6 +42,6 @@ public class Tutorial {
 
     // 리워드 위치 업데이트
     public void updateRewardPosition(Integer rewardPosition) {
-        this.rewardPosition = rewardPosition;
+        this.stampId = stampId;
     }
 }

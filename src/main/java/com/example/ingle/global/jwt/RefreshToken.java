@@ -1,6 +1,6 @@
 package com.example.ingle.global.jwt;
 
-import com.example.ingle.domain.member.entity.Member;
+import com.example.ingle.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,11 +34,6 @@ public class RefreshToken {
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
-    }
-
-    public RefreshToken updateValue(String refreshToken) {
-        this.refreshToken = refreshToken;
-        return this;
     }
 
     @Builder
