@@ -1,6 +1,6 @@
 package com.example.ingle.domain.member.dto.res;
 
-import com.example.ingle.domain.member.entity.Member;
+import com.example.ingle.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "마이페이지 정보 응답 DTO")

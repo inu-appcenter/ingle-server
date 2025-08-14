@@ -1,6 +1,6 @@
 package com.example.ingle.domain.building.repository;
 
-import com.example.ingle.domain.building.entity.Building;
+import com.example.ingle.domain.building.domain.Building;
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

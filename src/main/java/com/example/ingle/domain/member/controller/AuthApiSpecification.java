@@ -1,6 +1,5 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.member.dto.req.JwtTokenRequest;
 import com.example.ingle.domain.member.dto.req.LoginRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.LoginResponse;
@@ -14,9 +13,11 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,7 +38,8 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<LoginSuccessResponse> signup(@Valid @RequestBody MemberInfoRequest memberInfoRequest);
+    ResponseEntity<LoginSuccessResponse> signup(@Valid @RequestBody MemberInfoRequest memberInfoRequest,
+                                                HttpServletResponse response);
 
     @Operation(
             summary = "INU 포털 로그인",
@@ -72,7 +74,8 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest);
+    ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest,
+                                        HttpServletResponse response);
 
     @Operation(
             summary = "토큰 재발급",
@@ -130,7 +133,8 @@ public interface AuthApiSpecification {
                     )
             }
     )
-    ResponseEntity<LoginSuccessResponse> refresh(@Valid @RequestBody JwtTokenRequest jwtTokenRequest);
+    ResponseEntity<LoginSuccessResponse> refresh(@CookieValue(value = "refreshToken", required = true) String refreshToken,
+                                                 HttpServletResponse response);
 
     @Operation(
             summary = "닉네임 중복 확인",
@@ -170,7 +174,8 @@ public interface AuthApiSpecification {
                     ),
             }
     )
-    ResponseEntity<Void> logout(@AuthenticationPrincipal MemberDetail userDetails);
+    ResponseEntity<Void> logout(@AuthenticationPrincipal MemberDetail userDetails,
+                                HttpServletResponse response);
 
     @Operation(
             summary = "회원 탈퇴",
@@ -193,7 +198,8 @@ public interface AuthApiSpecification {
                     ),
             }
     )
-    ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails);
+    ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails,
+                                      HttpServletResponse response);
 
     @Operation(
             summary = "(TEST) INU 포털 로그인 테스트",

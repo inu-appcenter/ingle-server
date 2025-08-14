@@ -1,4 +1,4 @@
-package com.example.ingle.domain.building.entity;
+package com.example.ingle.domain.building.domain;
 
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.global.BaseEntity;
