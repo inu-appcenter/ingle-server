@@ -1,12 +1,12 @@
 package com.example.ingle.global.exception;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Data
+@Getter
 @Builder
 public class ErrorResponseEntity {
 
