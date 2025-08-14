@@ -1,6 +1,6 @@
 package com.example.ingle.domain.building.dto.res;
 
-import com.example.ingle.domain.building.entity.Building;
+import com.example.ingle.domain.building.domain.Building;
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 

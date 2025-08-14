@@ -2,8 +2,8 @@ package com.example.ingle.domain.building.service;
 
 import com.example.ingle.domain.building.dto.res.BuildingDetailResponse;
 import com.example.ingle.domain.building.dto.res.BuildingResponse;
-import com.example.ingle.domain.building.entity.Building;
-import com.example.ingle.domain.building.entity.ClosedDay;
+import com.example.ingle.domain.building.domain.Building;
+import com.example.ingle.domain.building.domain.ClosedDay;
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.domain.building.repository.BuildingRepository;
 import com.example.ingle.domain.building.repository.ClosedDayRepository;

@@ -2,7 +2,7 @@ package com.example.ingle.domain.member.service;
 
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
-import com.example.ingle.domain.member.entity.Member;
+import com.example.ingle.domain.member.domain.Member;
 import com.example.ingle.domain.member.repository.MemberRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
