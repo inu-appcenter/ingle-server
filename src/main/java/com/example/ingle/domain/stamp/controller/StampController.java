@@ -1,35 +1,59 @@
 package com.example.ingle.domain.stamp.controller;
 
 import com.example.ingle.domain.stamp.StampService;
+import com.example.ingle.domain.stamp.res.CompleteTutorialResponse;
+import com.example.ingle.domain.stamp.res.ProgressResponse;
 import com.example.ingle.domain.stamp.res.StampResponse;
+import com.example.ingle.global.jwt.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/rewards")
+@RequestMapping("/api/v1/stamps")
 @Validated
 public class StampController implements StampApiSpecification {
 
     private final StampService stampService;
 
-    // 스탬프 상세 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<StampResponse> getStamp(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(stampService.getStamp(id));
+    // 로그인한 사용자의 특정 스탬프 조회
+    @GetMapping("/{stampId}")
+    public ResponseEntity<StampResponse> getStamp(
+            @PathVariable Long stampId,
+            @AuthenticationPrincipal MemberDetail memberDetail) {
+        Long memberId = memberDetail.getMember().getId();
+        return ResponseEntity.ok(stampService.getStamp(memberId, stampId));
     }
 
-    // 전체 스탬프 목록 조회
+    // 로그인한 사용자의 전체 스탬프 목록 조회
     @GetMapping
-    public ResponseEntity<List<StampResponse>> getAllStamps() {
-        return ResponseEntity.status(HttpStatus.OK).body(stampService.getAllStamps());
+    public ResponseEntity<List<StampResponse>> getAllStamps(
+            @AuthenticationPrincipal MemberDetail memberDetail) {
+        Long memberId = memberDetail.getMember().getId();
+        return ResponseEntity.ok(stampService.getAllStamps(memberId));
+    }
+
+    // 로그인한 사용자의 튜토리얼 완료 처리
+    @PostMapping("/tutorials/{tutorialId}/complete")
+    public ResponseEntity<CompleteTutorialResponse> completeTutorial(
+            @PathVariable Long tutorialId,
+            @AuthenticationPrincipal MemberDetail memberDetail) {
+        Long memberId = memberDetail.getMember().getId();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(stampService.completeTutorial(memberId, tutorialId));
+    }
+
+    // 로그인한 사용자의 진행률 조회
+    @GetMapping("/progress")
+    public ResponseEntity<ProgressResponse> getProgress(
+            @AuthenticationPrincipal MemberDetail memberDetail) {
+        Long memberId = memberDetail.getMember().getId();
+        return ResponseEntity.ok(stampService.getProgressByMemberId(memberId));
     }
 }
