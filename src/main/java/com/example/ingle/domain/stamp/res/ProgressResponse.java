@@ -1,11 +1,11 @@
-package com.example.ingle.domain.progress.res;
+package com.example.ingle.domain.stamp.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Schema(description = "리워드 진행률 응답 DTO")
+@Schema(description = "튜토리얼 진행률 응답 DTO")
 public class ProgressResponse {
 
     @Schema(description = "완료된 튜토리얼 수", example = "3")
