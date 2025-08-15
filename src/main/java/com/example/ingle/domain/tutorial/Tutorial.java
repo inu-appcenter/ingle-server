@@ -41,7 +41,7 @@ public class Tutorial {
     }
 
     // 연결된 스탬프 업데이트
-    public void updateStampId(Long stampId) {
+    public void updateRewardPosition(Integer rewardPosition) {
         this.stampId = stampId;
     }
 }
