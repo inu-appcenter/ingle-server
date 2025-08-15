@@ -8,10 +8,10 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-@Schema(description = "리워드 상세 정보 응답 DTO")
+@Schema(description = "스탬프 상세 정보 응답 DTO")
 public class StampResponse {
 
-    @Schema(description = "리워드 ID", example = "1")
+    @Schema(description = "스탬프 ID", example = "1")
     private final Long id;
 
     @Schema(description = "멤버 ID", example = "1")
@@ -32,9 +32,6 @@ public class StampResponse {
     @Schema(description = "리워드 이미지", example = "https://ingle-server.inuappcenter.kr/images/reward_1.png")
     private final String imageUrl;
 
-    @Schema(description = "완료 여부", example = "true")
-    private final Boolean isCompleted;
-
     @Schema(description = "완료 시간", example = "2025-01-15T14:30:00")
     private final LocalDateTime completedAt;
 
@@ -47,7 +44,6 @@ public class StampResponse {
         this.cardTitle = stamp.getCardTitle();
         this.keyword = stamp.getKeyword();
         this.imageUrl = stamp.getImageUrl();
-        this.isCompleted = stamp.getIsCompleted();
         this.completedAt = stamp.getCompletedAt();
     }
 

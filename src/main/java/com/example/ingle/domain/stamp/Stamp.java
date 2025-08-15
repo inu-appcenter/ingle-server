@@ -36,33 +36,20 @@ public class Stamp extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @Column(name = "is_completed", nullable = false)
-    private Boolean isCompleted;
-
     private LocalDateTime completedAt;
 
     @Builder
-    public Stamp(Long memberId, Long tutorialId, String name, String cardTitle, String keyword, String imageUrl, Boolean isCompleted, LocalDateTime completedAt) {
+    public Stamp(Long memberId, Long tutorialId, String name, String cardTitle, String keyword, String imageUrl, LocalDateTime completedAt) {
         this.memberId = memberId;
         this.tutorialId = tutorialId;
         this.name = name;
         this.cardTitle = cardTitle;
         this.keyword = keyword;
         this.imageUrl = imageUrl;
-        this.isCompleted = isCompleted;
         this.completedAt = completedAt;
     }
 
-    public static Stamp complete(Long memberId, Long tutorialId, String name, String cardTitle, String keyword, String imageUrl, Boolean isCompleted, LocalDateTime completedAt) {
-        return Stamp.builder()
-                .memberId(memberId)
-                .tutorialId(tutorialId)
-                .name(name)
-                .cardTitle(cardTitle)
-                .keyword(keyword)
-                .imageUrl(imageUrl)
-                .isCompleted(isCompleted)
-                .completedAt(completedAt)
-                .build();
+    public void complete() {
+        this.completedAt = LocalDateTime.now();
     }
 }
