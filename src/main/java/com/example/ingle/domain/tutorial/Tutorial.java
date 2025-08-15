@@ -40,8 +40,8 @@ public class Tutorial {
         this.category = category;
     }
 
-    // 리워드 위치 업데이트
-    public void updateRewardPosition(Integer rewardPosition) {
+    // 연결된 스탬프 업데이트
+    public void updateStampId(Long stampId) {
         this.stampId = stampId;
     }
 }
