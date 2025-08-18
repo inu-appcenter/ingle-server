@@ -40,6 +40,9 @@ public class AuthService {
         if (memberRepository.existsByStudentId(memberInfoRequest.studentId())) {
             throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
         }
+        if (memberRepository.existsByNickname(memberInfoRequest.nickname())) {
+            throw new CustomException(ErrorCode.NICKNAME_DUPLICATED);
+        }
 
         Member member = Member.fromSignupRequest(memberInfoRequest);
         memberRepository.save(member);
