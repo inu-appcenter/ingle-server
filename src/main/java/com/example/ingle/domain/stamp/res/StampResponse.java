@@ -1,6 +1,6 @@
 package com.example.ingle.domain.stamp.res;
 
-import com.example.ingle.domain.stamp.Stamp;
+import com.example.ingle.domain.stamp.entity.Stamp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +13,6 @@ public class StampResponse {
 
     @Schema(description = "스탬프 ID", example = "1")
     private final Long id;
-
-    @Schema(description = "멤버 ID", example = "1")
-    private final Long memberId;
 
     @Schema(description = "해당 튜토리얼 ID", example = "1")
     private final Long tutorialId;
@@ -36,15 +33,14 @@ public class StampResponse {
     private final LocalDateTime completedAt;
 
     @Builder
-    public StampResponse(Stamp stamp) {
+    public StampResponse(Stamp stamp,  LocalDateTime completedAt) {
         this.id = stamp.getId();
-        this.memberId = stamp.getMemberId();
         this.tutorialId = stamp.getTutorialId();
         this.name = stamp.getName();
         this.cardTitle = stamp.getCardTitle();
         this.keyword = stamp.getKeyword();
         this.imageUrl = stamp.getImageUrl();
-        this.completedAt = stamp.getCompletedAt();
+        this.completedAt = completedAt;
     }
 
 }

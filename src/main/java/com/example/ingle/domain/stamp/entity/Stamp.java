@@ -1,6 +1,5 @@
-package com.example.ingle.domain.stamp;
+package com.example.ingle.domain.stamp.entity;
 
-import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,13 +12,10 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stamp")
-public class Stamp extends BaseEntity {
+public class Stamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "member_id", nullable = false)
-    private Long memberId;
 
     @Column(name = "tutorial_id", nullable = false)
     private Long tutorialId;
@@ -36,20 +32,12 @@ public class Stamp extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    private LocalDateTime completedAt;
-
     @Builder
-    public Stamp(Long memberId, Long tutorialId, String name, String cardTitle, String keyword, String imageUrl, LocalDateTime completedAt) {
-        this.memberId = memberId;
+    public Stamp(Long tutorialId, String name, String cardTitle, String keyword, String imageUrl) {
         this.tutorialId = tutorialId;
         this.name = name;
         this.cardTitle = cardTitle;
         this.keyword = keyword;
         this.imageUrl = imageUrl;
-        this.completedAt = completedAt;
-    }
-
-    public void complete() {
-        this.completedAt = LocalDateTime.now();
     }
 }

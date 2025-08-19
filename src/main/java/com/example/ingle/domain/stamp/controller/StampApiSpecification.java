@@ -16,8 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -44,7 +42,6 @@ public interface StampApiSpecification {
                                     value = """
                                               {
                                                 "id": 1,
-                                                "memberId": 123,
                                                 "tutorialId": 1,
                                                 "name": "Transit",
                                                 "cardTitle": "Transportation",
@@ -112,7 +109,6 @@ public interface StampApiSpecification {
                                                         [
                                                           {
                                                             "id": 1,
-                                                            "memberId": 123,
                                                             "tutorialId": 1,
                                                             "name": "Transit",
                                                             "cardTitle": "Transportation",
@@ -122,7 +118,6 @@ public interface StampApiSpecification {
                                                           },
                                                           {
                                                             "id": 2,
-                                                            "memberId": 123,
                                                             "tutorialId": 2,
                                                             "name": "Dormitory",
                                                             "cardTitle": "Dormitory Life",
@@ -132,7 +127,6 @@ public interface StampApiSpecification {
                                                           },
                                                           {
                                                             "id": 3,
-                                                            "memberId": 123,
                                                             "tutorialId": 3,
                                                             "name": "Campus",
                                                             "cardTitle": "Campus Life",
