@@ -76,6 +76,7 @@ public class StampService {
                 })
                 .toList();
     }
+
     // 튜토리얼 완료 처리
     @Transactional
     public CompleteTutorialResponse completeTutorial(Long memberId, Long tutorialId) {
