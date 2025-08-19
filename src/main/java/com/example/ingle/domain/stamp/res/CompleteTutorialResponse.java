@@ -1,6 +1,6 @@
 package com.example.ingle.domain.stamp.res;
 
-import com.example.ingle.domain.stamp.Stamp;
+import com.example.ingle.domain.stamp.entity.Stamp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +21,9 @@ public class CompleteTutorialResponse {
     private final LocalDateTime completedAt;
 
     @Builder
-    private CompleteTutorialResponse(Stamp stamp) {
-        this.id = stamp.getId();
-        this.tutorialId = stamp.getTutorialId();
-        this.completedAt = stamp.getCompletedAt();
+    private CompleteTutorialResponse(Long id, Long tutorialId, LocalDateTime completedAt) {
+        this.id = id;
+        this.tutorialId = tutorialId;
+        this.completedAt = completedAt;
     }
 }
