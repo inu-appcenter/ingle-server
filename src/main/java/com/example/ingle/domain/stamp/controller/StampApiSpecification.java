@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Tag(name = "Stamp", description = "스탬프 관련 API")
-@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "JWT")
 public interface StampApiSpecification {
 
     @Operation(
