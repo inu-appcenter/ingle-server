@@ -32,20 +32,17 @@ public interface TutorialApiSpecification {
                                                   {
                                                     "id": 1,
                                                     "title": "Transportation",
-                                                    "category": "CAMPUS_LIFE",
-                                                    "stampId": 1
+                                                    "category": "CAMPUS_LIFE"
                                                   },
                                                   {
                                                     "id": 2,
                                                     "title": "Tuition Payments",
-                                                    "category": "ACADEMIC_AFFAIRS",
-                                                    "stampId": 2
+                                                    "category": "ACADEMIC_AFFAIRS"
                                                   },
                                                   {
                                                     "id": 3,
                                                     "title": "Hospital",
-                                                    "category": "LIFE_STYLE",
-                                                    "stampId": 3
+                                                    "category": "LIFE_STYLE"
                                                   }
                                                 ]
                                                 """
@@ -71,20 +68,17 @@ public interface TutorialApiSpecification {
                                                   {
                                                     "id": 1,
                                                     "title": "Transportation",
-                                                    "category": "CAMPUS_LIFE",
-                                                    "stampId": 1
+                                                    "category": "CAMPUS_LIFE"
                                                   },
                                                   {
                                                     "id": 2,
                                                     "title": "Tuition Payments",
-                                                    "category": "ACADEMIC_AFFAIRS",
-                                                    "stampId": 2
+                                                    "category": "ACADEMIC_AFFAIRS"
                                                   },
                                                   {
                                                     "id": 4,
                                                     "title": "Course Registration",
-                                                    "category": "ACADEMIC_AFFAIRS",
-                                                    "stampId": 3
+                                                    "category": "ACADEMIC_AFFAIRS"
                                                   }
                                                 ]
                                                 """

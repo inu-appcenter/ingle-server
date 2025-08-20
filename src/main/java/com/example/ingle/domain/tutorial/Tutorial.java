@@ -21,13 +21,9 @@ public class Tutorial {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(nullable = false)
-    private Long stampId; // 스탬프 식별자
-
-    public Tutorial(String title, Category category, Long stampId) {
+    public Tutorial(String title, Category category) {
         this.title = title;
         this.category = category;
-        this.stampId = stampId;
     }
 
     // 제목 업데이트
@@ -38,10 +34,5 @@ public class Tutorial {
     // 카테고리 업데이트
     public void updateCategory(Category category) {
         this.category = category;
-    }
-
-    // 연결된 스탬프 업데이트
-    public void updateRewardPosition(Integer rewardPosition) {
-        this.stampId = stampId;
     }
 }

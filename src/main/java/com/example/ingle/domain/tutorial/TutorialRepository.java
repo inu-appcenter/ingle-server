@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TutorialRepository extends JpaRepository<Tutorial, Long> {
 
-    Optional<Tutorial> findByStampId(Long stampId);
-
     // 특정 카테고리의 튜토리얼을 튜토리얼 ID 순으로 조회
     @Query("SELECT t FROM Tutorial t WHERE t.category = :category ORDER BY t.id")
     List<Tutorial> findByCategoryOrderById(@Param("category") Category category);

@@ -19,14 +19,10 @@ public class TutorialResponse {
     @Schema(description = "튜토리얼 카테고리", example = "CAMPUS_LIFE")
     private final Category category;
 
-    @Schema(description = "스탬프 식별자", example = "1")
-    private final Long stampId;
-
     @Builder
     public TutorialResponse(Tutorial tutorial) {
         this.tutorialId = tutorial.getId();
         this.title = tutorial.getTitle();
         this.category = tutorial.getCategory();
-        this.stampId = tutorial.getStampId();
     }
 }

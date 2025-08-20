@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,13 +40,12 @@ public class StampService {
                 });
 
         // 해당 회원의 스탬프 획득 정보 조회
-        MemberStamp memberStamp = memberStampRepository
-                .findByMemberIdAndTutorialId(memberId, stamp.getTutorialId())
-                .orElse(null);
+        boolean isCompleted = memberStampRepository
+                .existsByMemberIdAndTutorialId(memberId, stamp.getTutorialId());
 
         return StampResponse.builder()
                 .stamp(stamp)
-                .completedAt(memberStamp != null ? memberStamp.getCompletedAt() : null)
+                .isCompleted(isCompleted)
                 .build();
     }
 
@@ -56,24 +56,19 @@ public class StampService {
         // 모든 스탬프 정보 조회
         List<Stamp> stamps = stampRepository.findAllByOrderById();
 
-         // 해당 회원이 획득한 스탬프들을 Map으로 변환 (tutorialId -> MemberStamp)
-        Map<Long, MemberStamp> memberStampMap = memberStampRepository
+        // 해당 회원이 완료한 튜토리얼 ID들을 Set으로 조회
+        Set<Long> completedTutorialIds = memberStampRepository
                 .findAllByMemberId(memberId)
                 .stream()
-                .collect(Collectors.toMap(
-                        MemberStamp::getTutorialId,
-                        memberStamp -> memberStamp
-                ));
+                .map(MemberStamp::getTutorialId) //tutorialId만 추출
+                .collect(Collectors.toSet());
 
-        // 스탬프 정보와 획득 정보를 합쳐서 반환
+        // 스탬프 정보와 완료 여부를 합쳐서 반환
         return stamps.stream()
-                .map(stamp -> {
-                    MemberStamp memberStamp = memberStampMap.get(stamp.getTutorialId());
-                    return StampResponse.builder()
-                            .stamp(stamp)
-                            .completedAt(memberStamp != null ? memberStamp.getCompletedAt() : null)
-                            .build();
-                })
+                .map(stamp -> StampResponse.builder()
+                        .stamp(stamp)
+                        .isCompleted(completedTutorialIds.contains(stamp.getTutorialId())) //완료 여부 판단
+                        .build())
                 .toList();
     }
 
@@ -105,7 +100,6 @@ public class StampService {
         return CompleteTutorialResponse.builder()
                 .id(stamp.getId())
                 .tutorialId(tutorialId)
-                .completedAt(memberStamp.getCompletedAt())
                 .build();
     }
 
