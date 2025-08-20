@@ -42,12 +42,10 @@ public interface StampApiSpecification {
                                     value = """
                                               {
                                                 "id": 1,
-                                                "tutorialId": 1,
                                                 "name": "Transit",
-                                                "cardTitle": "Transportation",
                                                 "keyword": "Airport, Subway, Buses, Bike",
                                                 "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_1.png",
-                                                "completedAt": "2025-01-15T14:30:00"
+                                                "isCompleted": "true"
                                               }
                                              """
                             )
@@ -109,30 +107,24 @@ public interface StampApiSpecification {
                                                         [
                                                           {
                                                             "id": 1,
-                                                            "tutorialId": 1,
                                                             "name": "Transit",
-                                                            "cardTitle": "Transportation",
                                                             "keyword": "Airport, Subway, Buses, Bike",
                                                             "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_1.png",
-                                                            "completedAt": "2025-01-15T14:30:00"
+                                                            "isCompleted": "true"
                                                           },
                                                           {
                                                             "id": 2,
-                                                            "tutorialId": 2,
                                                             "name": "Dormitory",
-                                                            "cardTitle": "Dormitory Life",
                                                             "keyword": "Room, Facilities, Rules",
                                                             "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_2.png",
-                                                            "completedAt": null
+                                                            "isCompleted": "false"
                                                           },
                                                           {
                                                             "id": 3,
-                                                            "tutorialId": 3,
                                                             "name": "Campus",
-                                                            "cardTitle": "Campus Life",
                                                             "keyword": "Library, Cafeteria, Study Room",
                                                             "stampImageUrl": "https://ingle-server.inuappcenter.kr/images/stamp_3.png",
-                                                            "completedAt": "2025-01-16T09:15:00"
+                                                            "isCompleted": "true"
                                                           }
                                                         ]
                                                          """
@@ -179,7 +171,6 @@ public interface StampApiSpecification {
                                             {
                                               "id": 1,
                                               "tutorialId": 1,
-                                              "completedAt": "2025-01-15T14:30:00"
                                             }
                                             """
                             )

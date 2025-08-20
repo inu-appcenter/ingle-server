@@ -22,9 +22,6 @@ public class Stamp extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String name; // 스탬프 이름
 
-    @Column(nullable = false, length = 20)
-    private String cardTitle; // 카드 제목
-
     @Column(nullable = false, length = 100)
     private String keyword; // 카드 내 키워드
 
@@ -32,10 +29,9 @@ public class Stamp extends BaseEntity {
     private String imageUrl;
 
     @Builder
-    public Stamp(Long tutorialId, String name, String cardTitle, String keyword, String imageUrl) {
+    public Stamp(Long tutorialId, String name, String keyword, String imageUrl) {
         this.tutorialId = tutorialId;
         this.name = name;
-        this.cardTitle = cardTitle;
         this.keyword = keyword;
         this.imageUrl = imageUrl;
     }
