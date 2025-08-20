@@ -17,13 +17,9 @@ public class CompleteTutorialResponse {
     @Schema(description = "튜토리얼 ID", example = "1")
     private final Long tutorialId;
 
-    @Schema(description = "완료 시간", example = "2025-01-15T14:30:00")
-    private final LocalDateTime completedAt;
-
     @Builder
-    private CompleteTutorialResponse(Long id, Long tutorialId, LocalDateTime completedAt) {
+    private CompleteTutorialResponse(Long id, Long tutorialId) {
         this.id = id;
         this.tutorialId = tutorialId;
-        this.completedAt = completedAt;
     }
 }
