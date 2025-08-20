@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "stamp")
-public class Stamp extends BaseEntity {
+public class Stamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
