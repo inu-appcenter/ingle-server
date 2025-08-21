@@ -42,15 +42,22 @@ public class ImageService {
     public byte[] getImage(String fileName) {
 
         try {
-            Path path = Paths.get(fileDirectory).resolve(fileName).normalize();
-            if (!path.startsWith(Paths.get(fileDirectory))) {
-                log.error("잘못된 파일 경로 접근 시도: {}", fileName);
-                throw new CustomException(ErrorCode.INVALID_FILE_PATH);
-            }
+            Path path = getFilePath(fileName);
             return Files.readAllBytes(path);
         } catch (IOException e) {
             log.error("이미지 읽기 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+        }
+    }
+
+    public void deleteImage(String fileName) {
+
+        try {
+            Path path = getFilePath(fileName);
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            log.error("이미지 삭제 실패: {}", e.getMessage());
+            throw new CustomException(ErrorCode.IMAGE_DELETION_FAILED);
         }
     }
 
@@ -69,5 +76,14 @@ public class ImageService {
             log.error("이미지 변환 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.IMAGE_CONVERSION_FAILED);
         }
+    }
+
+    private Path getFilePath(String fileName) {
+        Path path = Paths.get(fileDirectory).resolve(fileName).normalize();
+        if (!path.startsWith(Paths.get(fileDirectory))) {
+            log.error("잘못된 파일 경로 접근 시도: {}", fileName);
+            throw new CustomException(ErrorCode.INVALID_FILE_PATH);
+        }
+        return path;
     }
 }

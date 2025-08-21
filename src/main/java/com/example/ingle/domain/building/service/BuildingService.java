@@ -67,15 +67,9 @@ public class BuildingService {
 
         Building building = getBuildingById(buildingId);
 
-        building.getBuildingImages().clear();
+        deleteBuildingImages(building);
 
-        List<ImageResponse> imageResponses = images.stream()
-                .map(image -> {
-                    ImageResponse response = imageService.saveImage(image);
-                    building.getBuildingImages().add(response.fileName());
-                    return response;
-                })
-                .toList();
+        List<ImageResponse> imageResponses = createImageResponses(building, images);
 
         buildingRepository.save(building);
 
@@ -85,10 +79,34 @@ public class BuildingService {
     }
 
     private Building getBuildingById(Long buildingId) {
+
         return buildingRepository.findById(buildingId)
                 .orElseThrow(() -> {
                     log.warn("[건물 조회 실패] 존재하지 않는 건물 mapId: {}", buildingId);
                     return new CustomException(ErrorCode.BUILDING_NOT_FOUND);
                 });
+    }
+
+    private List<ImageResponse> createImageResponses(Building building, List<MultipartFile> images) {
+
+        return images.stream()
+                .map(image -> {
+                    ImageResponse response = imageService.saveImage(image);
+                    building.getBuildingImages().add(response.fileName());
+                    return response;
+                })
+                .toList();
+    }
+
+    private void deleteBuildingImages(Building building) {
+
+        log.info("[건물 이미지 삭제] 건물 buildingId: {}", building.getId());
+
+        if (!building.getBuildingImages().isEmpty()) {
+            building.getBuildingImages().forEach(imageService::deleteImage);
+            building.getBuildingImages().clear();
+        }
+
+        log.info("[건물 이미지 삭제 성공]");
     }
 }
