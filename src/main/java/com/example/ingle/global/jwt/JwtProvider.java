@@ -1,17 +1,24 @@
 package com.example.ingle.global.jwt;
 
-import com.example.ingle.domain.member.entity.Member;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
+<<<<<<< HEAD
 import com.example.ingle.domain.member.entity.MemberDetail;
 import com.example.ingle.domain.member.service.MemberDetailService;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.refreshToken.RefreshToken;
 import com.example.ingle.global.jwt.refreshToken.RefreshTokenRepository;
+=======
+import com.example.ingle.domain.member.domain.Member;
+import com.example.ingle.global.exception.CustomException;
+import com.example.ingle.global.exception.ErrorCode;
+import com.example.ingle.global.utils.CookieUtil;
+>>>>>>> main
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +57,7 @@ public class JwtProvider {
     }
 
     // 인증 성공 시 토큰 생성
-    public LoginSuccessResponse generateToken(Authentication authentication) {
+    public LoginSuccessResponse generateToken(Authentication authentication, HttpServletResponse response) {
 
         log.info("[JWT 발급 요청] From Authentication");
 
@@ -60,22 +67,25 @@ public class JwtProvider {
         // 토큰 만료 시간 계산
         long now = new Date().getTime();
         Date accessTime = new Date(now + ACCESS_TOKEN_EXPIRED_TIME);
-        Date refreshTime = new Date(now + REFRESH_TOKEN_EXPIRED_TIME);
 
         // 멤버 객체 꺼내기
         MemberDetail userDetails = memberDetailService.loadUserByUsername(authentication.getName());
         Member member = userDetails.getMember();
 
-        String accessToken = createToken(authentication.getName(), authorities, ACCESS_TOKEN_EXPIRED_TIME);
-        String refreshToken = createToken(authentication.getName(), authorities, REFRESH_TOKEN_EXPIRED_TIME);
+        String accessToken = createAccessToken(authentication.getName(), authorities);
+        String refreshToken = createRefreshToken();
+
+        CookieUtil.setCookie(response, "refreshToken", refreshToken, (int) (REFRESH_TOKEN_EXPIRED_TIME / 1000));
+
+        refreshTokenRepository.save(RefreshToken.builder().member(member).refreshToken(refreshToken).build());
 
         log.info("[Authentication JWT 발급 완료] accessToken: {}, refreshToken: {}", accessToken, refreshToken);
 
-        return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
+        return LoginSuccessResponse.from(member, accessToken, accessTime);
     }
 
     // Member 객체만으로 JWT 발급
-    public LoginSuccessResponse generateTokenFromMember(Member member) {
+    public LoginSuccessResponse generateTokenFromMember(Member member, HttpServletResponse response) {
 
         log.info("[JWT 발급 요청] From Member");
 
@@ -84,18 +94,21 @@ public class JwtProvider {
 
         long now = new Date().getTime();
         Date accessTime = new Date(now + ACCESS_TOKEN_EXPIRED_TIME);
-        Date refreshTime = new Date(now + REFRESH_TOKEN_EXPIRED_TIME);
 
-        String accessToken = createToken(studentId, authorities, ACCESS_TOKEN_EXPIRED_TIME);
-        String refreshToken = createToken(studentId, authorities, REFRESH_TOKEN_EXPIRED_TIME);
+        String accessToken = createAccessToken(studentId, authorities);
+        String refreshToken = createRefreshToken();
+
+        CookieUtil.setCookie(response, "refreshToken", refreshToken, (int) (REFRESH_TOKEN_EXPIRED_TIME / 1000));
+
+        refreshTokenRepository.save(RefreshToken.builder().member(member).refreshToken(refreshToken).build());
 
         log.info("[Member JWT 발급] studentId: {}, accessToken: {}, refreshToken: {}", studentId, accessToken, refreshToken);
 
-        return buildLoginResponse(member, accessToken, refreshToken, accessTime, refreshTime);
+        return LoginSuccessResponse.from(member, accessToken, accessTime);
     }
 
     // 포털 로그인 토큰 생성
-    public LoginSuccessResponse authenticateAndGenerateToken(String studentId, Member member) {
+    public LoginSuccessResponse authenticateAndGenerateToken(String studentId, Member member, HttpServletResponse response) {
         log.info("INU 포털 로그인 이미 성공 → Spring Security 인증 절차 스킵");
 
         MemberDetail memberDetail = new MemberDetail(member);
@@ -111,13 +124,8 @@ public class JwtProvider {
         }
 
         // JWT 토큰 생성 및 저장
-        LoginSuccessResponse token = generateToken(authentication);
-        RefreshToken refreshToken = RefreshToken.builder()
-                .member(member)
-                .refreshToken(token.refreshToken())
-                .build();
+        LoginSuccessResponse token = generateToken(authentication, response);
 
-        refreshTokenRepository.save(refreshToken);
         log.info("[JWT 발급 완료] studentId = {}", studentId);
 
         return token;
@@ -183,20 +191,23 @@ public class JwtProvider {
     }
 
     // 토큰 생성
-    private String createToken(String subject, String authorities, long expiration) {
+    private String createAccessToken(String subject, String authorities) {
 
         log.info("[Access Token 생성]");
         return Jwts.builder()
                 .setSubject(subject)
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + JwtProvider.ACCESS_TOKEN_EXPIRED_TIME))
                 .compact();
     }
 
-    private LoginSuccessResponse buildLoginResponse(Member member, String accessToken, String refreshToken,
-                                                    Date accessTime, Date refreshTime) {
+    private String createRefreshToken() {
+
         log.info("[Refresh Token 생성]");
-        return LoginSuccessResponse.from(member, accessToken, refreshToken, accessTime, refreshTime);
+        return Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(new Date(System.currentTimeMillis() + JwtProvider.REFRESH_TOKEN_EXPIRED_TIME))
+                .compact();
     }
 }

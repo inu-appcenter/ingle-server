@@ -2,8 +2,8 @@ package com.example.ingle.domain.building.service;
 
 import com.example.ingle.domain.building.dto.res.BuildingDetailResponse;
 import com.example.ingle.domain.building.dto.res.BuildingResponse;
-import com.example.ingle.domain.building.entity.Building;
-import com.example.ingle.domain.building.entity.ClosedDay;
+import com.example.ingle.domain.building.domain.Building;
+import com.example.ingle.domain.building.domain.ClosedDay;
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.domain.building.repository.BuildingRepository;
 import com.example.ingle.domain.building.repository.ClosedDayRepository;
@@ -13,6 +13,7 @@ import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,12 +29,23 @@ public class BuildingService {
     private final ClosedDayRepository closedDayRepository;
     private final ImageService imageService;
 
+    /*
+    - 결과는 Redis 캐시에 저장되며, 동일한 파라미터로 호출 시 캐시된 결과를 반환합니다.
+    - 캐시 만료 시간은 3시간입니다.
+     */
+    @Cacheable(
+            value = "mapsInBounds",
+            key = "T(java.lang.Math).floor(#minLat * 100) + '_' + T(java.lang.Math).floor(#maxLat * 100) " +
+                    "+ '_' + T(java.lang.Math).floor(#minLng * 100) + '_' + T(java.lang.Math).floor(#maxLng * 100) " +
+                    "+ '_' + (#buildingCategory != null ? #buildingCategory.toString() : 'null')",
+            cacheManager = "cacheManager"
+    )
     @Transactional(readOnly = true)
     public List<BuildingResponse> findMapsInBounds(double minLat, double maxLat, double minLng, double maxLng, BuildingCategory buildingCategory) {
 
         log.info("[지도 범위 조회]");
 
-        List<Building> buildings = buildingRepository.findMapsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory);
+        List<Building> buildings = buildingRepository.findBuildingsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory);
 
         return buildings.stream().map(BuildingResponse::from).toList();
     }

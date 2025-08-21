@@ -55,21 +55,38 @@ jobs:
           script: |
             cd /home/serverking/ingle
             
-            # 환경 변수 파일 생성
-            echo "${{ secrets.ENV_FILE }}" > .env
+            docker network create ingle-network || true
             
             # 기존 컨테이너 중지 및 삭제
             if [ "$(docker ps -aq -f name=${{secrets.DOCKER_REPO}})" ]; then
               docker stop ${{secrets.DOCKER_REPO}}
               docker rm ${{secrets.DOCKER_REPO}}
             fi
+            
+            # 기존 Redis 컨테이너 중지 및 삭제
+            if [ "$(docker ps -aq -f name=ingle-redis)" ]; then
+              docker stop ingle-redis
+              docker rm ingle-redis
+            fi
+            
+            # Redis 컨테이너 새로 실행 (포트 6385 바인딩)
+            docker run -d --name ingle-redis --network ingle-network -p 6385:6379 --restart unless-stopped redis:latest
+            
              # 새 컨테이너 실행
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker run -d \
               --name ${{ secrets.DOCKER_REPO }} \
+              --network ingle-network \
               --env SPRING_PROFILES_ACTIVE=prod \
               --env JAVA_TOOL_OPTIONS="-Duser.timezone=Asia/Seoul" \
-              --env-file /home/serverking/ingle/.env \
+              --env 'MYSQL_URL=${{ secrets.MYSQL_URL }}' \
+              --env MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              --env MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              --env ORACLE_URL=${{ secrets.ORACLE_URL }} \
+              --env ORACLE_USERNAME=${{ secrets.ORACLE_USERNAME }} \
+              --env ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }} \
+              --env JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              --env SERVER_URL=${{ secrets.SERVER_URL }} \
               -v /home/serverking/ingle/images:/ingle/images \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}

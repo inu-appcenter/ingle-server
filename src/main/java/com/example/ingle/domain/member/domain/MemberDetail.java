@@ -1,5 +1,6 @@
-package com.example.ingle.domain.member.entity;
+package com.example.ingle.domain.member.domain;
 
+import com.example.ingle.domain.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
