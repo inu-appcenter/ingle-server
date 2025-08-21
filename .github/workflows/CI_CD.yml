@@ -70,5 +70,6 @@ jobs:
               --env SPRING_PROFILES_ACTIVE=prod \
               --env JAVA_TOOL_OPTIONS="-Duser.timezone=Asia/Seoul" \
               --env-file /home/serverking/ingle/.env \
+              -v /home/serverking/ingle/images:/ingle/images \
               -p 8089:8089 \
                 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}

@@ -43,6 +43,11 @@ public enum ErrorCode {
 
     // Stamp
     STAMP_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "스탬프를 찾을 수 없습니다."),
+
+    // Image
+    IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 500, "이미지 업로드에 실패했습니다."),
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "이미지를 찾을 수 없습니다."),
+    IMAGE_CONVERSION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 500, "이미지 변환에 실패했습니다.")
     ;
 
     private final HttpStatus httpStatus;
