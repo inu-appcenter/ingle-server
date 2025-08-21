@@ -1,19 +1,14 @@
 package com.example.ingle.global.jwt;
 
+import com.example.ingle.domain.member.domain.Member;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
-<<<<<<< HEAD
-import com.example.ingle.domain.member.entity.MemberDetail;
 import com.example.ingle.domain.member.service.MemberDetailService;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.refreshToken.RefreshToken;
 import com.example.ingle.global.jwt.refreshToken.RefreshTokenRepository;
-=======
-import com.example.ingle.domain.member.domain.Member;
-import com.example.ingle.global.exception.CustomException;
-import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.utils.CookieUtil;
->>>>>>> main
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

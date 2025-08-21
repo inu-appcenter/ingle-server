@@ -3,7 +3,7 @@ package com.example.ingle.domain.member.controller;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
-import com.example.ingle.domain.member.entity.MemberDetail;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

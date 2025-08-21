@@ -3,7 +3,7 @@ package com.example.ingle.domain.member.controller;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.domain.member.service.MemberService;
-import com.example.ingle.domain.member.entity.MemberDetail;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
