@@ -1,4 +1,4 @@
-package com.example.ingle.global.jwt;
+package com.example.ingle.global.jwt.refreshToken;
 
 import com.example.ingle.domain.member.entity.Member;
 import jakarta.persistence.*;

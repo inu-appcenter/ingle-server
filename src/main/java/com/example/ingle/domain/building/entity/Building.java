@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +26,10 @@ public class Building extends BaseEntity {
 
     @Column(name = "building_name", nullable = false, length = 200)
     private String buildingName;
+
+    @Column(name = "building_images")
+    @ElementCollection
+    private List<String> buildingImages;
 
     @Column(name = "building_category", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)

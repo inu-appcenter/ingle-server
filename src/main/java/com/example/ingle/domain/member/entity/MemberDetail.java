@@ -1,6 +1,5 @@
-package com.example.ingle.global.jwt;
+package com.example.ingle.domain.member.entity;
 
-import com.example.ingle.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
