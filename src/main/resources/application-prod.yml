@@ -38,6 +38,9 @@ oracle:
 swagger:
   server-url: ${SERVER_URL}
 
+file:
+  upload-dir: ${IMAGE_PATH}
+
 jwt:
   secret: ${JWT_SECRET}
 

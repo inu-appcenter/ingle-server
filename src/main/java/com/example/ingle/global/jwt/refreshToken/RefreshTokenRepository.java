@@ -1,4 +1,4 @@
-package com.example.ingle.global.jwt;
+package com.example.ingle.global.jwt.refreshToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -6,7 +6,7 @@ import com.example.ingle.domain.member.dto.res.LoginResponse;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.domain.member.dto.res.SignupRequiredResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
-import com.example.ingle.global.jwt.MemberDetail;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

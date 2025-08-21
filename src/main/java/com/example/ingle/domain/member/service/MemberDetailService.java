@@ -1,6 +1,7 @@
-package com.example.ingle.global.jwt;
+package com.example.ingle.domain.member.service;
 
 import com.example.ingle.domain.member.domain.Member;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import com.example.ingle.domain.member.repository.MemberRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

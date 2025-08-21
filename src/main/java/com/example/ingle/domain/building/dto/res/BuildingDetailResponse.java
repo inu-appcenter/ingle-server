@@ -16,6 +16,9 @@ public record BuildingDetailResponse(
         @Schema(description = "건물 이름", example = "대학본부")
         String buildingName,
 
+        @Schema(description = "건물 이미지 URL 목록")
+        List<String> buildingImages,
+
         @Schema(description = "위도", example = "37.376833680573")
         Double latitude,
 
@@ -54,6 +57,7 @@ public record BuildingDetailResponse(
         return new BuildingDetailResponse(
                 building.getId(),
                 building.getBuildingName(),
+                building.getBuildingImages(),
                 building.getLatitude(),
                 building.getLongitude(),
                 building.getBuildingCategory(),

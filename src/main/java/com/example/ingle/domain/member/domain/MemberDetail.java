@@ -1,4 +1,4 @@
-package com.example.ingle.global.jwt;
+package com.example.ingle.domain.member.domain;
 
 import com.example.ingle.domain.member.domain.Member;
 import lombok.AllArgsConstructor;
