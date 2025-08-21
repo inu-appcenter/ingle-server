@@ -21,14 +21,9 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MyPageResponse getMyPage(MemberDetail memberDetail) {
-
-        Member loginMember = memberDetail.getMember();
-
-        log.info("[마이페이지 조회] 회원 ID: {}", loginMember.getId());
-
-        Member member = memberRepository.findById(loginMember.getId())
+        Member member = memberRepository.findById(memberDetail.getMember().getId())
                 .orElseThrow(() -> {
-                    log.warn("[마이페이지 조회 실패] 회원 ID: {}", loginMember.getId());
+                    log.warn("[마이페이지 조회 실패] 회원 ID: {}", memberDetail.getMember().getId());
                     return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
                 });
 
@@ -37,14 +32,9 @@ public class MemberService {
 
     @Transactional
     public MyPageResponse updateMyPage(MemberDetail memberDetail, MemberInfoRequest memberInfoRequest) {
-
-        Member loginMember = memberDetail.getMember();
-
-        log.info("[마이페이지 수정] 회원 ID: {}", loginMember.getId());
-
-        Member member = memberRepository.findById(loginMember.getId())
+        Member member = memberRepository.findById(memberDetail.getMember().getId())
                 .orElseThrow(() -> {
-                    log.warn("[마이페이지 수정 실패] 회원 ID: {}", loginMember.getId());
+                    log.warn("[마이페이지 수정 실패] 회원 ID: {}", memberDetail.getMember().getId());
                     return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
                 });
 

@@ -34,9 +34,6 @@ public class AuthService {
 
     @Transactional
     public LoginSuccessResponse signup(MemberInfoRequest memberInfoRequest, HttpServletResponse response) {
-
-        log.info("[회원가입 요청] studentId={}", memberInfoRequest.studentId());
-
         if (memberRepository.existsByStudentId(memberInfoRequest.studentId())) {
             throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
         }
@@ -48,18 +45,11 @@ public class AuthService {
         memberRepository.save(member);
 
         // Spring Security 인증 없이 직접 JWT 발급
-        LoginSuccessResponse token = jwtProvider.generateTokenFromMember(member, response);
-
-        log.info("[회원가입 성공] studentId = {}", member.getStudentId());
-
-        return token;
+        return jwtProvider.generateTokenFromMember(member, response);
     }
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response) {
-
-        log.info("[로그인 요청] studentId={}", loginRequest.studentId());
-
         if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
@@ -71,19 +61,13 @@ public class AuthService {
         }
 
         Member member = optionalMember.get();
-        LoginSuccessResponse loginSuccessResponse = jwtProvider.authenticateAndGenerateToken(
+
+        return jwtProvider.authenticateAndGenerateToken(
                 loginRequest.studentId(), member, response);
-
-        log.info("[로그인 성공] studentId: {}", member.getStudentId());
-
-        return loginSuccessResponse;
     }
 
     @Transactional
     public LoginSuccessResponse refresh(String refreshToken, HttpServletResponse response) {
-
-        log.info("[JWT 토큰 재발급 요청]");
-
         if (!jwtProvider.validateToken(refreshToken, "refresh")) {
             log.warn("[JWT 토큰 유효성 검증 실패] 만료된 Refresh Token");
             refreshTokenRepository.deleteByRefreshToken(refreshToken);
@@ -109,27 +93,16 @@ public class AuthService {
 
         refreshTokenRepository.delete(studentRefreshToken);
 
-        LoginSuccessResponse loginSuccessResponse = jwtProvider.generateTokenFromMember(member, response);
-        log.info("[AccessToken/RefreshToken 재발급 완료] studentId: {}", member.getStudentId());
-
-        return loginSuccessResponse;
+        return jwtProvider.generateTokenFromMember(member, response);
     }
 
     @Transactional(readOnly = true)
     public Boolean checkNicknameDuplicated(String nickname) {
-
-        boolean exists = memberRepository.existsByNickname(nickname);
-
-        log.info("[닉네임 중복 확인 결과] nickname={}, exists={}", nickname, exists);
-
-        return exists;
+        return memberRepository.existsByNickname(nickname);
     }
 
     @Transactional
     public void logout(Member member, HttpServletResponse response) {
-
-        log.info("[로그아웃 요청] studentId: {}", member.getStudentId());
-
         RefreshToken refreshToken = refreshTokenRepository.findByStudentId(member.getStudentId())
                 .orElseThrow(() -> {
                     log.warn("[로그아웃 실패] 저장된 RefreshToken 없음: studentId={}", member.getStudentId());
@@ -143,9 +116,6 @@ public class AuthService {
 
     @Transactional
     public void deleteMember(Member member, HttpServletResponse response) {
-
-        log.info("[회원 탈퇴 요청 시작] studentId: {}", member.getStudentId());
-
         Member memberToDelete = memberRepository.findByStudentId(member.getStudentId())
                 .orElseThrow(() -> {
                     log.warn("[회원 정보 조회 실패] 사용자 없음: studentId={}", member.getStudentId());
@@ -160,7 +130,6 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public String loginTest(LoginRequest loginRequest) {
-
         if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
             return "INU 포털 로그인 실패";
         }
