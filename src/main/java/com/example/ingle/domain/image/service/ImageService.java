@@ -27,7 +27,6 @@ public class ImageService {
     private String fileDirectory;
 
     public ImageResponse saveImage(MultipartFile file) {
-
         File dir = new File(fileDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -40,7 +39,6 @@ public class ImageService {
     }
 
     public byte[] getImage(String fileName) {
-
         try {
             Path path = getFilePath(fileName);
             return Files.readAllBytes(path);
@@ -51,7 +49,6 @@ public class ImageService {
     }
 
     public void deleteImage(String fileName) {
-
         try {
             Path path = getFilePath(fileName);
             Files.deleteIfExists(path);
@@ -62,7 +59,6 @@ public class ImageService {
     }
 
     private String convertJpeg(MultipartFile file) {
-
         try {
             BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
 

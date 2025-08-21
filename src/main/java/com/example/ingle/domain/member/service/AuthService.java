@@ -31,15 +31,11 @@ public class AuthService {
     private final INUMemberRepository inuMemberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
+    private final MemberService memberService;
 
     @Transactional
     public LoginSuccessResponse signup(MemberInfoRequest memberInfoRequest, HttpServletResponse response) {
-        if (memberRepository.existsByStudentId(memberInfoRequest.studentId())) {
-            throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
-        }
-        if (memberRepository.existsByNickname(memberInfoRequest.nickname())) {
-            throw new CustomException(ErrorCode.NICKNAME_DUPLICATED);
-        }
+        validateMember(memberInfoRequest);
 
         Member member = Member.fromSignupRequest(memberInfoRequest);
         memberRepository.save(member);
@@ -50,46 +46,25 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response) {
-        if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
-            throw new CustomException(ErrorCode.LOGIN_FAILED);
-        }
+        verifySchoolLogin(loginRequest);
 
-        Optional<Member> optionalMember = memberRepository.findByStudentId(loginRequest.studentId());
-        if (optionalMember.isEmpty()) {
+        Optional<Member> member = memberRepository.findByStudentId(loginRequest.studentId());
+        if (member.isEmpty()) {
             log.info("[회원 가입 필요] studentId: {}", loginRequest.studentId());
             return new SignupRequiredResponse(loginRequest.studentId(), true, "회원 가입이 필요합니다.");
         }
 
-        Member member = optionalMember.get();
-
-        return jwtProvider.authenticateAndGenerateToken(
-                loginRequest.studentId(), member, response);
+        return jwtProvider.authenticateAndGenerateToken(member.get(), response);
     }
 
     @Transactional
     public LoginSuccessResponse refresh(String refreshToken, HttpServletResponse response) {
-        if (!jwtProvider.validateToken(refreshToken, "refresh")) {
-            log.warn("[JWT 토큰 유효성 검증 실패] 만료된 Refresh Token");
-            refreshTokenRepository.deleteByRefreshToken(refreshToken);
-            throw new CustomException(ErrorCode.JWT_REFRESH_TOKEN_EXPIRED);
-        }
+        jwtProvider.validateRefreshTokenAndDelete(refreshToken);
 
-        RefreshToken studentRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> {
-                    log.warn("[RefreshToken 조회 실패] 저장된 토큰 없음");
-                    return new CustomException(ErrorCode.JWT_NOT_FOUND);
-                });
+        RefreshToken studentRefreshToken = jwtProvider.findRefreshToken(refreshToken);
+        Member member = memberService.getMemberByStudentId(studentRefreshToken.getStudentId());
 
-        Member member = memberRepository.findById(studentRefreshToken.getMemberId())
-                .orElseThrow(() -> {
-                    log.warn("[회원 정보 조회 실패] 사용자 없음: memberId={}", studentRefreshToken.getMemberId());
-                    return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-                });
-
-        if (!studentRefreshToken.getRefreshToken().equals(refreshToken)) {
-            log.warn("[RefreshToken 불일치] 요청 토큰과 저장 토큰이 다름");
-            throw new CustomException(ErrorCode.JWT_NOT_MATCH);
-        }
+        jwtProvider.matchRefreshToken(studentRefreshToken.getRefreshToken(), refreshToken);
 
         refreshTokenRepository.delete(studentRefreshToken);
 
@@ -103,36 +78,39 @@ public class AuthService {
 
     @Transactional
     public void logout(Member member, HttpServletResponse response) {
-        RefreshToken refreshToken = refreshTokenRepository.findByStudentId(member.getStudentId())
-                .orElseThrow(() -> {
-                    log.warn("[로그아웃 실패] 저장된 RefreshToken 없음: studentId={}", member.getStudentId());
-                    return new CustomException(ErrorCode.JWT_NOT_FOUND);
-                });
-
-        CookieUtil.deleteCookie(response, "refreshToken");
+        RefreshToken refreshToken = jwtProvider.findRefreshTokenByStudentId(member.getStudentId());
 
         refreshTokenRepository.delete(refreshToken);
+        CookieUtil.deleteCookie(response, "refreshToken");
     }
 
     @Transactional
     public void deleteMember(Member member, HttpServletResponse response) {
-        Member memberToDelete = memberRepository.findByStudentId(member.getStudentId())
-                .orElseThrow(() -> {
-                    log.warn("[회원 정보 조회 실패] 사용자 없음: studentId={}", member.getStudentId());
-                    return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-                });
+        Member memberToDelete = memberService.getMemberByStudentId(member.getStudentId());
 
         refreshTokenRepository.deleteByStudentId(member.getStudentId());
         memberRepository.delete(memberToDelete);
-
         CookieUtil.deleteCookie(response, "refreshToken");
     }
 
     @Transactional(readOnly = true)
     public String loginTest(LoginRequest loginRequest) {
-        if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
-            return "INU 포털 로그인 실패";
-        }
+        verifySchoolLogin(loginRequest);
         return "INU 포털 로그인 성공: " + loginRequest.studentId();
+    }
+
+    private void validateMember(MemberInfoRequest memberInfoRequest) {
+        if (memberRepository.existsByStudentId(memberInfoRequest.studentId())) {
+            throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
+        }
+        if (memberRepository.existsByNickname(memberInfoRequest.nickname())) {
+            throw new CustomException(ErrorCode.NICKNAME_DUPLICATED);
+        }
+    }
+
+    private void verifySchoolLogin(LoginRequest loginRequest) {
+        if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
+        }
     }
 }
