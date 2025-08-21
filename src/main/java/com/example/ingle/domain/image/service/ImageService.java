@@ -6,8 +6,6 @@ import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -28,7 +26,7 @@ public class ImageService {
     @Value("${file.upload-dir}")
     private String fileDirectory;
 
-    public ImageResponse saveImages(MultipartFile file) {
+    public ImageResponse saveImage(MultipartFile file) {
 
         File dir = new File(fileDirectory);
         if (!dir.exists()) {
@@ -36,25 +34,22 @@ public class ImageService {
         }
 
         String filePath = convertJpeg(file);
-        String url = "/api/v1/images?fileName=" + filePath;
+        String url = "/api/v1/images/" + filePath;
 
         return ImageResponse.from(filePath, url);
     }
 
-    public Resource getImages(String fileName) {
+    public byte[] getImage(String fileName) {
 
         try {
-            Path path = Paths.get(fileDirectory).resolve(fileName);
-            Resource resource = new UrlResource(path.toUri());
-
-            if (!resource.exists() || !resource.isReadable()) {
-                log.error("파일을 찾을 수 없습니다: {}", fileName);
-                throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+            Path path = Paths.get(fileDirectory).resolve(fileName).normalize();
+            if (!path.startsWith(Paths.get(fileDirectory))) {
+                log.error("잘못된 파일 경로 접근 시도: {}", fileName);
+                throw new CustomException(ErrorCode.INVALID_FILE_PATH);
             }
-
-            return resource;
-        } catch (MalformedURLException e) {
-            log.error("잘못된 URL: {}", e.getMessage());
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            log.error("이미지 읽기 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
         }
     }

@@ -4,7 +4,7 @@ import com.example.ingle.domain.stamp.res.CompleteTutorialResponse;
 import com.example.ingle.domain.stamp.res.ProgressResponse;
 import com.example.ingle.domain.stamp.res.StampResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
-import com.example.ingle.global.jwt.MemberDetail;
+import com.example.ingle.domain.member.entity.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

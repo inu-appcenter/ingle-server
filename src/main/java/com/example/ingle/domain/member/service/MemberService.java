@@ -6,7 +6,7 @@ import com.example.ingle.domain.member.entity.Member;
 import com.example.ingle.domain.member.repository.MemberRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
-import com.example.ingle.global.jwt.MemberDetail;
+import com.example.ingle.domain.member.entity.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

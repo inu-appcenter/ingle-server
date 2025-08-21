@@ -6,7 +6,7 @@ import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.LoginResponse;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.domain.member.service.AuthService;
-import com.example.ingle.global.jwt.MemberDetail;
+import com.example.ingle.domain.member.entity.MemberDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
