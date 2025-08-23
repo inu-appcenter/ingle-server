@@ -4,7 +4,7 @@ import com.example.ingle.domain.stamp.StampService;
 import com.example.ingle.domain.stamp.res.CompleteTutorialResponse;
 import com.example.ingle.domain.stamp.res.ProgressResponse;
 import com.example.ingle.domain.stamp.res.StampResponse;
-import com.example.ingle.domain.member.entity.MemberDetail;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

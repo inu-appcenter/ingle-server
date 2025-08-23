@@ -2,11 +2,11 @@ package com.example.ingle.domain.member.service;
 
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
-import com.example.ingle.domain.member.entity.Member;
+import com.example.ingle.domain.member.domain.Member;
 import com.example.ingle.domain.member.repository.MemberRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
-import com.example.ingle.domain.member.entity.MemberDetail;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,35 +21,25 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MyPageResponse getMyPage(MemberDetail memberDetail) {
-
-        Member loginMember = memberDetail.getMember();
-
-        log.info("[마이페이지 조회] 회원 ID: {}", loginMember.getId());
-
-        Member member = memberRepository.findById(loginMember.getId())
-                .orElseThrow(() -> {
-                    log.warn("[마이페이지 조회 실패] 회원 ID: {}", loginMember.getId());
-                    return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-                });
+        Member member = getMemberByStudentId(memberDetail.getUsername());
 
         return MyPageResponse.from(member);
     }
 
     @Transactional
     public MyPageResponse updateMyPage(MemberDetail memberDetail, MemberInfoRequest memberInfoRequest) {
-
-        Member loginMember = memberDetail.getMember();
-
-        log.info("[마이페이지 수정] 회원 ID: {}", loginMember.getId());
-
-        Member member = memberRepository.findById(loginMember.getId())
-                .orElseThrow(() -> {
-                    log.warn("[마이페이지 수정 실패] 회원 ID: {}", loginMember.getId());
-                    return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-                });
+        Member member = getMemberByStudentId(memberDetail.getUsername());
 
         member.updateMember(memberInfoRequest);
 
         return MyPageResponse.from(member);
+    }
+
+    protected Member getMemberByStudentId(String studentId) {
+        return memberRepository.findByStudentId(studentId)
+                .orElseThrow(() -> {
+                    log.warn("[회원 정보 조회 실패] 사용자 없음: studentId={}", studentId);
+                    return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+                });
     }
 }

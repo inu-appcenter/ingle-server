@@ -22,6 +22,11 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
 
+  data:
+    redis:
+      host: ingle-redis
+      port: 6379
+
 oracle:
   datasource:
     jdbc-url: ${ORACLE_URL}
