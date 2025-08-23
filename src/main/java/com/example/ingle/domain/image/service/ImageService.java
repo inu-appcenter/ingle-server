@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,20 +25,25 @@ public class ImageService {
     private String fileDirectory;
 
     public ImageResponse saveImage(MultipartFile file) {
-
         File dir = new File(fileDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        String filePath = convertJpeg(file);
-        String url = "/api/v1/images/" + filePath;
+        String originalFilename = file.getOriginalFilename();
+        String extension = extractExtension(originalFilename);
 
-        return ImageResponse.from(filePath, url);
+        String fileName = UUID.randomUUID() + extension;
+        File dest = new File(fileDirectory, fileName);
+
+        transferTo(file, dest);
+
+        String url = "/api/v1/images/" + fileName;
+
+        return ImageResponse.from(fileName, url);
     }
 
     public byte[] getImage(String fileName) {
-
         try {
             Path path = getFilePath(fileName);
             return Files.readAllBytes(path);
@@ -50,8 +53,19 @@ public class ImageService {
         }
     }
 
-    public void deleteImage(String fileName) {
+    public String getContentType(String filename) {
+        Path path = Paths.get(fileDirectory).resolve(filename);
+        String contentType = null;
+        try {
+            contentType = Files.probeContentType(path);
+        } catch (IOException e) {
+            log.warn("파일 MIME 타입 확인 실패: {}", filename);
+        }
 
+        return contentType != null ? contentType : "application/octet-stream";
+    }
+
+    public void deleteImage(String fileName) {
         try {
             Path path = getFilePath(fileName);
             Files.deleteIfExists(path);
@@ -61,19 +75,18 @@ public class ImageService {
         }
     }
 
-    private String convertJpeg(MultipartFile file) {
+    private String extractExtension(String originalFilename) {
+        if (originalFilename != null && originalFilename.contains(".")) {
+            return originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+        }
+        return "";
+    }
 
+    private void transferTo(MultipartFile file, File dest) {
         try {
-            BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-
-            String fileName = UUID.randomUUID() + ".jpg";
-            File outputFile = new File(fileDirectory, fileName);
-
-            ImageIO.write(bufferedImage, "jpg", outputFile);
-
-            return fileName;
+            file.transferTo(dest);
         } catch (IOException e) {
-            log.error("이미지 변환 실패: {}", e.getMessage());
+            log.error("이미지 저장 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.IMAGE_CONVERSION_FAILED);
         }
     }
