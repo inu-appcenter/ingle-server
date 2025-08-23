@@ -25,7 +25,7 @@ public class ImageController {
     @GetMapping("/{filename}")
     public ResponseEntity<byte[]> getImage(@PathVariable String filename) {
         return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                .header(HttpHeaders.CONTENT_TYPE, imageService.getContentType(filename))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
                 .header(HttpHeaders.CACHE_CONTROL, "max-age=3600")
                 .body(imageService.getImage(filename));
