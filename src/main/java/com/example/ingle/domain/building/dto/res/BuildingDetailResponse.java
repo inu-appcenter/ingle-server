@@ -50,7 +50,10 @@ public record BuildingDetailResponse(
         String phoneNumber,
 
         @Schema(description = "휴무일", example = "No Closed Days / Monday")
-        List<String> closedDays
+        List<String> closedDays,
+
+        @Schema(description = "건물 URL")
+        String buildingUrl
 
 ) {
     public static BuildingDetailResponse from(Building building, List<ClosedDay> closedDays) {
@@ -68,7 +71,8 @@ public record BuildingDetailResponse(
                 building.getOpenTime(),
                 building.getCloseTime(),
                 building.getPhoneNumber(),
-                closedDays.stream().map(cd -> cd.getClosedDay().getFullName()).toList()
+                closedDays.stream().map(cd -> cd.getClosedDay().getFullName()).toList(),
+                building.getBuildingUrl()
         );
     }
 }
