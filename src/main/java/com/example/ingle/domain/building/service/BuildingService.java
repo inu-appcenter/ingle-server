@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -69,8 +70,10 @@ public class BuildingService {
 
         deleteBuildingImages(building);
 
-        List<ImageResponse> imageResponses = createImageResponses(building, images);
-        buildingRepository.save(building);
+        List<ImageResponse> imageResponses = new ArrayList<>();
+        if (!images.isEmpty()) {
+            imageResponses = createImageResponses(building, images);
+        }
 
         return imageResponses;
     }
