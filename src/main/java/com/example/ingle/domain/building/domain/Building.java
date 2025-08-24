@@ -54,4 +54,7 @@ public class Building extends BaseEntity {
 
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
+
+    @Column(name = "building_url")
+    private String buildingUrl;
 }
