@@ -1,7 +1,6 @@
 package com.example.ingle.domain.stamp.res;
 
 import com.example.ingle.domain.stamp.entity.Stamp;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +21,6 @@ public class StampResponse {
     @Schema(description = "리워드 이미지", example = "https://ingle-server.inuappcenter.kr/images/reward_1.png")
     private final String imageUrl;
 
-    @JsonProperty("isCompleted")
     @Schema(description = "완료 여부", example = "true")
     private final boolean isCompleted;
 

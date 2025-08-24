@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Schema(description = "튜토리얼 완료 처리 응답 DTO")
 public class CompleteTutorialResponse {

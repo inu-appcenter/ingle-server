@@ -29,27 +29,7 @@ public class StampService {
     private final MemberStampRepository memberStampRepository;
     private final TutorialRepository tutorialRepository;
 
-    //  특정 회원의 스탬프 상세 조회 (기존 기본조회 + 상세조회 통합)
-    @Transactional(readOnly = true)
-    public StampResponse getStamp(Long memberId, Long stampId) {
-
-        Stamp stamp = stampRepository.findById(stampId)
-                .orElseThrow(() -> {
-                    log.warn("[스탬프 조회 실패] 존재하지 않는 스탬프: stampId={}, memberId={}", stampId, memberId);
-                    return new CustomException(ErrorCode.STAMP_NOT_FOUND);
-                });
-
-        // 해당 회원의 스탬프 획득 정보 조회
-        boolean isCompleted = memberStampRepository
-                .existsByMemberIdAndTutorialId(memberId, stamp.getTutorialId());
-
-        return StampResponse.builder()
-                .stamp(stamp)
-                .isCompleted(isCompleted)
-                .build();
-    }
-
-    // 특정 회원의 전체 스탬프 목록 조회
+    // 특정 회원의 전체 스탬프 목록 조회(기존 기본조회 + 상세조회 통합)
     @Transactional(readOnly = true)
     public List<StampResponse> getAllStamps(Long memberId) {
 
@@ -100,22 +80,6 @@ public class StampService {
         return CompleteTutorialResponse.builder()
                 .id(stamp.getId())
                 .tutorialId(tutorialId)
-                .build();
-    }
-
-    // 진행률 조회
-    @Transactional(readOnly = true)
-    public ProgressResponse getProgressByMemberId(Long memberId) {
-
-        // 완료된 튜토리얼 수 (획득한 스탬프 수)
-        Long completedCount = memberStampRepository.countCompletedByMemberId(memberId);
-
-        // 전체 튜토리얼 수
-        Long totalCount = tutorialRepository.count();
-
-        return ProgressResponse.builder()
-                .completedCount(completedCount.intValue())
-                .totalCount(totalCount.intValue())
                 .build();
     }
 }

@@ -2,7 +2,6 @@ package com.example.ingle.domain.stamp.controller;
 
 import com.example.ingle.domain.stamp.StampService;
 import com.example.ingle.domain.stamp.res.CompleteTutorialResponse;
-import com.example.ingle.domain.stamp.res.ProgressResponse;
 import com.example.ingle.domain.stamp.res.StampResponse;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +21,6 @@ public class StampController implements StampApiSpecification {
 
     private final StampService stampService;
 
-    // 로그인한 사용자의 특정 스탬프 조회
-    @GetMapping("/{stampId}")
-    public ResponseEntity<StampResponse> getStamp(
-            @PathVariable Long stampId,
-            @AuthenticationPrincipal MemberDetail memberDetail) {
-        Long memberId = memberDetail.getMember().getId();
-        return ResponseEntity.ok(stampService.getStamp(memberId, stampId));
-    }
-
     // 로그인한 사용자의 전체 스탬프 목록 조회
     @GetMapping
     public ResponseEntity<List<StampResponse>> getAllStamps(
@@ -47,13 +37,5 @@ public class StampController implements StampApiSpecification {
         Long memberId = memberDetail.getMember().getId();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(stampService.completeTutorial(memberId, tutorialId));
-    }
-
-    // 로그인한 사용자의 진행률 조회
-    @GetMapping("/progress")
-    public ResponseEntity<ProgressResponse> getProgress(
-            @AuthenticationPrincipal MemberDetail memberDetail) {
-        Long memberId = memberDetail.getMember().getId();
-        return ResponseEntity.ok(stampService.getProgressByMemberId(memberId));
     }
 }

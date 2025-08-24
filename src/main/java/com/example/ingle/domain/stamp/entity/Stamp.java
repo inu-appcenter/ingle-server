@@ -1,6 +1,5 @@
 package com.example.ingle.domain.stamp.entity;
 
-import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
