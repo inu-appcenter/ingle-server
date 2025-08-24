@@ -44,6 +44,7 @@ public enum Department {
     MECHANICAL_ENGINEERING(College.ENGINEERING, "Dept. of Mechanical Engineering and Robotics"),  // 기계공학과
     BIO_ROBOTICS_ENGINEERING(College.ENGINEERING, "Dept. of Biomedical & Robotics Engineering"),  // 바이오-로봇 시스템 공학과
     SAFETY_ENGINEERING(College.ENGINEERING, "Dept. of Safety Engineering"),                       // 안전공학과
+    MECHATRONICS_ENGINEERING(College.ENGINEERING, "Dept. of Mechatronics Engineering"),           // 메카트로닉스공학과
 
     // 정보기술대학
     COMPUTER_ENGINEERING(College.INFORMATION_TECHNOLOGY, "Dept. of Computer Science & Engineering"),                 // 컴퓨터공학부
@@ -120,6 +121,7 @@ public enum Department {
 
     FINE_ART(College.GRADUATE_SCHOOL, "Dept. of Fine Arts"),                                        // 미술학과
     DESIGN_ART(College.GRADUATE_SCHOOL, "Dept. of Design Art"),                                     // 디자인학과
+    PHYSICAL(College.GRADUATE_SCHOOL, "Dept. of Physical"),                                         // 체육학과
 
     // 동북아물류 대학원
     LOGISTICS_MANAGEMENT(College.GRADUATE_SCHOOL_LOGISTICS, "Dept. of Logistics Management"),                 // 물류경영학과
