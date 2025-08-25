@@ -21,7 +21,7 @@ public record LoginSuccessResponse(
         @Schema(description = "학생 유형", example = "Exchange Student")
         String studentType,
 
-        @Schema(description = "국가", example = "SOUTH_KOREA")
+        @Schema(description = "국가", example = "South Korea")
         String country,
 
         @Schema(description = "닉네임", example = "IngleFan")
