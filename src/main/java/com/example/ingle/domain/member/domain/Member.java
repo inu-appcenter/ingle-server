@@ -1,12 +1,12 @@
 package com.example.ingle.domain.member.domain;
 
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.enums.Country;
 import com.example.ingle.domain.member.enums.Department;
 import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.domain.member.enums.StudentType;
 import com.example.ingle.global.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +31,10 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StudentType studentType;
 
+    @Column(nullable = false, length = 40)
+    @Enumerated(EnumType.STRING)
+    private Country country;
+
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
@@ -41,10 +45,11 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Member(String studentId, Department department, StudentType studentType, String nickname, Role role, String imageUrl) {
+    public Member(String studentId, Department department, StudentType studentType, Country country , String nickname, Role role, String imageUrl) {
         this.studentId = studentId;
         this.department = department;
         this.studentType = studentType;
+        this.country = country;
         this.nickname = nickname;
         this.role = role;
         this.imageUrl = imageUrl;
@@ -55,20 +60,18 @@ public class Member extends BaseEntity {
                 memberInfoRequest.studentId(),
                 memberInfoRequest.department(),
                 memberInfoRequest.studentType(),
+                memberInfoRequest.country(),
                 memberInfoRequest.nickname(),
                 Role.USER,
                 "https://example.com/default-profile.jpg"
         );
     }
 
-    public void updateMember(@Valid MemberInfoRequest memberInfoRequest) {
+    public void updateMember(MemberInfoRequest memberInfoRequest) {
         this.studentId = memberInfoRequest.studentId() != null ? memberInfoRequest.studentId() : this.studentId;
         this.department = memberInfoRequest.department() != null ? memberInfoRequest.department() : this.department;
-        this.nickname = memberInfoRequest.nickname() != null ? memberInfoRequest.nickname() : this.nickname;
+        this.country = memberInfoRequest.country() != null ? memberInfoRequest.country() : this.country;
         this.studentType = memberInfoRequest.studentType() != null ? memberInfoRequest.studentType() : this.studentType;
-    }
-
-    public void updateImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.nickname = memberInfoRequest.nickname() != null ? memberInfoRequest.nickname() : this.nickname;
     }
 }

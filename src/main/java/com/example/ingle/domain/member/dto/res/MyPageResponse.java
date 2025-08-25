@@ -15,6 +15,9 @@ public record MyPageResponse(
         @Schema(description = "학과", example = "COMPUTER_ENG")
         String department,
 
+        @Schema(description = "국가", example = "SOUTH_KOREA")
+        String country,
+
         @Schema(description = "파견 유형", example = "EXCHANGE")
         String studentType,
 
@@ -31,6 +34,7 @@ public record MyPageResponse(
                 member.getStudentId(),
                 member.getDepartment().getFullName(),
                 member.getStudentType().getDescription(),
+                member.getCountry().getFullName(),
                 member.getNickname(),
                 member.getImageUrl()
         );
