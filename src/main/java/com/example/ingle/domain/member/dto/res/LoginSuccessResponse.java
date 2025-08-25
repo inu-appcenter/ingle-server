@@ -21,6 +21,9 @@ public record LoginSuccessResponse(
         @Schema(description = "학생 유형", example = "Exchange Student")
         String studentType,
 
+        @Schema(description = "국가", example = "SOUTH_KOREA")
+        String country,
+
         @Schema(description = "닉네임", example = "IngleFan")
         String nickname,
 
@@ -38,6 +41,7 @@ public record LoginSuccessResponse(
                 member.getStudentId(),
                 member.getDepartment().getFullName(),
                 member.getStudentType().getDescription(),
+                member.getCountry().getFullName(),
                 member.getNickname(),
                 accessToken,
                 accessTokenExpiresDate
