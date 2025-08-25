@@ -1,5 +1,6 @@
 package com.example.ingle.domain.member.dto.req;
 
+import com.example.ingle.domain.member.enums.Country;
 import com.example.ingle.domain.member.enums.Department;
 import com.example.ingle.domain.member.enums.StudentType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,6 +24,10 @@ public record MemberInfoRequest(
         @Schema(description = "학생 유형", example = "EXCHANGE")
         @NotNull(message = "학생 유형이 비어있습니다.")
         StudentType studentType,
+
+        @Schema(description = "국가", example = "SOUTH_KOREA")
+        @NotNull(message = "국가가 비어있습니다.")
+        Country country,
 
         @Schema(description = "닉네임", example = "IngleFan")
         @Size(min = 3, max = 20, message = "닉네임은 3~20자여야 합니다.")
