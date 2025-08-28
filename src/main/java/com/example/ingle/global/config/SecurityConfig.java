@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(AUTH_URIS).permitAll()
                         .requestMatchers(SWAGGER_URIS).permitAll()
+                        .requestMatchers(IMAGE_URIS).permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -89,5 +90,10 @@ public class SecurityConfig {
             "/favicon.ico",
             "/swagger-ui/**",
             "/v3/api-docs/**"
+    };
+
+    private static final String[] IMAGE_URIS = {
+            "/api/v1/images/**",
+            "/images/**",
     };
 }
