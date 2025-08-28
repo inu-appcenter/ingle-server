@@ -12,14 +12,14 @@ public record MyPageResponse(
         @Schema(description = "학번", example = "202301452")
         String studentId,
 
-        @Schema(description = "학과", example = "COMPUTER_ENG")
+        @Schema(description = "학과", example = "Dept. of Computer Science & Engineering")
         String department,
 
-        @Schema(description = "국가", example = "SOUTH_KOREA")
-        String country,
-
-        @Schema(description = "파견 유형", example = "EXCHANGE")
+        @Schema(description = "학생 유형", example = "Exchange Student")
         String studentType,
+
+        @Schema(description = "국가", example = "South Korea")
+        String country,
 
         @Schema(description = "닉네임", example = "IngleFan")
         String nickname,
