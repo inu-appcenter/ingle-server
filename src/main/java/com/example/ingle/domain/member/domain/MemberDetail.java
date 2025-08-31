@@ -1,6 +1,7 @@
 package com.example.ingle.domain.member.domain;
 
 import com.example.ingle.domain.member.domain.Member;
+import com.example.ingle.domain.member.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,8 +18,7 @@ public class MemberDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("USER"));
-    }
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + member.getRole().name()));    }
 
     @Override
     public String getPassword() {
@@ -37,7 +37,7 @@ public class MemberDetail implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return member.getRole() != Role.BANNED;
     }
 
     @Override
@@ -47,6 +47,6 @@ public class MemberDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return member.getRole() != Role.BANNED;
     }
 }

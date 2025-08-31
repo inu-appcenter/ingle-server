@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(AUTH_URIS).permitAll()
                         .requestMatchers(SWAGGER_URIS).permitAll()
                         .requestMatchers(IMAGE_URIS).permitAll()
+                        .requestMatchers(ADMIN_URIS).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
@@ -95,5 +96,9 @@ public class SecurityConfig {
     private static final String[] IMAGE_URIS = {
             "/api/v1/images/**",
             "/images/**",
+    };
+
+    private static final String[] ADMIN_URIS = {
+            "/api/v1/admin/**"
     };
 }
