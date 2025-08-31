@@ -74,4 +74,12 @@ public class Member extends BaseEntity {
         this.studentType = memberInfoRequest.studentType() != null ? memberInfoRequest.studentType() : this.studentType;
         this.nickname = memberInfoRequest.nickname() != null ? memberInfoRequest.nickname() : this.nickname;
     }
+
+    public void banMember() {
+        this.role = Role.BANNED;
+    }
+
+    public void unbanMember() {
+        this.role = Role.USER;
+    }
 }

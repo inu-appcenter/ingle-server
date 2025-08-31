@@ -13,6 +13,7 @@ public enum ErrorCode {
     MISSING_PART(HttpStatus.BAD_REQUEST, 400, "요청에 필요한 부분이 없습니다."),
     NO_HANDLER_FOUND(HttpStatus.NOT_FOUND, 404, "요청하신 API가 존재하지 않습니다."),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, 405, "지원하지 않는 HTTP 메서드입니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, 403, "접근 권한이 없습니다."),
 
     // Jwt
     JWT_NOT_VALID(HttpStatus.UNAUTHORIZED, 401, "[Jwt] 유효하지 않은 Jwt"),
@@ -31,6 +32,7 @@ public enum ErrorCode {
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, 401, "로그인이 실패하였습니다."),
     MEMBER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, 400, "이미 존재하는 회원입니다."),
     NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, 400, "이미 존재하는 닉네임입니다."),
+    MEMBER_BANNED(HttpStatus.FORBIDDEN, 403, "차단된 회원입니다."),
 
     // Building
     BUILDING_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "건물을 찾을 수 없습니다."),
