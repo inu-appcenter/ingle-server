@@ -1,5 +1,7 @@
 package com.example.ingle.global.jwt;
 
+import com.example.ingle.domain.member.domain.MemberDetail;
+import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.exception.ErrorResponseEntity;
@@ -45,8 +47,18 @@ public class JwtFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt, "access")) {
 
                 Authentication authentication = jwtProvider.getAuthentication(jwt);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                // 밴된 사용자 체크
+                if (authentication.getPrincipal() instanceof MemberDetail) {
+                    MemberDetail memberDetail = (MemberDetail) authentication.getPrincipal();
+                    if (memberDetail.getMember().getRole() == Role.BANNED) {
+                        log.warn("[JWT 검증 실패] 밴된 사용자: studentId={}, URI={}",
+                                memberDetail.getUsername(), requestURI);
+                        throw new CustomException(ErrorCode.MEMBER_BANNED);
+                    }
+                }
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("[Security Context] studentId: {}, URI: {}", authentication.getName(), requestURI);
             } else {
                 log.warn("[JWT 검증 실패] 유효하지 않은 토큰: {}, URI: {}", jwt, requestURI);
@@ -56,6 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (CustomException e) {
             setErrorResponse(response, e.getErrorCode());
         } catch (Exception e) {
+            log.error("[JWT 필터 오류] {}", e.getMessage());
             setErrorResponse(response, ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
