@@ -63,7 +63,7 @@ public class Member extends BaseEntity {
                 memberInfoRequest.country(),
                 memberInfoRequest.nickname(),
                 Role.USER,
-                "https://example.com/default-profile.jpg"
+                null
         );
     }
 
@@ -81,5 +81,9 @@ public class Member extends BaseEntity {
 
     public void unbanMember() {
         this.role = Role.USER;
+    }
+
+    public void updateProfileImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
