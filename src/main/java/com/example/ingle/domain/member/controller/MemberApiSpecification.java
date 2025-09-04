@@ -1,6 +1,9 @@
 package com.example.ingle.domain.member.controller;
 
+import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.member.dto.req.FeedbackRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.res.FeedbackResponse;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.domain.member.domain.MemberDetail;
@@ -14,6 +17,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Member", description = "마이페이지 관련 API")
 public interface MemberApiSpecification {
@@ -74,4 +79,60 @@ public interface MemberApiSpecification {
     ResponseEntity<MyPageResponse> updateMyPage(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @Valid @RequestBody MemberInfoRequest memberInfoRequest);
+
+    @Operation(
+            summary = "프로필 이미지 수정",
+            description = "로그인 된 사용자의 프로필 이미지를 수정합니다.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "프로필 이미지 수정 성공",
+                            content = @Content(schema = @Schema(implementation = ImageResponse.class))
+                    ),
+                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(
+                                            value = """
+                                                {
+                                                   "code": 404,
+                                                   "name": "MEMBER_NOT_FOUND",
+                                                   "message": "회원을 찾을 수 없습니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    )
+            }
+    )
+    ResponseEntity<ImageResponse> updateProfileImage(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                     @RequestPart("image") MultipartFile image);
+
+    @Operation(
+            summary = "피드백 전송",
+            description = "로그인 된 사용자로 피드백을 전송합니다.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "피드백 전송 성공",
+                            content = @Content(schema = @Schema(implementation = FeedbackResponse.class))
+                    ),
+                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.",
+                            content = @Content(schema = @Schema(implementation = ErrorResponseEntity.class),
+                                    examples = @ExampleObject(
+                                            value = """
+                                                {
+                                                   "code": 404,
+                                                   "name": "MEMBER_NOT_FOUND",
+                                                   "message": "회원을 찾을 수 없습니다.",
+                                                   "errors": null
+                                                }
+                                                """
+                                    )
+                            )
+                    )
+            }
+    )
+    ResponseEntity<FeedbackResponse> sendFeedback(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                  @Valid @RequestBody FeedbackRequest request);
 }
