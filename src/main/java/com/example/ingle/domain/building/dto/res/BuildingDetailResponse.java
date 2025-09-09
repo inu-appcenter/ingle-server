@@ -40,6 +40,9 @@ public record BuildingDetailResponse(
         @Schema(description = "층수", example = "1")
         Integer floor,
 
+        @Schema(description = "주소", example = "1F, Dormitory 1 (next to Emart24)")
+        String address,
+
         @Schema(description = "오픈 시간", example = "00:00")
         String openTime,
 
@@ -49,11 +52,14 @@ public record BuildingDetailResponse(
         @Schema(description = "전화번호", example = "032-1234-5678")
         String phoneNumber,
 
-        @Schema(description = "휴무일", example = "No Closed Days / Monday")
-        List<String> closedDays,
+        @Schema(description = "잉글픽", example = "Al-bap [₩ 6,000]")
+        String inglePick,
 
-        @Schema(description = "건물 URL")
-        String buildingUrl
+        @Schema(description = "건물 URL", example = "https://maps.app.goo.gl/Pke1AmVdp1SCPFib8")
+        String buildingUrl,
+
+        @Schema(description = "휴무일", example = "No Closed Days / Monday")
+        List<String> closedDays
 
 ) {
     public static BuildingDetailResponse from(Building building, List<ClosedDay> closedDays) {
@@ -68,11 +74,13 @@ public record BuildingDetailResponse(
                 building.getBuildingCode(),
                 building.getLocation(),
                 building.getFloor(),
+                building.getAddress(),
                 building.getOpenTime(),
                 building.getCloseTime(),
                 building.getPhoneNumber(),
-                closedDays.stream().map(cd -> cd.getClosedDay().getFullName()).toList(),
-                building.getBuildingUrl()
+                building.getInglePick(),
+                building.getBuildingUrl(),
+                closedDays.stream().map(cd -> cd.getClosedDay().getFullName()).toList()
         );
     }
 }
