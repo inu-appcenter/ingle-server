@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum StudentType {
     EXCHANGE("Exchange Student"),        // 교환학생
+    LANGUAGE("Language Student"),        // 언어 학생
     UNDERGRADUATE("Undergraduate Student"), // 학부생
     GRADUATE("Graduate Student"),        // 대학원생
     OTHER("Other");                      // 기타
