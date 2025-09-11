@@ -35,8 +35,6 @@ public class AdminMemberService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN')")
     public Page<AdminMemberResponse> searchMembers(AdminMemberSearchRequest searchRequest, Pageable pageable) {
-        log.info("[관리자 회원 검색] 검색 조건: studentId={}, nickname={}",
-                searchRequest.studentId(), searchRequest.nickname());
 
         Specification<Member> spec = createSearchSpecification(searchRequest);
         Page<Member> members = memberRepository.findAll(spec, pageable);
@@ -47,82 +45,70 @@ public class AdminMemberService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN')")
     public AdminMemberCountResponse getMemberCount() {
-        log.info("[관리자 회원 수 조회]");
 
         long totalCount = memberRepository.count();
         long bannedCount = memberRepository.countByRole(Role.BANNED);
-        long activeCount = totalCount - bannedCount;  // BANNED 제외한 모든 회원
 
         return AdminMemberCountResponse.builder()
                 .totalCount(totalCount)
-                .activeCount(activeCount)
                 .bannedCount(bannedCount)
+                .activeCount(totalCount - bannedCount)
                 .build();
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteMember(Long memberId) {
-        log.info("[관리자 회원 삭제 시작] memberId={}", memberId);
-
+    public void deleteMember(Long adminId, Long memberId) {
+        validateAdminPermission(adminId, memberId);
         Member member = getMemberById(memberId);
 
-        // 관리자 계정 삭제 방지
-        if (member.getRole() == Role.ADMIN) {
-            log.warn("[관리자 회원 삭제 실패] 관리자 계정은 삭제할 수 없습니다: memberId={}", memberId);
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        try {
+            // 관련 데이터 삭제
+            memberStampRepository.deleteAllByMemberId(memberId);
+            refreshTokenRepository.deleteByStudentId(member.getStudentId());
+
+            // 회원 삭제
+            memberRepository.delete(member);
+
+            log.info("[관리자 회원 삭제 완료] memberId={}", memberId);
+        } catch (Exception e) {
+            log.error("[관리자 회원 삭제 실패] memberId={}, error={}", memberId, e.getMessage());
+            throw new CustomException(ErrorCode.MEMBER_DELETE_FAILED);
         }
-
-        // 1. member_stamp 테이블에서 해당 회원의 스탬프 기록 삭제
-        memberStampRepository.deleteAllByMemberId(memberId);
-        log.info("[관리자 회원 삭제] 스탬프 기록 삭제 완료: memberId={}", memberId);
-
-        // 2. refresh_token 테이블에서 토큰 삭제
-        refreshTokenRepository.deleteByStudentId(member.getStudentId());
-        log.info("[관리자 회원 삭제] 리프레시 토큰 삭제 완료: studentId={}", member.getStudentId());
-
-        // 3. 회원 삭제
-        memberRepository.delete(member);
-        log.info("[관리자 회원 삭제] 회원 삭제 완료: memberId={}, studentId={}", memberId, member.getStudentId());
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public AdminMemberResponse banMember(Long memberId, boolean ban) {
-        log.info("[관리자 회원 밴/언밴 시작] memberId={}, ban={}", memberId, ban);
-
+    public AdminMemberResponse banMember(Long adminId, Long memberId, boolean ban) {
+        validateAdminPermission(adminId, memberId);
         Member member = getMemberById(memberId);
 
-        // 관리자 계정 밴 방지
-        if (member.getRole() == Role.ADMIN) {
-            log.warn("[관리자 회원 밴 실패] 관리자 계정은 밴할 수 없습니다: memberId={}", memberId);
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
-
         if (ban) {
-            // 이미 밴된 상태인지 확인
-            if (member.getRole() == Role.BANNED) {
-                log.warn("[관리자 회원 밴] 이미 밴된 회원: memberId={}", memberId);
-                return AdminMemberResponse.from(member);
-            }
-
-            member.banMember();
-
-            // 밴 처리 시 리프레시 토큰 삭제 (강제 로그아웃)
-            refreshTokenRepository.deleteByStudentId(member.getStudentId());
-            log.info("[관리자 회원 밴] memberId={}, studentId={}", memberId, member.getStudentId());
-        } else {
-            // 밴 상태가 아닌 경우
             if (member.getRole() != Role.BANNED) {
-                log.warn("[관리자 회원 언밴] 밴 상태가 아닌 회원: memberId={}", memberId);
-                return AdminMemberResponse.from(member);
+                member.banMember();
+                refreshTokenRepository.deleteByStudentId(member.getStudentId());
+                log.info("[회원 밴 처리] memberId={}", memberId);
             }
-
-            member.unbanMember();
-            log.info("[관리자 회원 언밴] memberId={}, studentId={}", memberId, member.getStudentId());
+        } else {
+            if (member.getRole() == Role.BANNED) {
+                member.unbanMember();
+                log.info("[회원 언밴 처리] memberId={}", memberId);
+            }
         }
 
         return AdminMemberResponse.from(member);
+    }
+
+    // 본인 삭제, 밴 방지
+    private void validateAdminPermission(Long adminId, Long targetMemberId) {
+        if (adminId.equals(targetMemberId)) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
+
+        Member targetMember = getMemberById(targetMemberId);
+        if (targetMember.getRole() == Role.ADMIN) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
     }
 
     private Member getMemberById(Long memberId) {

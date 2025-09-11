@@ -33,6 +33,7 @@ public enum ErrorCode {
     MEMBER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, 400, "이미 존재하는 회원입니다."),
     NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, 400, "이미 존재하는 닉네임입니다."),
     MEMBER_BANNED(HttpStatus.FORBIDDEN, 403, "차단된 회원입니다."),
+    MEMBER_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 500, "회원 삭제에 실패했습니다."),
 
     // Building
     BUILDING_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "건물을 찾을 수 없습니다."),
