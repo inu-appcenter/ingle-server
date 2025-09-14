@@ -1,4 +1,4 @@
-package com.example.ingle.admin.member.dto.res;
+package com.example.ingle.admin.statistics.dto.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

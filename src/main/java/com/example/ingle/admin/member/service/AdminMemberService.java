@@ -3,7 +3,7 @@ package com.example.ingle.admin.member.service;
 import com.example.ingle.admin.member.dto.req.AdminMemberSearchRequest;
 import com.example.ingle.admin.member.dto.res.AdminMemberCountResponse;
 import com.example.ingle.admin.member.dto.res.AdminMemberResponse;
-import com.example.ingle.admin.member.dto.res.AdminProgressResponse;
+import com.example.ingle.admin.statistics.dto.res.AdminProgressResponse;
 import com.example.ingle.domain.member.domain.Member;
 import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.domain.member.repository.MemberRepository;

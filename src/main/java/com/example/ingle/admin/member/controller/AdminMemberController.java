@@ -3,7 +3,6 @@ package com.example.ingle.admin.member.controller;
 import com.example.ingle.admin.member.dto.req.AdminMemberSearchRequest;
 import com.example.ingle.admin.member.dto.res.AdminMemberCountResponse;
 import com.example.ingle.admin.member.dto.res.AdminMemberResponse;
-import com.example.ingle.admin.member.dto.res.AdminProgressResponse;
 import com.example.ingle.admin.member.service.AdminMemberService;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import jakarta.validation.Valid;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -64,12 +61,5 @@ public class AdminMemberController implements AdminMemberApiSpecification {
             @RequestParam boolean ban) {
         Long adminId = memberDetail.getMember().getId();
         return ResponseEntity.ok(adminMemberService.banMember(adminId, memberId, ban));
-    }
-
-    // 스탬프 획득률 조회
-    @GetMapping("/stamps")
-    public ResponseEntity<List<AdminProgressResponse>> getStampProgress(
-            @AuthenticationPrincipal MemberDetail memberDetail) {
-        return ResponseEntity.ok(adminMemberService.getStampProgress());
     }
 }
