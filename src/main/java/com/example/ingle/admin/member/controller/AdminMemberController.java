@@ -3,6 +3,7 @@ package com.example.ingle.admin.member.controller;
 import com.example.ingle.admin.member.dto.req.AdminMemberSearchRequest;
 import com.example.ingle.admin.member.dto.res.AdminMemberCountResponse;
 import com.example.ingle.admin.member.dto.res.AdminMemberResponse;
+import com.example.ingle.admin.member.dto.res.AdminProgressResponse;
 import com.example.ingle.admin.member.service.AdminMemberService;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import jakarta.validation.Valid;
@@ -18,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +31,7 @@ public class AdminMemberController implements AdminMemberApiSpecification {
     private final AdminMemberService adminMemberService;
 
     // 회원 검색
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> searchMembers(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @Valid @ParameterObject AdminMemberSearchRequest searchRequest,
@@ -54,7 +57,7 @@ public class AdminMemberController implements AdminMemberApiSpecification {
     }
 
     // 회원 밴/언밴
-    @PatchMapping("/{memberId}/ban")
+    @PatchMapping("/{memberId}/status")
     public ResponseEntity<AdminMemberResponse> banMember(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @PathVariable Long memberId,

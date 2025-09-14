@@ -1,4 +1,4 @@
-package com.example.ingle.domain.stamp.res;
+package com.example.ingle.domain.stamp.dto.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

@@ -4,9 +4,8 @@ import com.example.ingle.domain.stamp.entity.MemberStamp;
 import com.example.ingle.domain.stamp.entity.Stamp;
 import com.example.ingle.domain.stamp.repository.MemberStampRepository;
 import com.example.ingle.domain.stamp.repository.StampRepository;
-import com.example.ingle.domain.stamp.res.CompleteTutorialResponse;
-import com.example.ingle.domain.stamp.res.ProgressResponse;
-import com.example.ingle.domain.stamp.res.StampResponse;
+import com.example.ingle.domain.stamp.dto.res.CompleteTutorialResponse;
+import com.example.ingle.domain.stamp.dto.res.StampResponse;
 import com.example.ingle.domain.tutorial.TutorialRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
