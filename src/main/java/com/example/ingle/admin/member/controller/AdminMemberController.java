@@ -65,4 +65,11 @@ public class AdminMemberController implements AdminMemberApiSpecification {
         Long adminId = memberDetail.getMember().getId();
         return ResponseEntity.ok(adminMemberService.banMember(adminId, memberId, ban));
     }
+
+    // 스탬프 획득률 조회
+    @GetMapping("/stamps")
+    public ResponseEntity<List<AdminProgressResponse>> getStampProgress(
+            @AuthenticationPrincipal MemberDetail memberDetail) {
+        return ResponseEntity.ok(adminMemberService.getStampProgress());
+    }
 }

@@ -3,10 +3,13 @@ package com.example.ingle.admin.member.service;
 import com.example.ingle.admin.member.dto.req.AdminMemberSearchRequest;
 import com.example.ingle.admin.member.dto.res.AdminMemberCountResponse;
 import com.example.ingle.admin.member.dto.res.AdminMemberResponse;
+import com.example.ingle.admin.member.dto.res.AdminProgressResponse;
 import com.example.ingle.domain.member.domain.Member;
 import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.domain.member.repository.MemberRepository;
+import com.example.ingle.domain.stamp.entity.Stamp;
 import com.example.ingle.domain.stamp.repository.MemberStampRepository;
+import com.example.ingle.domain.stamp.repository.StampRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.refreshToken.RefreshTokenRepository;
@@ -31,6 +34,7 @@ public class AdminMemberService {
     private final MemberRepository memberRepository;
     private final MemberStampRepository memberStampRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final StampRepository stampRepository;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN')")
@@ -97,6 +101,28 @@ public class AdminMemberService {
         }
 
         return AdminMemberResponse.from(member);
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<AdminProgressResponse> getStampProgress() {
+        log.info("[관리자 스탬프 획득률 조회]");
+
+        List<Stamp> stamps = stampRepository.findAllByOrderById();
+        long totalMemberCount = memberRepository.count();
+
+        return stamps.stream()
+                .map(stamp -> {
+                    // 해당 스탬프를 획득한(튜토리얼을 완료한) 회원 수 조회
+                    long acquiredCount = memberStampRepository.countByTutorialId(stamp.getTutorialId());
+
+                    return AdminProgressResponse.builder()
+                            .stampName(stamp.getName())
+                            .aquiredCount(acquiredCount)
+                            .totalCount(totalMemberCount)
+                            .build();
+                })
+                .toList();
     }
 
     // 본인 삭제, 밴 방지
