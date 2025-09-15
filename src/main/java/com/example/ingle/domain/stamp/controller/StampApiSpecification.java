@@ -1,7 +1,7 @@
 package com.example.ingle.domain.stamp.controller;
 
-import com.example.ingle.domain.stamp.res.CompleteTutorialResponse;
-import com.example.ingle.domain.stamp.res.StampResponse;
+import com.example.ingle.domain.stamp.dto.res.CompleteTutorialResponse;
+import com.example.ingle.domain.stamp.dto.res.StampResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import io.swagger.v3.oas.annotations.Operation;

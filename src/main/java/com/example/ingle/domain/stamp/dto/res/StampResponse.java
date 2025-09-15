@@ -1,4 +1,4 @@
-package com.example.ingle.domain.stamp.res;
+package com.example.ingle.domain.stamp.dto.res;
 
 import com.example.ingle.domain.stamp.entity.Stamp;
 import io.swagger.v3.oas.annotations.media.Schema;
