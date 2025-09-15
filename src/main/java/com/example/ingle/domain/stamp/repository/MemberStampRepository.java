@@ -11,8 +11,8 @@ import java.util.List;
 public interface MemberStampRepository extends JpaRepository<MemberStamp, Long> {
 
     List<MemberStamp> findAllByMemberId(Long memberId);
-
     boolean existsByMemberIdAndTutorialId(Long memberId, Long tutorialId);
+    long countByTutorialId(Long tutorialId); // 특정 튜토리얼 완료한 멤버 수
 
     @Modifying
     @Query("DELETE FROM MemberStamp ms WHERE ms.memberId = :memberId")
