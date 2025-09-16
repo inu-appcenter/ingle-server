@@ -1,6 +1,7 @@
 package com.example.ingle.global.config;
 
 import com.example.ingle.domain.member.domain.Member;
+import com.example.ingle.domain.member.domain.MemberDetail;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -39,10 +40,15 @@ public class LoggingConfig {
 
     private String getCurrentMemberId(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = null;
         if (authentication == null || authentication.getPrincipal() instanceof String) {
             return request.getHeader("X-Forwarded-For");
+        } else {
+            if(authentication.getPrincipal() instanceof MemberDetail memberDetail) {
+                member = memberDetail.getMember();
+                return member != null ? String.valueOf(member.getId()) : "unknown";
+            }
         }
-        Member member = (Member) authentication.getPrincipal();
-        return String.valueOf(member.getId());
+        return "anonymous";
     }
 }
