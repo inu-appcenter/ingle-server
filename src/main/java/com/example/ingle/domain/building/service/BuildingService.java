@@ -43,9 +43,7 @@ public class BuildingService {
     )
     @Transactional(readOnly = true)
     public List<BuildingResponse> findMapsInBounds(double minLat, double maxLat, double minLng, double maxLng, BuildingCategory buildingCategory) {
-        List<Building> buildings = buildingRepository.findBuildingsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory);
-
-        return buildings.stream().map(BuildingResponse::from).toList();
+        return buildingRepository.findBuildingsInBounds(minLat, maxLat, minLng, maxLng, buildingCategory);
     }
 
     @Transactional(readOnly = true)
@@ -59,9 +57,7 @@ public class BuildingService {
 
     @Transactional(readOnly = true)
     public List<BuildingResponse> searchMaps(String keyword) {
-        List<Building> buildings = buildingRepository.findByBuildingNameContainingOrderByCreatedAtDesc(keyword);
-
-        return buildings.stream().map(BuildingResponse::from).toList();
+        return buildingRepository.findByBuildingNameContainingOrderByCreatedAtDesc(keyword);
     }
 
     @Transactional
