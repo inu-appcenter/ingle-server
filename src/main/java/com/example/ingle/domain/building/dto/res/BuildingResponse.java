@@ -25,14 +25,4 @@ public class BuildingResponse {
 
     @Schema(description = "지도 카테고리", example = "SCHOOL_BUILDING")
     private BuildingCategory buildingCategory;
-
-    public static BuildingResponse from(Building building) {
-        return new BuildingResponse(
-                building.getId(),
-                building.getBuildingName(),
-                building.getLatitude(),
-                building.getLongitude(),
-                building.getBuildingCategory()
-        );
-    }
 }
