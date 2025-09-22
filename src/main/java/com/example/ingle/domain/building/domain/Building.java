@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "building")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Building extends BaseEntity {
