@@ -5,6 +5,7 @@ import com.example.ingle.domain.image.dto.response.ImageResponse;
 import com.example.ingle.domain.image.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class ImageController implements ImageApiSpecification{
 
     // 이미지 업로드
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageResponse> uploadImage(@RequestBody ImageUploadRequest request,
+    public ResponseEntity<ImageResponse> uploadImage(@Valid @RequestPart ImageUploadRequest request,
                                                   @RequestPart("image") MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadImage(image, request.name(), request.category()));
     }
