@@ -1,6 +1,7 @@
 package com.example.ingle.domain.member.service;
 
 import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.repository.ImageRepository;
 import com.example.ingle.domain.image.service.ImageService;
 import com.example.ingle.domain.member.domain.Feedback;
 import com.example.ingle.domain.member.domain.Member;
@@ -27,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final StampRepository stampRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional(readOnly = true)
     public MyPageResponse getMyPage(MemberDetail memberDetail) {
@@ -49,7 +50,11 @@ public class MemberService {
     public MemberProfileImageResponse updateProfileImage(MemberDetail memberDetail, String imageName) {
         Member member = getMemberByStudentId(memberDetail.getUsername());
 
-        return changeProfileImage(member, imageName);
+        MemberProfileImageResponse memberProfileImageResponse = getProfileImage(imageName);
+
+        member.updateProfileImage(memberProfileImageResponse.imageUrl());
+
+        return memberProfileImageResponse;
     }
 
     @Transactional
@@ -68,14 +73,11 @@ public class MemberService {
                 });
     }
 
-    private MemberProfileImageResponse changeProfileImage(Member member, String imageName) {
-        MemberProfileImageResponse memberProfileImageResponse = stampRepository.findByName(imageName)
+    private MemberProfileImageResponse getProfileImage(String imageName) {
+        return imageRepository.findByName(imageName)
                 .orElseThrow(() -> {
                     log.warn("[프로필 사진 변경 실패] 이미지 없음: imageName={}", imageName);
                     return new CustomException(ErrorCode.IMAGE_NOT_FOUND);
                 });
-        member.updateProfileImage(memberProfileImageResponse.imageUrl());
-
-        return memberProfileImageResponse;
     }
 }

@@ -85,7 +85,7 @@ public interface MemberApiSpecification {
     @Operation(
             summary = "프로필 이미지 수정",
             description = "로그인 된 사용자의 프로필 이미지를 수정합니다. <br><br>" +
-                    "이미지의 이름을 보내주세요. ex) Transit, Dormitory, Library, Club ...",
+                    "이미지의 이름을 보내주세요. (Seal, Sloth, Jellyfish, Elephant, Fox, Crab, Bee, Snail, Axolotl)",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
