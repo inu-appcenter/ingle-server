@@ -37,6 +37,6 @@ public class ImageController implements ImageApiSpecification{
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ImageResponse> uploadImage(@Valid @RequestPart ImageUploadRequest request,
                                                   @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadImage(image, request.name(), request.category()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadImage(image, request.getName(), request.getCategory()));
     }
 }
