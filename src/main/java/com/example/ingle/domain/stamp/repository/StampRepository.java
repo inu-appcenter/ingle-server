@@ -13,11 +13,4 @@ public interface StampRepository extends JpaRepository<Stamp, Long> {
     Optional<Stamp> findByTutorialId(Long tutorialId);
 
     List<Stamp> findAllByOrderById();
-
-    @Query("""
-    SELECT new com.example.ingle.domain.member.dto.res.MemberProfileImageResponse(s.imageUrl)
-    FROM Stamp s
-    WHERE s.name = :name
-""")
-    Optional<MemberProfileImageResponse> findByName(String name);
 }

@@ -19,6 +19,8 @@ spring:
           auto: update
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: false
+        use_sql_comments: false
+        type: false
         jdbc:
           time_zone: Asia/Seoul
 
