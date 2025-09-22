@@ -13,6 +13,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     SELECT new com.example.ingle.domain.member.dto.res.MemberProfileImageResponse(i.imageUrl)
     FROM Image i
     WHERE i.name = :imageName
+    AND i.category = 'profile-image'
 """)
     Optional<MemberProfileImageResponse> findByName(String imageName);
 }
