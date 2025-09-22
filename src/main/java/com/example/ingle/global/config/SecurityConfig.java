@@ -7,6 +7,7 @@ import com.example.ingle.global.jwt.handler.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -47,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(AUTH_URIS).permitAll()
                         .requestMatchers(SWAGGER_URIS).permitAll()
                         .requestMatchers(IMAGE_URIS).permitAll()
+                        .requestMatchers(HttpMethod.POST, UPLOAD_IMAGE_URIS).hasRole("ADMIN")
                         .requestMatchers(ADMIN_URIS).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -96,6 +98,11 @@ public class SecurityConfig {
     private static final String[] IMAGE_URIS = {
             "/api/v1/images/**",
             "/images/**",
+    };
+
+    private static final String[] UPLOAD_IMAGE_URIS = {
+            "/api/v1/images",
+            "/api/v1/buildings/*/images"
     };
 
     private static final String[] ADMIN_URIS = {
