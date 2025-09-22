@@ -1,20 +1,18 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.image.dto.response.ImageResponse;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import com.example.ingle.domain.member.dto.req.FeedbackRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.FeedbackResponse;
+import com.example.ingle.domain.member.dto.res.MemberProfileImageResponse;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,10 +35,10 @@ public class MemberController implements MemberApiSpecification{
     }
 
     // 프로필 사진 수정
-    @PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageResponse> updateProfileImage(@AuthenticationPrincipal MemberDetail memberDetail,
-                                                            @RequestPart("image") MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.updateProfileImage(memberDetail, image));
+    @PutMapping("/profile-image")
+    public ResponseEntity<MemberProfileImageResponse> updateProfileImage(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                         @RequestParam String imageName) {
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.updateProfileImage(memberDetail, imageName));
     }
 
     // 피드백 전송

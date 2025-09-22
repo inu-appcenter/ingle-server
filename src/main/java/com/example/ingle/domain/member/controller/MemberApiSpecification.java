@@ -4,6 +4,7 @@ import com.example.ingle.domain.image.dto.response.ImageResponse;
 import com.example.ingle.domain.member.dto.req.FeedbackRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.FeedbackResponse;
+import com.example.ingle.domain.member.dto.res.MemberProfileImageResponse;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import com.example.ingle.domain.member.domain.MemberDetail;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -82,7 +84,8 @@ public interface MemberApiSpecification {
 
     @Operation(
             summary = "프로필 이미지 수정",
-            description = "로그인 된 사용자의 프로필 이미지를 수정합니다.",
+            description = "로그인 된 사용자의 프로필 이미지를 수정합니다. <br><br>" +
+                    "이미지의 이름을 보내주세요. ex) Transit, Dormitory, Library, Club ...",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -105,8 +108,8 @@ public interface MemberApiSpecification {
                     )
             }
     )
-    ResponseEntity<ImageResponse> updateProfileImage(@AuthenticationPrincipal MemberDetail memberDetail,
-                                                     @RequestPart("image") MultipartFile image);
+    ResponseEntity<MemberProfileImageResponse> updateProfileImage(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                         @RequestParam String imageName);
 
     @Operation(
             summary = "피드백 전송",
