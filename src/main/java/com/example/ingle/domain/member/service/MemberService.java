@@ -8,8 +8,11 @@ import com.example.ingle.domain.member.domain.MemberDetail;
 import com.example.ingle.domain.member.dto.req.FeedbackRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.member.dto.res.FeedbackResponse;
+import com.example.ingle.domain.member.dto.res.MemberProfileImageResponse;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.domain.member.repository.MemberRepository;
+import com.example.ingle.domain.stamp.entity.Stamp;
+import com.example.ingle.domain.stamp.repository.StampRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ImageService imageService;
+    private final StampRepository stampRepository;
 
     @Transactional(readOnly = true)
     public MyPageResponse getMyPage(MemberDetail memberDetail) {
@@ -43,10 +46,10 @@ public class MemberService {
     }
 
     @Transactional
-    public ImageResponse updateProfileImage(MemberDetail memberDetail, MultipartFile image) {
+    public MemberProfileImageResponse updateProfileImage(MemberDetail memberDetail, String imageName) {
         Member member = getMemberByStudentId(memberDetail.getUsername());
 
-        return uploadProfileImage(member, image);
+        return changeProfileImage(member, imageName);
     }
 
     @Transactional
@@ -65,10 +68,14 @@ public class MemberService {
                 });
     }
 
-    private ImageResponse uploadProfileImage(Member member, MultipartFile image) {
-        ImageResponse response = imageService.saveImage(image);
-        member.updateProfileImage(response.fileName());
+    private MemberProfileImageResponse changeProfileImage(Member member, String imageName) {
+        MemberProfileImageResponse memberProfileImageResponse = stampRepository.findByName(imageName)
+                .orElseThrow(() -> {
+                    log.warn("[프로필 사진 변경 실패] 이미지 없음: imageName={}", imageName);
+                    return new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+                });
+        member.updateProfileImage(memberProfileImageResponse.imageUrl());
 
-        return response;
+        return memberProfileImageResponse;
     }
 }
