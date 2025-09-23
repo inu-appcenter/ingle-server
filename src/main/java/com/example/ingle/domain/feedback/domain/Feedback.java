@@ -1,5 +1,6 @@
-package com.example.ingle.domain.member.domain;
+package com.example.ingle.domain.feedback.domain;
 
+import com.example.ingle.domain.feedback.dto.req.FeedbackRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,9 +23,12 @@ public class Feedback {
     @Column(nullable = false, length = 1000)
     private String content;
 
-    @Builder
     private Feedback(Long memberId, String content) {
         this.memberId = memberId;
         this.content = content;
+    }
+
+    public static Feedback of(Long memberId, String content) {
+        return new Feedback(memberId, content);
     }
 }

@@ -1,13 +1,16 @@
 package com.example.ingle.domain.member.service;
 
 import com.example.ingle.domain.member.domain.Member;
+import com.example.ingle.domain.member.domain.WithdrawalReason;
 import com.example.ingle.domain.member.dto.req.LoginRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.req.WithdrawalReasonRequest;
 import com.example.ingle.domain.member.dto.res.LoginResponse;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.domain.member.dto.res.SignupRequiredResponse;
 import com.example.ingle.domain.member.repository.INUMemberRepository;
 import com.example.ingle.domain.member.repository.MemberRepository;
+import com.example.ingle.domain.member.repository.WithdrawalReasonRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.JwtProvider;
@@ -29,9 +32,9 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final INUMemberRepository inuMemberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final WithdrawalReasonRepository withdrawalReasonRepository;
     private final JwtProvider jwtProvider;
-    private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
 
     @Transactional
     public LoginSuccessResponse signup(MemberInfoRequest memberInfoRequest, HttpServletResponse response) {
@@ -62,11 +65,11 @@ public class AuthService {
         jwtProvider.validateRefreshTokenAndDelete(refreshToken);
 
         RefreshToken studentRefreshToken = jwtProvider.findRefreshToken(refreshToken);
-        Member member = memberService.getMemberByStudentId(studentRefreshToken.getStudentId());
+        Member member = memberQueryService.getMemberByStudentId(studentRefreshToken.getStudentId());
 
         jwtProvider.matchRefreshToken(studentRefreshToken.getRefreshToken(), refreshToken);
 
-        refreshTokenRepository.delete(studentRefreshToken);
+        jwtProvider.deleteRefreshToken(studentRefreshToken);
 
         return jwtProvider.generateTokenFromMember(member, response);
     }
@@ -80,15 +83,16 @@ public class AuthService {
     public void logout(Member member, HttpServletResponse response) {
         RefreshToken refreshToken = jwtProvider.findRefreshTokenByStudentId(member.getStudentId());
 
-        refreshTokenRepository.delete(refreshToken);
+        jwtProvider.deleteRefreshToken(refreshToken);
         CookieUtil.deleteCookie(response, "refreshToken");
     }
 
     @Transactional
-    public void deleteMember(Member member, HttpServletResponse response) {
-        Member memberToDelete = memberService.getMemberByStudentId(member.getStudentId());
+    public void deleteMember(Member member, WithdrawalReasonRequest request, HttpServletResponse response) {
+        Member memberToDelete = memberQueryService.getMemberByStudentId(member.getStudentId());
+        withdrawalReasonRepository.save(WithdrawalReason.of(member.getId(), request.content()));
 
-        refreshTokenRepository.deleteByStudentId(member.getStudentId());
+        jwtProvider.deleteRefreshTokenByStudentId(member.getStudentId());
         memberRepository.delete(memberToDelete);
         CookieUtil.deleteCookie(response, "refreshToken");
     }
