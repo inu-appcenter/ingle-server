@@ -2,6 +2,7 @@ package com.example.ingle.domain.member.controller;
 
 import com.example.ingle.domain.member.dto.req.LoginRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.req.WithdrawalReasonRequest;
 import com.example.ingle.domain.member.dto.res.LoginResponse;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.domain.member.service.AuthService;
@@ -63,8 +64,9 @@ public class AuthController implements AuthApiSpecification{
     // 회원탈퇴
     @DeleteMapping
     public ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails,
+                                             @Valid @RequestBody WithdrawalReasonRequest request,
                                              HttpServletResponse response) {
-        authService.deleteMember(userDetails.getMember(), response);
+        authService.deleteMember(userDetails.getMember(), request, response);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

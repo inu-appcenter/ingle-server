@@ -1,4 +1,4 @@
-package com.example.ingle.domain.member.dto.req;
+package com.example.ingle.domain.feedback.dto.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

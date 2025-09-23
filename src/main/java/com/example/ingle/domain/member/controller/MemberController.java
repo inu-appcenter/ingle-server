@@ -1,9 +1,9 @@
 package com.example.ingle.domain.member.controller;
 
 import com.example.ingle.domain.member.domain.MemberDetail;
-import com.example.ingle.domain.member.dto.req.FeedbackRequest;
+import com.example.ingle.domain.feedback.dto.req.FeedbackRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
-import com.example.ingle.domain.member.dto.res.FeedbackResponse;
+import com.example.ingle.domain.feedback.dto.res.FeedbackResponse;
 import com.example.ingle.domain.member.dto.res.MemberProfileImageResponse;
 import com.example.ingle.domain.member.dto.res.MyPageResponse;
 import com.example.ingle.domain.member.service.MemberService;

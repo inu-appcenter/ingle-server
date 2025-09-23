@@ -2,6 +2,7 @@ package com.example.ingle.domain.member.controller;
 
 import com.example.ingle.domain.member.dto.req.LoginRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
+import com.example.ingle.domain.member.dto.req.WithdrawalReasonRequest;
 import com.example.ingle.domain.member.dto.res.LoginResponse;
 import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
 import com.example.ingle.domain.member.dto.res.SignupRequiredResponse;
@@ -199,6 +200,7 @@ public interface AuthApiSpecification {
             }
     )
     ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails,
+                                      @Valid @RequestBody WithdrawalReasonRequest request,
                                       HttpServletResponse response);
 
     @Operation(

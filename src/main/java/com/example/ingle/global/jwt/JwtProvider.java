@@ -33,7 +33,7 @@ public class JwtProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
 
-    public static final long ACCESS_TOKEN_EXPIRED_TIME = 1 * 60 * 60 * 1000L;   // 1시간
+    public static final long ACCESS_TOKEN_EXPIRED_TIME = 3 * 60 * 60 * 1000L;   // 3시간
     public static final long REFRESH_TOKEN_EXPIRED_TIME = 3 * 24 * 60 * 60 * 1000L; // 3일
 
     private final Key key;
@@ -185,5 +185,13 @@ public class JwtProvider {
             log.warn("[RefreshToken 불일치] 요청 토큰과 저장 토큰이 다름");
             throw new CustomException(ErrorCode.JWT_NOT_MATCH);
         }
+    }
+
+    public void deleteRefreshToken(RefreshToken refreshToken) {
+        refreshTokenRepository.delete(refreshToken);
+    }
+
+    public void deleteRefreshTokenByStudentId(String studentId) {
+        refreshTokenRepository.deleteByStudentId(studentId);
     }
 }
