@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
@@ -32,6 +34,12 @@ public class MemberController implements MemberApiSpecification{
     public ResponseEntity<MyPageResponse> updateMyPage(@AuthenticationPrincipal MemberDetail memberDetail,
                                                        @Valid @RequestBody MemberInfoRequest memberInfoRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(memberService.updateMyPage(memberDetail, memberInfoRequest));
+    }
+
+    // 프로필 이미지 리스트 조회
+    @GetMapping("/profile-image")
+    public ResponseEntity<List<MemberProfileImageResponse>> getAllProfileImage(@AuthenticationPrincipal MemberDetail memberDetail) {
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.getAllProfileImage(memberDetail));
     }
 
     // 프로필 사진 수정
