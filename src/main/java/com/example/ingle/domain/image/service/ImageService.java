@@ -62,9 +62,8 @@ public class ImageService {
     public ImageResponse uploadImage(MultipartFile file, String name, String category) {
         ImageResponse imageResponse = saveImage(file);
 
-        Image image = Image.create(name, category, imageResponse.url());
-        imageRepository.save(image);
-        // 추가로 이미지 메타데이터(예: name, category)를 DB에 저장하는 로직이 필요할 수 있습니다.
+        Image image = imageRepository.save(Image.of(name, category, imageResponse.url()));
+
         return imageResponse;
     }
 
