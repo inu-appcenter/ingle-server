@@ -45,7 +45,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberProfileImageResponse> getAllProfileImage(MemberDetail memberDetail) {
+    public List<MemberProfileImageResponse> getAllProfileImage() {
         return imageRepository.findByCategory("profile-image");
     }
 

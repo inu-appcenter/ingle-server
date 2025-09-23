@@ -103,7 +103,7 @@ public interface MemberApiSpecification {
                     )
             }
     )
-    ResponseEntity<List<MemberProfileImageResponse>> getAllProfileImage(@AuthenticationPrincipal MemberDetail memberDetail);
+    ResponseEntity<List<MemberProfileImageResponse>> getAllProfileImage();
 
     @Operation(
             summary = "프로필 이미지 수정",

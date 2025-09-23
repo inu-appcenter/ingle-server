@@ -38,8 +38,8 @@ public class MemberController implements MemberApiSpecification{
 
     // 프로필 이미지 리스트 조회
     @GetMapping("/profile-image")
-    public ResponseEntity<List<MemberProfileImageResponse>> getAllProfileImage(@AuthenticationPrincipal MemberDetail memberDetail) {
-        return ResponseEntity.status(HttpStatus.OK).body(memberService.getAllProfileImage(memberDetail));
+    public ResponseEntity<List<MemberProfileImageResponse>> getAllProfileImage() {
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.getAllProfileImage());
     }
 
     // 프로필 사진 수정
