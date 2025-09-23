@@ -62,7 +62,7 @@ public class ImageService {
     public ImageResponse uploadImage(MultipartFile file, String name, String category) {
         ImageResponse imageResponse = saveImage(file);
 
-        Image image = imageRepository.save(Image.of(name, category, imageResponse.url()));
+        imageRepository.save(Image.of(name, category, imageResponse.url()));
 
         return imageResponse;
     }
