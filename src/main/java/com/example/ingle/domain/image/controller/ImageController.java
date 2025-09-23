@@ -1,10 +1,8 @@
 package com.example.ingle.domain.image.controller;
 
-import com.example.ingle.domain.building.dto.req.ImageUploadRequest;
-import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.dto.req.ImageUploadRequest;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import com.example.ingle.domain.image.service.ImageService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

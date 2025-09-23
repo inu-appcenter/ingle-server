@@ -1,6 +1,6 @@
 package com.example.ingle.domain.member.controller;
 
-import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import com.example.ingle.domain.feedback.dto.req.FeedbackRequest;
 import com.example.ingle.domain.member.dto.req.MemberInfoRequest;
 import com.example.ingle.domain.feedback.dto.res.FeedbackResponse;

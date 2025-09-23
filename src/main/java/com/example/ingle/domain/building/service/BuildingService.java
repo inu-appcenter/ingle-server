@@ -7,7 +7,7 @@ import com.example.ingle.domain.building.domain.ClosedDay;
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.domain.building.repository.BuildingRepository;
 import com.example.ingle.domain.building.repository.ClosedDayRepository;
-import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import com.example.ingle.domain.image.service.ImageService;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;

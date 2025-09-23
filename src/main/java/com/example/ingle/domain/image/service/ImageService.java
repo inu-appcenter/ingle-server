@@ -1,7 +1,7 @@
 package com.example.ingle.domain.image.service;
 
 import com.example.ingle.domain.image.domain.Image;
-import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import com.example.ingle.domain.image.repository.ImageRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;

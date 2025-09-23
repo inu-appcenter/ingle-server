@@ -4,7 +4,7 @@ import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.domain.building.service.BuildingService;
 import com.example.ingle.domain.building.dto.res.BuildingDetailResponse;
 import com.example.ingle.domain.building.dto.res.BuildingResponse;
-import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
