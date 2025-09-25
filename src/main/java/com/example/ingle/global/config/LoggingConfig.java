@@ -27,25 +27,26 @@ public class LoggingConfig {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         String memberId = getCurrentMemberId(request);
-        String method = joinPoint.getSignature().toShortString();
+        String method = request.getMethod();
+        String uri = request.getRequestURI();
         long start = System.currentTimeMillis();
 
         try {
             return joinPoint.proceed();
         } finally {
             long duration = System.currentTimeMillis() - start;
-            log.info("user={} method={} duration={}ms", memberId, method, duration);
+            log.info("user={} {} {} {}ms", memberId, method, uri, duration);
         }
     }
 
     private String getCurrentMemberId(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member member = null;
+
         if (authentication == null || authentication.getPrincipal() instanceof String) {
             return request.getHeader("X-Forwarded-For");
         } else {
             if(authentication.getPrincipal() instanceof MemberDetail memberDetail) {
-                member = memberDetail.getMember();
+                Member member = memberDetail.getMember();
                 return member != null ? String.valueOf(member.getId()) : "unknown";
             }
         }
