@@ -49,7 +49,7 @@ public class AdminStatisticsService {
 
                     return AdminProgressResponse.builder()
                             .stampName(stamp.getName())
-                            .aquiredCount(acquiredCount)
+                            .acquiredCount(acquiredCount)
                             .totalCount(totalMemberCount)
                             .build();
                 })

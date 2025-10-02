@@ -36,17 +36,17 @@ public interface AdminStatisticsApiSpecification {
                                     [
                                       {
                                         "stampName": "Transit",
-                                        "aquiredCount": 145,
+                                        "acquiredCount": 145,
                                         "totalCount": 150
                                       },
                                       {
                                         "stampName": "Dormitory",
-                                        "aquiredCount": 130,
+                                        "acquiredCount": 130,
                                         "totalCount": 150
                                       },
                                       {
                                         "stampName": "Festival",
-                                        "aquiredCount": 120,
+                                        "acquiredCount": 120,
                                         "totalCount": 150
                                       }
                                     ]

@@ -10,7 +10,7 @@ public record AdminProgressResponse(
         String stampName,
 
         @Schema(description = "해당 스탬프를 획득한 회원 수", example = "145")
-        Long aquiredCount,
+        Long acquiredCount,
 
         @Schema(description = "전체 회원 수", example = "150")
         Long totalCount
