@@ -3,7 +3,7 @@ package com.example.ingle.domain.building.controller;
 import com.example.ingle.domain.building.enums.BuildingCategory;
 import com.example.ingle.domain.building.dto.res.BuildingDetailResponse;
 import com.example.ingle.domain.building.dto.res.BuildingResponse;
-import com.example.ingle.domain.image.dto.response.ImageResponse;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

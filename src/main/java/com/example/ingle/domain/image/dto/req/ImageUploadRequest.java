@@ -1,4 +1,4 @@
-package com.example.ingle.domain.building.dto.req;
+package com.example.ingle.domain.image.dto.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

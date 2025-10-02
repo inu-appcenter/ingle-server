@@ -1,8 +1,7 @@
 package com.example.ingle.domain.image.controller;
 
-import com.example.ingle.domain.building.dto.req.ImageUploadRequest;
-import com.example.ingle.domain.image.dto.response.ImageResponse;
-import com.example.ingle.domain.member.dto.res.LoginSuccessResponse;
+import com.example.ingle.domain.image.dto.req.ImageUploadRequest;
+import com.example.ingle.domain.image.dto.res.ImageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 

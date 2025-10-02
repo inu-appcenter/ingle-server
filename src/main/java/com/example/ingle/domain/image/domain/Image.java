@@ -30,7 +30,7 @@ public class Image {
         this.imageUrl = imageUrl;
     }
 
-    public static Image create(String name, String category, String imageUrl) {
+    public static Image of(String name, String category, String imageUrl) {
         return new Image(name, category, imageUrl);
     }
 }
