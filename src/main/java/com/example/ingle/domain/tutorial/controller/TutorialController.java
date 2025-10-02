@@ -1,7 +1,7 @@
 package com.example.ingle.domain.tutorial.controller;
 
-import com.example.ingle.domain.tutorial.Category;
-import com.example.ingle.domain.tutorial.TutorialService;
+import com.example.ingle.domain.tutorial.entity.Category;
+import com.example.ingle.domain.tutorial.service.TutorialService;
 import com.example.ingle.domain.tutorial.dto.res.TutorialResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

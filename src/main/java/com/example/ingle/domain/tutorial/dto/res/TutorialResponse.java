@@ -1,7 +1,7 @@
 package com.example.ingle.domain.tutorial.dto.res;
 
-import com.example.ingle.domain.tutorial.Category;
-import com.example.ingle.domain.tutorial.Tutorial;
+import com.example.ingle.domain.tutorial.entity.Category;
+import com.example.ingle.domain.tutorial.entity.Tutorial;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "튜토리얼 조회 응답 DTO")

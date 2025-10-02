@@ -1,4 +1,4 @@
-package com.example.ingle.domain.stamp;
+package com.example.ingle.domain.stamp.service;
 
 import com.example.ingle.domain.stamp.dto.res.CompleteTutorialResponse;
 import com.example.ingle.domain.stamp.dto.res.StampResponse;
@@ -6,7 +6,7 @@ import com.example.ingle.domain.stamp.entity.MemberStamp;
 import com.example.ingle.domain.stamp.entity.Stamp;
 import com.example.ingle.domain.stamp.repository.MemberStampRepository;
 import com.example.ingle.domain.stamp.repository.StampRepository;
-import com.example.ingle.domain.tutorial.TutorialRepository;
+import com.example.ingle.domain.tutorial.repository.TutorialRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

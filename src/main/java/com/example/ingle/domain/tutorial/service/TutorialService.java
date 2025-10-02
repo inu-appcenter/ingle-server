@@ -1,6 +1,9 @@
-package com.example.ingle.domain.tutorial;
+package com.example.ingle.domain.tutorial.service;
 
+import com.example.ingle.domain.tutorial.repository.TutorialRepository;
 import com.example.ingle.domain.tutorial.dto.res.TutorialResponse;
+import com.example.ingle.domain.tutorial.entity.Category;
+import com.example.ingle.domain.tutorial.entity.Tutorial;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

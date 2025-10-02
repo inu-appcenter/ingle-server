@@ -1,4 +1,4 @@
-package com.example.ingle.domain.tutorial;
+package com.example.ingle.domain.tutorial.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
