@@ -1,7 +1,6 @@
 package com.example.ingle.admin.member.dto.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 
 @Schema(description = "관리자 회원 수 조회 응답 DTO")
 public record AdminMemberCountResponse(
@@ -15,7 +14,11 @@ public record AdminMemberCountResponse(
         @Schema(description = "밴된 회원 수", example = "5")
         Long bannedCount
 ) {
-    @Builder
-    public AdminMemberCountResponse {
+    public static AdminMemberCountResponse of(long totalCount, long bannedCount) {
+        return new AdminMemberCountResponse(
+                totalCount,
+                totalCount - bannedCount,  // activeCount
+                bannedCount
+        );
     }
 }

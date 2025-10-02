@@ -26,12 +26,9 @@ public class Tutorial {
         this.category = category;
     }
 
-    // 제목 업데이트
     public void updateTitle(String title) {
         this.title = title;
     }
-
-    // 카테고리 업데이트
     public void updateCategory(Category category) {
         this.category = category;
     }
