@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "관리자 회원 검색 요청 DTO")
 public record AdminMemberSearchRequest (
-
     String studentId,
     String nickname,
     Department department,
@@ -16,6 +15,5 @@ public record AdminMemberSearchRequest (
     StudentType studentType,
     Country country
 ){
-
 }
 

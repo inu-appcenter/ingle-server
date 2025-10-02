@@ -1,28 +1,27 @@
 package com.example.ingle.domain.tutorial.dto.res;
 
-import com.example.ingle.domain.tutorial.Category;
-import com.example.ingle.domain.tutorial.Tutorial;
+import com.example.ingle.domain.tutorial.entity.Category;
+import com.example.ingle.domain.tutorial.entity.Tutorial;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
 
-@Getter
 @Schema(description = "튜토리얼 조회 응답 DTO")
-public class TutorialResponse {
+public record TutorialResponse(
 
-    @Schema(description = "튜토리얼 Id", example = "1")
-    private final Long tutorialId;
+        @Schema(description = "튜토리얼 Id", example = "1")
+        Long tutorialId,
 
-    @Schema(description = "튜토리얼 제목", example = "Transportation")
-    private final String title;
+        @Schema(description = "튜토리얼 제목", example = "Transportation")
+        String title,
 
-    @Schema(description = "튜토리얼 카테고리", example = "CAMPUS_LIFE")
-    private final Category category;
+        @Schema(description = "튜토리얼 카테고리", example = "CAMPUS_LIFE")
+        Category category
 
-    @Builder
-    public TutorialResponse(Tutorial tutorial) {
-        this.tutorialId = tutorial.getId();
-        this.title = tutorial.getTitle();
-        this.category = tutorial.getCategory();
+) {
+    public static TutorialResponse from(Tutorial tutorial) {
+        return new TutorialResponse(
+                tutorial.getId(),
+                tutorial.getTitle(),
+                tutorial.getCategory()
+        );
     }
 }

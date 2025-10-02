@@ -3,16 +3,15 @@ package com.example.ingle.admin.member.service;
 import com.example.ingle.admin.member.dto.req.AdminMemberSearchRequest;
 import com.example.ingle.admin.member.dto.res.AdminMemberCountResponse;
 import com.example.ingle.admin.member.dto.res.AdminMemberResponse;
-import com.example.ingle.admin.statistics.dto.res.AdminProgressResponse;
 import com.example.ingle.domain.member.domain.Member;
 import com.example.ingle.domain.member.enums.Role;
 import com.example.ingle.domain.member.repository.MemberRepository;
-import com.example.ingle.domain.stamp.entity.Stamp;
 import com.example.ingle.domain.stamp.repository.MemberStampRepository;
 import com.example.ingle.domain.stamp.repository.StampRepository;
 import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.refreshToken.RefreshTokenRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +51,7 @@ public class AdminMemberService {
         long totalCount = memberRepository.count();
         long bannedCount = memberRepository.countByRole(Role.BANNED);
 
-        return AdminMemberCountResponse.builder()
-                .totalCount(totalCount)
-                .bannedCount(bannedCount)
-                .activeCount(totalCount - bannedCount)
-                .build();
+        return AdminMemberCountResponse.of(totalCount, bannedCount);
     }
 
     @Transactional
@@ -67,14 +61,11 @@ public class AdminMemberService {
         Member member = getMemberById(memberId);
 
         try {
-            // 관련 데이터 삭제
             memberStampRepository.deleteAllByMemberId(memberId);
             refreshTokenRepository.deleteByStudentId(member.getStudentId());
-
-            // 회원 삭제
             memberRepository.delete(member);
-
             log.info("[관리자 회원 삭제 완료] memberId={}", memberId);
+
         } catch (Exception e) {
             log.error("[관리자 회원 삭제 실패] memberId={}, error={}", memberId, e.getMessage());
             throw new CustomException(ErrorCode.MEMBER_DELETE_FAILED);
@@ -103,36 +94,17 @@ public class AdminMemberService {
         return AdminMemberResponse.from(member);
     }
 
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<AdminProgressResponse> getStampProgress() {
-        log.info("[관리자 스탬프 획득률 조회]");
-
-        List<Stamp> stamps = stampRepository.findAllByOrderById();
-        long totalMemberCount = memberRepository.count();
-
-        return stamps.stream()
-                .map(stamp -> {
-                    // 해당 스탬프를 획득한(튜토리얼을 완료한) 회원 수 조회
-                    long acquiredCount = memberStampRepository.countByTutorialId(stamp.getTutorialId());
-
-                    return AdminProgressResponse.builder()
-                            .stampName(stamp.getName())
-                            .aquiredCount(acquiredCount)
-                            .totalCount(totalMemberCount)
-                            .build();
-                })
-                .toList();
-    }
-
-    // 본인 삭제, 밴 방지
+    /**
+     * 관리자 삭제, 밴 방지(본인 포함)
+     * @param adminId
+     * @param targetMemberId
+     */
     private void validateAdminPermission(Long adminId, Long targetMemberId) {
-        if (adminId.equals(targetMemberId)) {
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
-
         Member targetMember = getMemberById(targetMemberId);
+
         if (targetMember.getRole() == Role.ADMIN) {
+            log.warn("[관리자 권한 검증 실패] 관리자 계정은 수정할 수 없습니다: adminId={}, targetId={}",
+                    adminId, targetMemberId);
             throw new CustomException(ErrorCode.ACCESS_DENIED);
         }
     }
@@ -149,7 +121,6 @@ public class AdminMemberService {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // 학번 검색
             if (request.studentId() != null && !request.studentId().isEmpty()) {
                 predicates.add(criteriaBuilder.like(
                         root.get("studentId"),
@@ -157,7 +128,6 @@ public class AdminMemberService {
                 ));
             }
 
-            // 닉네임 검색
             if (request.nickname() != null && !request.nickname().isEmpty()) {
                 predicates.add(criteriaBuilder.like(
                         criteriaBuilder.lower(root.get("nickname")),
@@ -165,7 +135,6 @@ public class AdminMemberService {
                 ));
             }
 
-            // 학과 검색
             if (request.department() != null) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("department"),
@@ -173,7 +142,6 @@ public class AdminMemberService {
                 ));
             }
 
-            // 권한(Role) 검색 - 밴 상태 확인용
             if (request.role() != null) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("role"),
@@ -181,7 +149,6 @@ public class AdminMemberService {
                 ));
             }
 
-            // 학생 유형 검색
             if (request.studentType() != null) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("studentType"),
@@ -189,7 +156,6 @@ public class AdminMemberService {
                 ));
             }
 
-            // 국가 검색
             if (request.country() != null) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("country"),

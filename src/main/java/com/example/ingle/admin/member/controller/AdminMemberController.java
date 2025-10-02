@@ -27,7 +27,13 @@ public class AdminMemberController implements AdminMemberApiSpecification {
 
     private final AdminMemberService adminMemberService;
 
-    // 회원 검색
+    /**
+     * 회원 검색
+     * @param memberDetail
+     * @param searchRequest
+     * @param pageable
+     * @return
+     */
     @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> searchMembers(
             @AuthenticationPrincipal MemberDetail memberDetail,
@@ -36,14 +42,23 @@ public class AdminMemberController implements AdminMemberApiSpecification {
         return ResponseEntity.ok(adminMemberService.searchMembers(searchRequest, pageable));
     }
 
-    // 전체 회원 수 조회
+    /**
+     * 회원 수 조회
+     * @param memberDetail
+     * @return
+     */
     @GetMapping("/count")
     public ResponseEntity<AdminMemberCountResponse> getMemberCount(
             @AuthenticationPrincipal MemberDetail memberDetail) {
         return ResponseEntity.ok(adminMemberService.getMemberCount());
     }
 
-    // 회원 삭제
+    /**
+     * 회원 삭제
+     * @param memberDetail
+     * @param memberId
+     * @return
+     */
     @DeleteMapping("/{memberId}")
     public ResponseEntity<Void> deleteMember(
             @AuthenticationPrincipal MemberDetail memberDetail,
@@ -53,7 +68,13 @@ public class AdminMemberController implements AdminMemberApiSpecification {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // 회원 밴/언밴
+    /**
+     * 회원 밴/언밴
+     * @param memberDetail
+     * @param memberId
+     * @param ban
+     * @return
+     */
     @PatchMapping("/{memberId}/status")
     public ResponseEntity<AdminMemberResponse> banMember(
             @AuthenticationPrincipal MemberDetail memberDetail,

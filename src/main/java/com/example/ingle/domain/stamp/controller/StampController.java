@@ -1,6 +1,6 @@
 package com.example.ingle.domain.stamp.controller;
 
-import com.example.ingle.domain.stamp.StampService;
+import com.example.ingle.domain.stamp.service.StampService;
 import com.example.ingle.domain.stamp.dto.res.CompleteTutorialResponse;
 import com.example.ingle.domain.stamp.dto.res.StampResponse;
 import com.example.ingle.domain.member.domain.MemberDetail;

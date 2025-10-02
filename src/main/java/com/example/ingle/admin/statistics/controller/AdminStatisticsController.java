@@ -1,7 +1,7 @@
 package com.example.ingle.admin.statistics.controller;
 
-import com.example.ingle.admin.member.service.AdminMemberService;
-import com.example.ingle.admin.statistics.dto.res.AdminProgressResponse;
+import com.example.ingle.admin.statistics.dto.res.AdminStampProgressResponse;
+import com.example.ingle.admin.statistics.service.AdminStatisticsService;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +21,16 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminStatisticsController {
 
-    private final AdminMemberService adminMemberService;
+    private final AdminStatisticsService adminStatisticsService;
 
-    // 스탬프 획득률 조회
+    /**
+     * 스탬프 획득률 조회
+     * @param memberDetail
+     * @return
+     */
     @GetMapping("/stamps")
-    public ResponseEntity<List<AdminProgressResponse>> getStampProgress(
+    public ResponseEntity<List<AdminStampProgressResponse>> getStampProgress(
             @AuthenticationPrincipal MemberDetail memberDetail) {
-        return ResponseEntity.ok(adminMemberService.getStampProgress());
+        return ResponseEntity.ok(adminStatisticsService.getStampProgress());
     }
 }

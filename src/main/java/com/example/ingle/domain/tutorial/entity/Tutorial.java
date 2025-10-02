@@ -1,4 +1,4 @@
-package com.example.ingle.domain.tutorial;
+package com.example.ingle.domain.tutorial.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -26,12 +26,9 @@ public class Tutorial {
         this.category = category;
     }
 
-    // 제목 업데이트
     public void updateTitle(String title) {
         this.title = title;
     }
-
-    // 카테고리 업데이트
     public void updateCategory(Category category) {
         this.category = category;
     }

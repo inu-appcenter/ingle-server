@@ -1,6 +1,6 @@
 package com.example.ingle.admin.statistics.controller;
 
-import com.example.ingle.admin.statistics.dto.res.AdminProgressResponse;
+import com.example.ingle.admin.statistics.dto.res.AdminStampProgressResponse;
 import com.example.ingle.domain.member.domain.MemberDetail;
 import com.example.ingle.global.exception.ErrorResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,23 +30,23 @@ public interface AdminStatisticsApiSpecification {
                             description = "스탬프 획득률 조회 성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = AdminProgressResponse.class)),
+                                    array = @ArraySchema(schema = @Schema(implementation = AdminStampProgressResponse.class)),
                                     examples = @ExampleObject(
                                             value = """
                                     [
                                       {
                                         "stampName": "Transit",
-                                        "aquiredCount": 145,
+                                        "acquiredCount": 145,
                                         "totalCount": 150
                                       },
                                       {
                                         "stampName": "Dormitory",
-                                        "aquiredCount": 130,
+                                        "acquiredCount": 130,
                                         "totalCount": 150
                                       },
                                       {
                                         "stampName": "Festival",
-                                        "aquiredCount": 120,
+                                        "acquiredCount": 120,
                                         "totalCount": 150
                                       }
                                     ]
@@ -73,7 +73,7 @@ public interface AdminStatisticsApiSpecification {
                     )
             }
     )
-    ResponseEntity<List<AdminProgressResponse>> getStampProgress(
+    ResponseEntity<List<AdminStampProgressResponse>> getStampProgress(
             @AuthenticationPrincipal MemberDetail memberDetail
     );
 }
