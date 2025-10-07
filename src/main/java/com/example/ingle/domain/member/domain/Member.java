@@ -45,7 +45,7 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Member(String studentId, Department department, StudentType studentType, Country country , String nickname, Role role, String imageUrl) {
+    private Member(String studentId, Department department, StudentType studentType, Country country , String nickname, Role role, String imageUrl) {
         this.studentId = studentId;
         this.department = department;
         this.studentType = studentType;
