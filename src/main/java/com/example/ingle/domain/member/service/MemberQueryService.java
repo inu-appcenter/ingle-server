@@ -22,4 +22,8 @@ public class MemberQueryService {
                     return new CustomException(ErrorCode.MEMBER_NOT_FOUND);
                 });
     }
+
+    protected String getAdminStudentIdByNickname() {
+        return memberRepository.findStudentIdByNickname("admin");
+    }
 }

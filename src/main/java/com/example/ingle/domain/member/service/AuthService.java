@@ -39,9 +39,6 @@ public class AuthService {
     private final MemberQueryService memberQueryService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    @Value("${admin.username}")
-    private String adminId;
-
     @Value("${admin.password}")
     private String adminPasswordHash;
 
@@ -116,7 +113,7 @@ public class AuthService {
     }
 
     private void verifySchoolLogin(LoginRequest loginRequest) {
-        if (Objects.equals(loginRequest.studentId(), adminId)
+        if (Objects.equals(loginRequest.studentId(), memberQueryService.getAdminStudentIdByNickname())
                 && bCryptPasswordEncoder.matches(loginRequest.password(), adminPasswordHash)) {
             log.info("관리자 로그인 발생");
         }
