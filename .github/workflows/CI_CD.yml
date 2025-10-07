@@ -87,7 +87,7 @@ jobs:
               --env ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }} \
               --env JWT_SECRET=${{ secrets.JWT_SECRET }} \
               --env ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }} \
-              --env ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }} \
+              --env 'ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}' \
               --env SERVER_URL=${{ secrets.SERVER_URL }} \
               --env IMAGE_PATH=${{ secrets.IMAGE_PATH }} \
               -v /home/serverking/ingle/images:/ingle/images \
