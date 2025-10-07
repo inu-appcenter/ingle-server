@@ -202,17 +202,4 @@ public interface AuthApiSpecification {
     ResponseEntity<Void> deleteMember(@AuthenticationPrincipal MemberDetail userDetails,
                                       @Valid @RequestBody WithdrawalReasonRequest request,
                                       HttpServletResponse response);
-
-    @Operation(
-            summary = "(TEST) INU 포털 로그인 테스트",
-            description = "INU 포털 로그인 기능을 테스트합니다.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "테스트 성공",
-                            content = @Content(schema = @Schema(implementation = LoginSuccessResponse.class))
-                    )
-            }
-    )
-    ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequest loginRequest);
 }

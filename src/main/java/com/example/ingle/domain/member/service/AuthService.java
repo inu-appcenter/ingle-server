@@ -15,14 +15,16 @@ import com.example.ingle.global.exception.CustomException;
 import com.example.ingle.global.exception.ErrorCode;
 import com.example.ingle.global.jwt.JwtProvider;
 import com.example.ingle.global.jwt.refreshToken.RefreshToken;
-import com.example.ingle.global.jwt.refreshToken.RefreshTokenRepository;
 import com.example.ingle.global.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -35,6 +37,13 @@ public class AuthService {
     private final WithdrawalReasonRepository withdrawalReasonRepository;
     private final JwtProvider jwtProvider;
     private final MemberQueryService memberQueryService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+    @Value("${admin.username}")
+    private String adminId;
+
+    @Value("${admin.password}")
+    private String adminPasswordHash;
 
     @Transactional
     public LoginSuccessResponse signup(MemberInfoRequest memberInfoRequest, HttpServletResponse response) {
@@ -97,12 +106,6 @@ public class AuthService {
         CookieUtil.deleteCookie(response, "refreshToken");
     }
 
-    @Transactional(readOnly = true)
-    public String loginTest(LoginRequest loginRequest) {
-        verifySchoolLogin(loginRequest);
-        return "INU 포털 로그인 성공: " + loginRequest.studentId();
-    }
-
     private void validateMember(MemberInfoRequest memberInfoRequest) {
         if (memberRepository.existsByStudentId(memberInfoRequest.studentId())) {
             throw new CustomException(ErrorCode.MEMBER_ALREADY_EXISTS);
@@ -113,7 +116,11 @@ public class AuthService {
     }
 
     private void verifySchoolLogin(LoginRequest loginRequest) {
-        if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
+        if (Objects.equals(loginRequest.studentId(), adminId)
+                && bCryptPasswordEncoder.matches(loginRequest.password(), adminPasswordHash)) {
+            log.info("관리자 로그인 발생");
+        }
+        else if (!inuMemberRepository.verifySchoolLogin(loginRequest.studentId(), loginRequest.password())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
     }

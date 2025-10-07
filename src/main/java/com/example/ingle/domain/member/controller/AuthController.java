@@ -69,10 +69,4 @@ public class AuthController implements AuthApiSpecification{
         authService.deleteMember(userDetails.getMember(), request, response);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    // 포털 로그인 테스트
-    @PostMapping("/login/test")
-    public ResponseEntity<String> loginTest(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.loginTest(loginRequest));
-    }
 }
