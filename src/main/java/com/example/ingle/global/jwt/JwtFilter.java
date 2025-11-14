@@ -49,8 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtProvider.getAuthentication(jwt);
 
                 // 밴된 사용자 체크
-                if (authentication.getPrincipal() instanceof MemberDetail) {
-                    MemberDetail memberDetail = (MemberDetail) authentication.getPrincipal();
+                if (authentication.getPrincipal() instanceof MemberDetail memberDetail) {
                     if (memberDetail.getMember().getRole() == Role.BANNED) {
                         log.warn("[JWT 검증 실패] 밴된 사용자: studentId={}, URI={}",
                                 memberDetail.getUsername(), requestURI);
