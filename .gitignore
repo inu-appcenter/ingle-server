@@ -44,3 +44,4 @@ application.properties
 
 ### Logs ###
 ingle.log
+logging.file.path_IS_UNDEFINED
