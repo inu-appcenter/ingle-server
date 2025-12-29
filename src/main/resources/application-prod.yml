@@ -16,7 +16,7 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          auto: update
+          auto: create
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: false
         use_sql_comments: false
