@@ -62,6 +62,7 @@ public class JwtProvider {
 
         CookieUtil.setCookie(response, "refreshToken", refreshToken, (int) (REFRESH_TOKEN_EXPIRED_TIME / 1000));
 
+        refreshTokenRepository.deleteByStudentId(member.getStudentId());
         refreshTokenRepository.save(RefreshToken.builder().member(member).refreshToken(refreshToken).build());
 
         return LoginSuccessResponse.from(member, accessToken, accessTime);

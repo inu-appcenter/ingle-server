@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:17-jre-alpine
 
 ARG JAR_NAME=ingle-0.0.1-SNAPSHOT.jar
 
